@@ -480,6 +480,25 @@ parts.append("const DATA = " + js({
 parts.append("DATA.glossary = " + js(GLOSS) + ";\n\n")
 parts.append("DATA.cut = " + js(CUT_OUT) + ";\n\n")
 parts.append("DATA.drills = " + js(DRILLS) + ";\n\n")
-parts.append("DATA.nblmDecks = {};\n")
+def nblm_decks():
+    path = Path(r"C:\output\obsidian\notebooklm\tdd-m365-digital-work-platform\glossary-gap-2026-10-02\glossary-gap-flashcards.json")
+    if not path.is_file():
+        return {}
+    raw = json.loads(path.read_text(encoding="utf-8"))
+    cards = []
+    for card in raw.get("cards", []):
+        def side(block):
+            return " ".join(
+                part.get("content", "")
+                for part in block.get("flashcardContentBlock", [])
+                if part.get("type") == "text"
+            ).strip()
+        front, back = side(card.get("front", {})), side(card.get("back", {}))
+        if front and back and "NOT IN SOURCES" not in back:
+            cards.append({"front": front, "back": back})
+    return {"gap": {"title": "Gap pass 2026-10-02", "cards": cards}}
+
+
+parts.append("DATA.nblmDecks = " + js(nblm_decks()) + ";\n")
 (SITE / "js" / "data.js").write_text("".join(parts), encoding="utf-8")
 print("sources", len(SRCS), "glossary", len(GLOSS), "cards", len(CUT_OUT["cards"]))

@@ -224,6 +224,34 @@
     "nblm": false
   },
   {
+    "slug": "prompts-glossary-gap",
+    "title": "Glossary gap prompts",
+    "section": "Prompts",
+    "desc": "NotebookLM prompts for the glossary gap pass: terms the learn-m365 site uses but the glossary did not define.",
+    "nblm": false
+  },
+  {
+    "slug": "nblm-gap-table",
+    "title": "Glossary gap review (2026-10-02)",
+    "section": "NotebookLM reports",
+    "desc": "Review of the 2026-10-02 NotebookLM glossary gap table against the source ledger.",
+    "nblm": true
+  },
+  {
+    "slug": "nblm-gap-quiz",
+    "title": "Glossary gap quiz",
+    "section": "NotebookLM reports",
+    "desc": "NotebookLM gap-pass quiz. Not folded into the site quiz bank.",
+    "nblm": true
+  },
+  {
+    "slug": "nblm-gap-cards",
+    "title": "Glossary gap flashcards",
+    "section": "NotebookLM reports",
+    "desc": "NotebookLM gap-pass flashcards. NOT IN SOURCES cards stay out of the site deck.",
+    "nblm": true
+  },
+  {
     "slug": "nblm-briefing",
     "title": "Briefing document",
     "section": "NotebookLM reports",

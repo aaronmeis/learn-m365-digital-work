@@ -11,13 +11,13 @@ const text = JSON.stringify({ ...D, glossary: undefined }).replace(/https?:[^"]+
 const lower = text.toLowerCase();
 
 const PHRASES = [
-  "auto-labeling", "trainable classifier", "label policy", "retention policy", "legal hold", "review set",
-  "activity explorer", "data explorer", "adaptive protection", "browser extension", "private endpoint",
-  "azure ir", "aws ir", "kubernetes", "landing zone", "lineage", "qualified name", "onelake", "fabric mirroring",
-  "compliance score", "improvement action", "data lifecycle management", "named-entity", "browse-to-url",
-  "grounding", "oversharing", "know your data", "itemclass", "p-ato", "il4", "cjis", "irs 1075", "dfars", "itar",
-  "800-171", "sentinel", "defender for endpoint", "copilot studio", "foundry", "azure government", "key vault",
-  "conditional access", "rbac", "smb", "nfs", "unc", "kms", "scp", "iam", "togaf", "dodaf", "ov-1", "sv-1", "div-2", "stdv-1",
+  "grounding", "dlp", "oversharing", "sensitivity label", "permission trimming", "semantic label", "legal hold", "audit log",
+  "mcp gateway", "webhook", "mcp and api catalog", "github actions", "graphql", "delta query", "throttling",
+  "delegated permission", "admin consent",
+  "sharepoint", "itsm", "servicenow", "crm", "hr system",
+  "sast", "coding agent",
+  "gcc high", "gcc", "dod",
+  "togaf adm", "dodaf", "ov-1", "ov-2", "ov-3", "ov-5b", "cv-2", "sv-1", "sv-2", "sv-4", "sv-6", "div-2", "stdv-1",
   ...process.argv.slice(2).map(s => s.toLowerCase()),
 ];
 

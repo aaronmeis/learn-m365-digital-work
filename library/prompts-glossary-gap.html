@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Glossary gap prompts | Learn the digital-work platform</title>
+<meta name="description" content="NotebookLM prompts for the glossary gap pass: terms the learn-m365 site uses but the glossary did not define.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="library.css">
+<script>try{var p=JSON.parse(localStorage.getItem("appPalette"))||"github",m=JSON.parse(localStorage.getItem("appMode"))||"dark";document.documentElement.setAttribute("data-theme",p+"-"+m);}catch(e){document.documentElement.setAttribute("data-theme","github-dark");}</script>
+</head>
+<body>
+<header class="topbar">
+  <a href="../index.html" class="home">&larr; Learn the digital-work platform</a>
+  <span class="crumb">Library · Prompts</span>
+  <a href="index.html" class="home">All pages</a>
+</header>
+<main class="doc">
+  <div class="kicker">Prompts</div>
+  <h1 class="doctitle">Glossary gap prompts</h1>
+  <p class="lead">NotebookLM prompts for the glossary gap pass: terms the learn-m365 site uses but the glossary did not define.</p>
+  
+  <article><h1>Glossary gap prompts — Microsoft's digital-work platform</h1>
+<p>Notebook: <code>tdd-m365-digital-work-platform</code> (<code>cf4873b7-d9e7-4adb-b00b-543849aaf955</code>). Scan script: <code>C:\projects\claude\learn-m365-digital-work\scripts\glossary_gap.mjs</code>, run on 2026-10-02 against the 44-term glossary.</p>
+<p>Step 2 platform terms (declarative agent, Restricted SharePoint Search, Sites.Selected, and the rest of that list) are not in this pass. A term from that list is added only when a view, quiz item, or failure mode will use it.</p>
+<h2>Terms in the gap</h2>
+<p>Data protection: grounding · DLP · oversharing · sensitivity label · permission trimming · semantic label · legal hold · audit log</p>
+<p>Integration: MCP gateway · webhook · REST · GraphQL · throttling</p>
+<p>Identity: admin consent</p>
+<p>Neighbor systems: SharePoint · ITSM · ServiceNow · CRM · HR system</p>
+<p>Delivery: LLM · SAST · ADR · coding agent</p>
+<p>Government cloud: GCC · GCC High · DoD</p>
+<p>Architecture frameworks: TOGAF ADM · DoDAF · OV-1 · OV-2 · OV-3 · OV-5b · CV-2 · SV-1 · SV-2 · SV-4 · SV-6 · DIV-2 · StdV-1</p>
+<p>Dropped as noise from the same scan: AI, OUT, ONE, PM, HTTP, SKUs, and plurals of terms already defined (ACL, PAT). GitHub Actions, schema, delta query, delegated permission, and "MCP and API catalog" did not appear in <code>js/data.js</code>.</p>
+<h2>1. Data table (<code>nlm data-table create</code>)</h2>
+<pre><code class="language-text">Using only the sources, build a glossary table for an enterprise architect studying Microsoft's digital-work platform (Microsoft 365 Copilot, GitHub Copilot, connectors, and MCP). One row per term below. Columns: Term | Category (Data protection, Integration, Identity, Neighbor system, Delivery, Government cloud, Architecture framework) | Definition (one or two plain sentences, as the sources describe it) | Where it shows up (conceptual, logical, physical, or integration and AI view, and the component it touches) | Source (title of the supporting source). If the sources do not define a term, write NOT IN SOURCES in the Definition column and leave Source blank. Do not fill gaps from outside knowledge. Terms: grounding; DLP; oversharing; sensitivity label; permission trimming; semantic label; legal hold; audit log; MCP gateway; webhook; REST; GraphQL; throttling; admin consent; SharePoint; ITSM; ServiceNow; CRM; HR system; LLM; SAST; ADR; coding agent; GCC; GCC High; DoD; TOGAF ADM; DoDAF; OV-1; OV-2; OV-3; OV-5b; CV-2; SV-1; SV-2; SV-4; SV-6; DIV-2; StdV-1.
+</code></pre>
+<h2>2. Quiz (<code>nlm quiz create --count 15 --difficulty 3</code>)</h2>
+<pre><code class="language-text">Architect-level questions on the edges of Microsoft's digital-work platform: grounding and oversharing, DLP and sensitivity labels, permission trimming, synced versus live data, MCP gateway and webhooks, admin consent, neighbor systems of record (SharePoint, ITSM, ServiceNow, CRM, HR), and government-cloud checks (GCC, GCC High, DoD). Prefer scenario questions an architect would face in a design review. Use only the sources. If a term is not in the sources, do not invent an answer.
+</code></pre>
+<h2>3. Flashcards (<code>nlm flashcards create --difficulty medium</code>)</h2>
+<pre><code class="language-text">One card per term an architect needs at the edges of this pack: grounding, DLP, oversharing, sensitivity label, permission trimming, semantic label, legal hold, audit log, MCP gateway, webhook, throttling, admin consent, SharePoint, ITSM, ServiceNow, CRM, HR system, coding agent, GCC, GCC High, DoD. Front: the term or a short scenario. Back: the answer in one or two sentences, from the sources only. If the sources do not define a term, the back says NOT IN SOURCES.
+</code></pre>
+<h2>Review rule</h2>
+<p>NotebookLM output is secondary. Every definition that reaches the site is checked against the source ledger. Rows marked NOT IN SOURCES stay out of the site glossary unless a ledger row covers the term.</p></article>
+  <footer class="docfoot">
+    Rendered from <code>Learning\tech-deep-dive\m365-digital-work-platform\prompts\glossary-gap-prompts.md</code>. The Obsidian vault is the source of truth. Study material only. Citations <span class="cite">S#</span> link to the Microsoft source ledger.
+    <div class="prevnext"><a href="prompts-deep-dive-extra.html">&larr; Previous</a><span></span></div>
+  </footer>
+</main>
+<script type="module">
+import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+const dark=(document.documentElement.getAttribute("data-theme")||"").endsWith("dark");
+mermaid.initialize({startOnLoad:true,theme:dark?"dark":"default",securityLevel:"strict"});
+</script>
+</body>
+</html>

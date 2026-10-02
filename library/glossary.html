@@ -479,6 +479,134 @@
 <td>[<a class="cite" href="https://learn.microsoft.com/en-us/entra/fundamentals/whatis" target="_blank" rel="noopener" title="What is Microsoft Entra ID">S18</a>] [<a class="cite" href="https://docs.github.com/en/apps/creating-github-apps/about-creating-github-apps/about-creating-github-apps" target="_blank" rel="noopener" title="GitHub Apps overview (GitHub Docs)">S16</a>]</td>
 </tr>
 </tbody>
+</table>
+<h2>Platform edges (2026-10-02)</h2>
+<p>Accepted from the NotebookLM gap table only where a ledger row states the claim. The notebook's wording was rewritten to match that page. Held rows are in <a href="nblm-gap-table.html">Glossary Gap Data Table</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Definition</th>
+<th>Category</th>
+<th>Rung</th>
+<th>Essential</th>
+<th>Related</th>
+<th>Where it shows up</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Grounding</td>
+<td>Copilot prepares a prompt with Microsoft Graph data the signed-in user can already open, then sends that grounded prompt to the model.</td>
+<td>Data protection</td>
+<td>200</td>
+<td>yes</td>
+<td>Microsoft 365 Copilot, Microsoft Graph</td>
+<td>Integration view</td>
+<td>nblm-gap [<a class="cite" href="https://learn.microsoft.com/en-us/microsoft-365/copilot/microsoft-365-copilot-architecture" target="_blank" rel="noopener" title="Microsoft 365 Copilot architecture">S11</a>] [<a class="cite" href="https://learn.microsoft.com/en-us/microsoft-365/copilot/connectors/federated-connectors-overview" target="_blank" rel="noopener" title="Federated connectors overview (Microsoft Learn)">S4</a>]</td>
+</tr>
+<tr>
+<td>Permission trimming</td>
+<td>Copilot returns only what the signed-in user is allowed to open. It does not get tenant-wide visibility.</td>
+<td>Data protection</td>
+<td>200</td>
+<td>yes</td>
+<td>ACL, Grounding</td>
+<td>Integration view</td>
+<td>nblm-gap [<a class="cite" href="https://learn.microsoft.com/en-us/microsoft-365/copilot/microsoft-365-copilot-architecture" target="_blank" rel="noopener" title="Microsoft 365 Copilot architecture">S11</a>]</td>
+</tr>
+<tr>
+<td>LLM</td>
+<td>The model that writes the Copilot response from the grounded prompt. It is not the system of record for mail or files.</td>
+<td>Delivery</td>
+<td>100</td>
+<td>no</td>
+<td>Grounding</td>
+<td>Integration view</td>
+<td>nblm-gap [<a class="cite" href="https://learn.microsoft.com/en-us/microsoft-365/copilot/microsoft-365-copilot-architecture" target="_blank" rel="noopener" title="Microsoft 365 Copilot architecture">S11</a>]</td>
+</tr>
+<tr>
+<td>SharePoint</td>
+<td>A Microsoft 365 store for files. Copilot reaches the files the user can open. Restricted SharePoint Search can narrow that set further.</td>
+<td>Neighbor system</td>
+<td>100</td>
+<td>no</td>
+<td>Microsoft Graph, Grounding</td>
+<td>Integration view</td>
+<td>nblm-gap [<a class="cite" href="https://learn.microsoft.com/en-us/microsoft-365/copilot/microsoft-365-copilot-architecture" target="_blank" rel="noopener" title="Microsoft 365 Copilot architecture">S11</a>]</td>
+</tr>
+<tr>
+<td>Oversharing</td>
+<td>Copilot retrieves an item the user could not open in the source system, usually because the synced ACL is wider than the source rights.</td>
+<td>Data protection</td>
+<td>300</td>
+<td>yes</td>
+<td>ACL, Permission fidelity</td>
+<td>Integration view</td>
+<td>nblm-gap [<a class="cite" href="https://learn.microsoft.com/en-us/graph/connecting-external-content-manage-items" target="_blank" rel="noopener" title="Manage external items in a connection (Microsoft Graph)">S15</a>] [<a class="cite" href="https://learn.microsoft.com/en-us/microsoft-365/copilot/connectors/overview" target="_blank" rel="noopener" title="Microsoft 365 Copilot connectors overview (Microsoft Learn)">S3</a>]</td>
+</tr>
+<tr>
+<td>Webhook</td>
+<td>A callback Microsoft Graph can send when a resource changes. The subscriber then reads the change instead of polling.</td>
+<td>Integration</td>
+<td>200</td>
+<td>no</td>
+<td>Graph change notifications</td>
+<td>Logical view</td>
+<td>nblm-gap [<a class="cite" href="https://learn.microsoft.com/en-us/graph/change-notifications-overview" target="_blank" rel="noopener" title="Microsoft Graph change notifications">S20</a>]</td>
+</tr>
+<tr>
+<td>REST</td>
+<td>The HTTP style of the Copilot APIs on Microsoft Graph.</td>
+<td>Integration</td>
+<td>200</td>
+<td>no</td>
+<td>Copilot APIs</td>
+<td>Physical view</td>
+<td>nblm-gap [<a class="cite" href="https://learn.microsoft.com/en-us/microsoft-365/copilot/extensibility/copilot-apis-overview" target="_blank" rel="noopener" title="Copilot APIs overview (Microsoft Learn)">S1</a>]</td>
+</tr>
+<tr>
+<td>GraphQL</td>
+<td>GitHub's query API. One request can read a repository together with related objects such as pull requests.</td>
+<td>Integration</td>
+<td>200</td>
+<td>no</td>
+<td>GitHub Copilot</td>
+<td>Physical view</td>
+<td>nblm-gap [<a class="cite" href="https://docs.github.com/en/graphql" target="_blank" rel="noopener" title="GitHub GraphQL API">S26</a>]</td>
+</tr>
+<tr>
+<td>GCC</td>
+<td>Office 365 Government Community Cloud. Customer content is stored in the United States and kept logically separate from commercial Office 365.</td>
+<td>Government cloud</td>
+<td>200</td>
+<td>no</td>
+<td>GCC High</td>
+<td>Physical view</td>
+<td>nblm-gap [<a class="cite" href="https://learn.microsoft.com/en-us/office365/servicedescriptions/office-365-platform-service-description/office-365-us-government/office-365-us-government" target="_blank" rel="noopener" title="Office 365 US Government service description">S27</a>]</td>
+</tr>
+<tr>
+<td>GCC High</td>
+<td>Office 365 government environment for DoD security requirements, DFARS, and ITAR. It is not the Department of Defense tenant.</td>
+<td>Government cloud</td>
+<td>200</td>
+<td>yes</td>
+<td>GCC, DoD</td>
+<td>Physical view</td>
+<td>nblm-gap [<a class="cite" href="https://learn.microsoft.com/en-us/office365/servicedescriptions/office-365-platform-service-description/office-365-us-government/office-365-us-government" target="_blank" rel="noopener" title="Office 365 US Government service description">S27</a>]</td>
+</tr>
+<tr>
+<td>DoD</td>
+<td>The Office 365 environment for the United States Department of Defense only.</td>
+<td>Government cloud</td>
+<td>200</td>
+<td>no</td>
+<td>GCC High</td>
+<td>Physical view</td>
+<td>nblm-gap [<a class="cite" href="https://learn.microsoft.com/en-us/office365/servicedescriptions/office-365-platform-service-description/office-365-us-government/office-365-us-government" target="_blank" rel="noopener" title="Office 365 US Government service description">S27</a>]</td>
+</tr>
+</tbody>
 </table></article>
   <footer class="docfoot">
     Rendered from <code>Learning\tech-deep-dive\m365-digital-work-platform\GLOSSARY.md</code>. The Obsidian vault is the source of truth. Study material only. Citations <span class="cite">S#</span> link to the Microsoft source ledger.

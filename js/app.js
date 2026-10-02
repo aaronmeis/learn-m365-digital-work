@@ -326,14 +326,14 @@ function renderGlossary(){
   const pass=g=> (cat==="all"||g.category===cat) && (rung==="all"||String(g.rung)===String(rung)) && (ess!=="essential"||g.essential) && (!q||(g.term+g.definition+(g.see_also||"")+(g.where||"")).toLowerCase().includes(q));
   const shown=DATA.glossary.filter(pass);
   let h=`<h2 class="vh">Glossary <span style="font-size:1rem;color:var(--text-dim)">${shown.length} terms</span></h2>
-  <p class="lead">Feeds the flashcard decks. Category, rung, and essential come from the vault table. A cited glossary gap pass has not run for this pack yet. ${lib("glossary","Glossary note")}</p>
+  <p class="lead">Feeds the flashcard decks. Category, rung, and essential come from the vault table. The 2026-10-02 gap pass added the terms marked gap pass. ${lib("glossary","Glossary note")} · ${lib("nblm-gap-table","Gap pass review")}</p>
   <input class="search" id="gSearch" placeholder="filter terms…" value="${esc(q)}">
   <div class="gfilters"><button class="b ${cat==="all"?"on":""}" data-gc="all">All</button>${cats.map(c=>`<button class="b ${cat===c?"on":""}" data-gc="${esc(c)}">${esc(c)}</button>`).join("")}</div>
   <div class="gfilters"><button class="b ${rung==="all"?"on":""}" data-gr="all">All rungs</button>${[100,200,300].map(r=>`<button class="b ${String(rung)===String(r)?"on":""}" data-gr="${r}">${r}</button>`).join("")}<button class="b ${ess==="essential"?"on":""}" data-ge="essential">Essential</button></div>`;
   cats.filter(c=>shown.some(g=>g.category===c)).forEach(c=>{
     const items=shown.filter(g=>g.category===c);
     h+=`<h3 style="margin:1.1rem 0 .5rem;font-size:.95rem">${esc(c)} <span style="color:var(--text-dim);font-weight:400">· ${items.length}</span></h3>`;
-    items.forEach(g=>h+=`<div class="gterm" id="g-${gSlug(g.term)}"><h4>${esc(g.term)} <span class="pill r${g.rung}">${g.rung}</span> ${g.essential?'<span class="pill r100">Essential</span>':''} ${g.source==="nblm-gap"?'<span class="pill" title="Drafted by a NotebookLM data table, checked against the source ledger">gap pass</span>':''}</h4><p>${ec(g.definition)}</p>${g.where?`<div class="sa">Where: ${esc(g.where)}</div>`:""}${g.see_also?`<div class="sa">Related: ${relLinks(g.see_also)}</div>`:""}${g.source?`<div class="sa">${ec(g.source)}</div>`:""}</div>`);
+    items.forEach(g=>h+=`<div class="gterm" id="g-${gSlug(g.term)}"><h4>${esc(g.term)} <span class="pill r${g.rung}">${g.rung}</span> ${g.essential?'<span class="pill r100">Essential</span>':''} ${String(g.source||"").includes("nblm-gap")?'<span class="pill" title="Drafted by a NotebookLM data table, checked against the source ledger">gap pass</span>':''}</h4><p>${ec(g.definition)}</p>${g.where?`<div class="sa">Where: ${esc(g.where)}</div>`:""}${g.see_also?`<div class="sa">Related: ${relLinks(g.see_also)}</div>`:""}${g.source?`<div class="sa">${ec(g.source)}</div>`:""}</div>`);
   });
   el.innerHTML=h;
   const s=$("#gSearch");

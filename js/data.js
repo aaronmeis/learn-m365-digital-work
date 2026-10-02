@@ -249,6 +249,26 @@ const SOURCES = [
     "trust": "high",
     "b": "Dataverse",
     "ledger": "25"
+  },
+  {
+    "n": 26,
+    "g": "GitHub Docs",
+    "t": "GitHub GraphQL API",
+    "u": "https://docs.github.com/en/graphql",
+    "type": "docs",
+    "trust": "high",
+    "b": "GraphQL",
+    "ledger": "26"
+  },
+  {
+    "n": 27,
+    "g": "Microsoft Learn",
+    "t": "Office 365 US Government service description",
+    "u": "https://learn.microsoft.com/en-us/office365/servicedescriptions/office-365-platform-service-description/office-365-us-government/office-365-us-government",
+    "type": "docs",
+    "trust": "high",
+    "b": "GCC, GCC High, DoD",
+    "ledger": "27"
   }
 ];
 
@@ -1718,6 +1738,116 @@ DATA.glossary = [
     "see_also": "Entra ID, GitHub App",
     "where": "Study guide",
     "source": "[S18] [S16]"
+  },
+  {
+    "category": "Data protection",
+    "term": "Grounding",
+    "rung": 200,
+    "essential": true,
+    "definition": "Copilot prepares a prompt with Microsoft Graph data the signed-in user can already open, then sends that grounded prompt to the model.",
+    "see_also": "Microsoft 365 Copilot, Microsoft Graph",
+    "where": "Integration view",
+    "source": "nblm-gap [S11] [S4]"
+  },
+  {
+    "category": "Data protection",
+    "term": "Permission trimming",
+    "rung": 200,
+    "essential": true,
+    "definition": "Copilot returns only what the signed-in user is allowed to open. It does not get tenant-wide visibility.",
+    "see_also": "ACL, Grounding",
+    "where": "Integration view",
+    "source": "nblm-gap [S11]"
+  },
+  {
+    "category": "Delivery",
+    "term": "LLM",
+    "rung": 100,
+    "essential": false,
+    "definition": "The model that writes the Copilot response from the grounded prompt. It is not the system of record for mail or files.",
+    "see_also": "Grounding",
+    "where": "Integration view",
+    "source": "nblm-gap [S11]"
+  },
+  {
+    "category": "Neighbor system",
+    "term": "SharePoint",
+    "rung": 100,
+    "essential": false,
+    "definition": "A Microsoft 365 store for files. Copilot reaches the files the user can open. Restricted SharePoint Search can narrow that set further.",
+    "see_also": "Microsoft Graph, Grounding",
+    "where": "Integration view",
+    "source": "nblm-gap [S11]"
+  },
+  {
+    "category": "Data protection",
+    "term": "Oversharing",
+    "rung": 300,
+    "essential": true,
+    "definition": "Copilot retrieves an item the user could not open in the source system, usually because the synced ACL is wider than the source rights.",
+    "see_also": "ACL, Permission fidelity",
+    "where": "Integration view",
+    "source": "nblm-gap [S15] [S3]"
+  },
+  {
+    "category": "Integration",
+    "term": "Webhook",
+    "rung": 200,
+    "essential": false,
+    "definition": "A callback Microsoft Graph can send when a resource changes. The subscriber then reads the change instead of polling.",
+    "see_also": "Graph change notifications",
+    "where": "Logical view",
+    "source": "nblm-gap [S20]"
+  },
+  {
+    "category": "Integration",
+    "term": "REST",
+    "rung": 200,
+    "essential": false,
+    "definition": "The HTTP style of the Copilot APIs on Microsoft Graph.",
+    "see_also": "Copilot APIs",
+    "where": "Physical view",
+    "source": "nblm-gap [S1]"
+  },
+  {
+    "category": "Integration",
+    "term": "GraphQL",
+    "rung": 200,
+    "essential": false,
+    "definition": "GitHub's query API. One request can read a repository together with related objects such as pull requests.",
+    "see_also": "GitHub Copilot",
+    "where": "Physical view",
+    "source": "nblm-gap [S26]"
+  },
+  {
+    "category": "Government cloud",
+    "term": "GCC",
+    "rung": 200,
+    "essential": false,
+    "definition": "Office 365 Government Community Cloud. Customer content is stored in the United States and kept logically separate from commercial Office 365.",
+    "see_also": "GCC High",
+    "where": "Physical view",
+    "source": "nblm-gap [S27]"
+  },
+  {
+    "category": "Government cloud",
+    "term": "GCC High",
+    "rung": 200,
+    "essential": true,
+    "definition": "Office 365 government environment for DoD security requirements, DFARS, and ITAR. It is not the Department of Defense tenant.",
+    "see_also": "GCC, DoD",
+    "where": "Physical view",
+    "source": "nblm-gap [S27]"
+  },
+  {
+    "category": "Government cloud",
+    "term": "DoD",
+    "rung": 200,
+    "essential": false,
+    "definition": "The Office 365 environment for the United States Department of Defense only.",
+    "see_also": "GCC High",
+    "where": "Physical view",
+    "source": "nblm-gap [S27]"
   }
 ];
 
@@ -2005,4 +2135,246 @@ DATA.drills = {
   }
 };
 
-DATA.nblmDecks = {};
+DATA.nblmDecks = {
+  "gap": {
+    "title": "Gap pass 2026-10-02",
+    "cards": [
+      {
+        "front": "What is grounding in the context of Microsoft 365 Copilot?",
+        "back": "Grounding is the process of referencing authoritative enterprise context, documents, and relationships (via Microsoft Graph or MCP) to inform LLM responses without exporting data."
+      },
+      {
+        "front": "What is the primary function of Data Loss Prevention (DLP) within the enterprise control plane?",
+        "back": "DLP enforces policy controls across Microsoft Purview to prevent sensitive data exposure, unauthorized transfer, or leakage during user and AI interactions."
+      },
+      {
+        "front": "What causes oversharing in Copilot responses, and how is it mitigated?",
+        "back": "Oversharing occurs when indexed content fails to correctly model source permissions. It is mitigated by enforcing strict permission fidelity in connector Access Control Lists (ACLs)."
+      },
+      {
+        "front": "How do sensitivity labels govern AI data access?",
+        "back": "Sensitivity labels classify enterprise content and are automatically inherited and respected by Microsoft Graph, Work IQ, and Copilot APIs to restrict unauthorized access."
+      },
+      {
+        "front": "What is permission trimming in Microsoft Graph and Copilot APIs?",
+        "back": "Permission trimming automatically filters out items from search and AI responses that the signed-in user does not have explicit permission to view in the underlying source system."
+      },
+      {
+        "front": "What are semantic labels in a synced connector schema?",
+        "back": "Semantic labels (such as title, url, or iconUrl) are schema annotations applied to external items to improve ranking, filtering, and Copilot retrieval quality."
+      },
+      {
+        "front": "How must a legal hold be handled across AI retrieval layers?",
+        "back": "Legal hold and retention requirements must propagate from the system of record directly into Graph indexes, caches, downstream stores, and AI retrieval layers."
+      },
+      {
+        "front": "What is the purpose of an audit log in Copilot and agent governance?",
+        "back": "Audit logs record prompts, responses, tool calls, parameters, user identities, and decision outcomes into SIEM/SOAR pipelines for security monitoring and compliance."
+      },
+      {
+        "front": "What is the architectural role of an MCP gateway?",
+        "back": "An MCP gateway centralizes tool discovery, enforces tool policies, authenticates requests, and audits tool execution between AI agents and external services."
+      },
+      {
+        "front": "What is a webhook in the context of integration architecture?",
+        "back": "A webhook is an HTTP callback mechanism that enables near-real-time event-driven notifications when resources change in platforms like GitHub or Microsoft Graph."
+      },
+      {
+        "front": "Why is API throttling enforced by Microsoft Graph?",
+        "back": "Throttling limits API request frequency per tenant to preserve platform stability, manage traffic spikes, and ensure predictable service performance."
+      },
+      {
+        "front": "What is admin consent in Microsoft 365 Copilot connector setup?",
+        "back": "Admin consent is explicit administrative authorization granted during app registration to allow custom connectors or APIs to access designated Microsoft Graph permissions."
+      },
+      {
+        "front": "What is the integration role of SharePoint in the platform?",
+        "back": "SharePoint serves as the primary system of record for governing, retaining, publishing, and retrieving office documents and broad enterprise knowledge."
+      },
+      {
+        "front": "What is the recommended architectural role for an IT Service Management (ITSM) system?",
+        "back": "An ITSM system serves as the system of record for controlling operational risk, authorization workflows, change records, and incident lifecycles."
+      },
+      {
+        "front": "How does ServiceNow integrate with Microsoft 365 Copilot?",
+        "back": "ServiceNow integrates via federated MCP connectors for live incident/ticket management, or via synced connectors to index knowledge base articles into Graph."
+      },
+      {
+        "front": "What is the integration principle for a Customer Relationship Management (CRM) system?",
+        "back": "A CRM platform must remain the authoritative system of record for accounts and cases, exposed to AI via governed APIs or connectors rather than duplicated stores."
+      },
+      {
+        "front": "What is a coding agent within the GitHub Copilot ecosystem?",
+        "back": "A coding agent is an AI entity (such as GitHub Copilot in Agent mode) that evaluates code context, calls approved tools via MCP, and automates multi-step development tasks."
+      },
+      {
+        "front": "What is Government Community Cloud (GCC), and how does connector support apply?",
+        "back": "GCC is a US government cloud deployment tier that supports synced connectors out of the box, though federated MCP connector availability varies per implementation."
+      },
+      {
+        "front": "How does connector support in GCC High compare to standard commercial clouds?",
+        "back": "GCC High supports synced connectors for indexing knowledge, but availability for federated (MCP-based) connectors varies and must be verified per connector."
+      },
+      {
+        "front": "What is the status of Copilot connectors in Department of Defense (DoD) environments?",
+        "back": "DoD environments support baseline synced Copilot connectors, while availability for individual federated connectors varies."
+      },
+      {
+        "front": "What is the key functional difference between synced and federated connectors in Microsoft 365 Copilot?",
+        "back": "Synced connectors crawl and index external content into Microsoft Graph, whereas federated connectors fetch live content at request time via MCP without storing data in Graph."
+      },
+      {
+        "front": "Which architectural core requirement must every item indexed by a synced connector contain?",
+        "back": "An Access Control List (ACL) that maps source-system entitlements directly to the Microsoft 365 user context to ensure permission fidelity."
+      },
+      {
+        "front": "What open protocol forms the underlying framework for federated Copilot connectors?",
+        "back": "Model Context Protocol (MCP)."
+      },
+      {
+        "front": "What is the Model Context Protocol (MCP)?",
+        "back": "MCP is an open standard that defines how application clients safely share context, prompts, resources, and tools with large language models."
+      },
+      {
+        "front": "What role does Microsoft Graph play in Microsoft's Digital-Work Platform?",
+        "back": "Microsoft Graph serves as the unified API and data plane for accessing Microsoft 365 resources, tenant indexes, and external synced items."
+      },
+      {
+        "front": "What are the three operational planes of the recommended Copilot Integration Enablement Layer?",
+        "back": "1. Knowledge plane (Search/Graph index & synced connectors)\n2. Transaction plane (APIs, workflows, & events)\n3. Control plane (Identity, access, secrets, policy, & audit)"
+      },
+      {
+        "front": "Why should enterprise architectures avoid copying data into secondary indexes solely for AI access?",
+        "back": "To prevent creating duplicate systems of record, which leads to stale data, permission drift, compliance risks, and audit failures."
+      },
+      {
+        "front": "Why is a GitHub App preferred over a broad OAuth app for server-to-server third-party integrations?",
+        "back": "GitHub Apps use fine-grained repository permissions, scoped installation access, and short-lived tokens rather than acting on user-delegated broad credentials."
+      },
+      {
+        "front": "What is the primary function of the GitHub Cloud Knowledge connector?",
+        "back": "It indexes Markdown (.md) and text (.txt) files from GitHub.com repositories into Microsoft Graph so productivity users can query engineering docs in Copilot."
+      },
+      {
+        "front": "What is the purpose of the Microsoft Work IQ API?",
+        "back": "It exposes the intelligence layer behind Microsoft 365 Copilot, allowing custom apps to securely reason over M365 work data while preserving permissions and compliance boundaries."
+      },
+      {
+        "front": "Under which REST namespace are Microsoft 365 Copilot APIs hosted?",
+        "back": "Under the Microsoft Graph namespace (graph.microsoft.com/v1.0/copilot and graph.microsoft.com/beta/copilot)."
+      },
+      {
+        "front": "What is dynamic tooling in Microsoft 365 Copilot federated connectors?",
+        "back": "It allows Copilot to dynamically select and execute tools exposed by an MCP server at runtime to fetch live facts or execute actions."
+      },
+      {
+        "front": "What choices does a user have when prompted to confirm a write, update, or delete action in a federated connector?",
+        "back": "Allow once, Allow for conversation, Always allow, or Cancel."
+      },
+      {
+        "front": "In an event-driven GitHub-to-ITSM pattern, which component enforces branch protection gates?",
+        "back": "GitHub Check Runs and status checks updated by API/event pipelines, not the LLM."
+      },
+      {
+        "front": "How do the M365 platform and GitHub platform differ in architectural focus?",
+        "back": "Microsoft 365 is a digital-work platform centered on Microsoft Graph, while GitHub is a software-delivery platform centered on code repositories, webhooks, and CI/CD."
+      },
+      {
+        "front": "What is the key architectural correction regarding Copilot's place in integration design?",
+        "back": "Copilot is a user-facing intelligence and orchestration layer, not the integration layer itself."
+      },
+      {
+        "front": "When should an enterprise build a custom synced connector instead of using a prebuilt connector?",
+        "back": "When the source system is proprietary, permission semantics are specialized, or unique domain metadata must be mapped precisely."
+      },
+      {
+        "front": "How can the GitHub MCP server be accessed remotely in VS Code?",
+        "back": "Through Copilot Chat in VS Code without local setup, granting access to remote-only GitHub toolsets."
+      },
+      {
+        "front": "Why is toolset customization recommended for the GitHub MCP server?",
+        "back": "Enabling only required toolsets improves tool selection accuracy, enhances security, and reduces token consumption in the context window."
+      },
+      {
+        "front": "What mechanism protects public and GHAS-enabled private repositories against exposed keys during GitHub MCP server interactions?",
+        "back": "Push protection, which scans and blocks secrets in AI-generated responses and agent actions."
+      },
+      {
+        "front": "How should agent architecture defend against prompt injection from retrieved external content?",
+        "back": "By separating retrieved content from system instructions, validating parameters, allowlisting tools, and enforcing policy outside the model."
+      },
+      {
+        "front": "What is the function of the Microsoft 365 Copilot Interaction Export API?",
+        "back": "It allows compliance solutions to capture and archive user interactions with Copilot across M365 applications for audit requirements."
+      },
+      {
+        "front": "What data does the Meeting Insights API extract from Microsoft Teams meetings?",
+        "back": "AI-generated meeting notes, action items, decisions, and discussion topics."
+      },
+      {
+        "front": "What is wiqd (Work IQ Dev Tools) used for?",
+        "back": "It is a command-line tool that automates the full lifecycle (scaffold, validate, provision, package, publish, monitor) of declarative agents."
+      },
+      {
+        "front": "What is the main responsibility of the Knowledge Plane in enterprise integration?",
+        "back": "To maintain curated, indexed information that is searchable and retrievable for humans and AI models."
+      },
+      {
+        "front": "What is the main responsibility of the Transaction Plane in enterprise integration?",
+        "back": "To provide controlled APIs, webhooks, event queues, and workflows that safely execute state-changing actions across systems of record."
+      },
+      {
+        "front": "What is the main responsibility of the Control Plane in enterprise integration?",
+        "back": "To govern identity, access policies, secrets, conditional access, audit telemetry, and API rate limits across platforms."
+      },
+      {
+        "front": "Which protocols manage user identity and SSO in the Enterprise Identity Plane?",
+        "back": "OAuth 2.0 / OpenID Connect (OIDC) and SAML SSO via Microsoft Entra ID."
+      },
+      {
+        "front": "What role does System for Cross-domain Identity Management (SCIM) play in enterprise security?",
+        "back": "It automates user lifecycle provisioning and deprovisioning (joiner-mover-leaver) across systems."
+      },
+      {
+        "front": "Why should Personal Access Tokens (PATs) be avoided for durable service integration?",
+        "back": "Because they are tied to individual human identities and lack automated rotation and granular app-level permissions."
+      },
+      {
+        "front": "When should delegated user-context authorization be preferred over application-only credentials?",
+        "back": "When retrieval must evaluate individual dynamic user entitlements so users only receive data they are personally authorized to see."
+      },
+      {
+        "front": "What role do the GitHub Checks API and Deployment APIs play in release governance?",
+        "back": "They post automated test results, security findings, quality gates, and deployment state directly into pull requests to enforce branch protection."
+      },
+      {
+        "front": "Which four essential properties should an externalItem schema definition include for synced connectors?",
+        "back": "1. Content / extracted text\n2. Metadata (title, URL, author, timestamps)\n3. Access Control List (ACL)\n4. Semantic labels"
+      },
+      {
+        "front": "What is the scope of self-serve sync connectors in Microsoft 365 Copilot?",
+        "back": "They synchronize recent external content scoped strictly to an individual user using that user's own credentials and consent."
+      },
+      {
+        "front": "What is the primary use case for Microsoft Graph Data Connect?",
+        "back": "Large-scale, governed batch extraction of Microsoft 365 datasets into Azure data platforms for analytics and data engineering."
+      },
+      {
+        "front": "How do Microsoft Graph change notifications function?",
+        "back": "They send webhook callbacks to registered listeners when monitored resources mutate, triggering authorized delta fetches."
+      },
+      {
+        "front": "How does the GitHub Server Knowledge connector differ mechanically from the GitHub Cloud Knowledge connector?",
+        "back": "The GitHub Server Knowledge connector uses an on-premises Microsoft Graph connector agent to run git clone operations against GitHub Enterprise Server instances."
+      },
+      {
+        "front": "Where can a user review or reset write/delete tool approvals for federated connectors in Microsoft 365 Copilot?",
+        "back": "In Copilot under Settings > Sources by selecting the connector and expanding the Tools section."
+      },
+      {
+        "front": "What are the exit criteria for Block 8 (Design Review) in the 420-minute deep-dive schedule?",
+        "back": "Deliver the teach-back presentation and answer the quiz bank without notes."
+      }
+    ]
+  }
+};
