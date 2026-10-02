@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>GLOSSARY — Microsoft&#x27;s Digital-Work Platform | Learn the digital-work platform</title>
-<meta name="description" content="Terms used across the Microsoft digital-work platform deep dive, with a one-line definition each.">
+<meta name="description" content="Terms for the Microsoft digital-work platform deep dive, graded by rung and cited to the source ledger.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -20,238 +20,463 @@
 <main class="doc">
   <div class="kicker">Reference</div>
   <h1 class="doctitle">GLOSSARY — Microsoft&#x27;s Digital-Work Platform</h1>
-  <p class="lead">Terms used across the Microsoft digital-work platform deep dive, with a one-line definition each.</p>
+  <p class="lead">Terms for the Microsoft digital-work platform deep dive, graded by rung and cited to the source ledger.</p>
   
   <article>
-<p>Collected from the mind map, the four architecture views, the study guide, and the cheatsheet. External URLs live on <a href="resources.html">RESOURCES</a>.</p>
+<p>Rung 100 names a product or plane. Rung 200 names a mechanism. Rung 300 needs a judgment or names a failure. Essential is yes when a design review cannot skip the term. Source is a ledger row, or UNVERIFIED when no row states the claim.</p>
 <table>
 <thead>
 <tr>
 <th>Term</th>
 <th>Definition</th>
+<th>Category</th>
+<th>Rung</th>
+<th>Essential</th>
+<th>Related</th>
 <th>Where it shows up</th>
+<th>Source</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>ACL</td>
-<td>Access control list on a Microsoft Graph item. A synced connector must map source-system permissions onto this list or Copilot can overshare.</td>
+<td>Access control list on a Microsoft Graph external item. A synced connector must map source-system permissions onto this list or Copilot can overshare.</td>
+<td>Logical</td>
+<td>200</td>
+<td>yes</td>
+<td>externalItem, Permission fidelity</td>
 <td>Integration view, study guide</td>
+<td>[<a class="cite" href="https://learn.microsoft.com/en-us/graph/connecting-external-content-manage-items" target="_blank" rel="noopener" title="Manage external items in a connection (Microsoft Graph)">S15</a>] [<a class="cite" href="https://learn.microsoft.com/en-us/microsoft-365/copilot/connectors/overview" target="_blank" rel="noopener" title="Microsoft 365 Copilot connectors overview (Microsoft Learn)">S3</a>]</td>
 </tr>
 <tr>
 <td>Agent / tool integration</td>
-<td>An agent calls a governed action or workflow (create a ticket, ask for approval, update a record). State changes stay in the system of record, not in the prompt.</td>
+<td>An agent calls a governed action or workflow. State changes stay in the system of record, not in the prompt.</td>
+<td>Logical</td>
+<td>200</td>
+<td>no</td>
+<td>MCP server, System of record</td>
 <td>Mind map, logical view</td>
+<td>[<a class="cite" href="https://docs.github.com/en/copilot/concepts/context/mcp" target="_blank" rel="noopener" title="About Model Context Protocol (MCP) (GitHub Docs)">S6</a>] [<a class="cite" href="https://docs.github.com/copilot/customizing-copilot/using-model-context-protocol/extending-copilot-chat-with-mcp" target="_blank" rel="noopener" title="Extending Copilot Chat with MCP (GitHub Docs)">S7</a>]</td>
 </tr>
 <tr>
 <td>API consumption</td>
 <td>The app calls a third-party API at request time for a transactional read or write. No copy of the record is kept as a second system of record.</td>
+<td>Logical</td>
+<td>200</td>
+<td>no</td>
+<td>System of record, Federated connector</td>
 <td>Mind map</td>
+<td>UNVERIFIED</td>
 </tr>
 <tr>
 <td>Checks API</td>
 <td>GitHub API that posts pass/fail and evidence onto a pull request. Used for tests, security findings, and release gates.</td>
+<td>Integration &amp; AI</td>
+<td>200</td>
+<td>no</td>
+<td>GitHub App</td>
 <td>Logical view, integration risks</td>
+<td>[<a class="cite" href="https://docs.github.com/en/rest/checks/runs" target="_blank" rel="noopener" title="REST API: check runs (GitHub Docs)">S17</a>]</td>
 </tr>
 <tr>
 <td>Conditional Access</td>
-<td>Entra policy that can block or step up a sign-in. Copilot APIs inherit it because they sit on Microsoft Graph.</td>
+<td>Entra policy that can block or step up a sign-in. Copilot APIs inherit it when they sit on Microsoft Graph.</td>
+<td>Physical</td>
+<td>200</td>
+<td>no</td>
+<td>Entra ID, Copilot APIs</td>
 <td>Mind map, Copilot APIs docs</td>
+<td>[<a class="cite" href="https://learn.microsoft.com/en-us/entra/identity/conditional-access/overview" target="_blank" rel="noopener" title="What is Conditional Access">S19</a>]</td>
 </tr>
 <tr>
 <td>Control plane</td>
-<td>Identity, policy, secrets, catalogs, and audit. One of the three planes in the Copilot Integration Enablement Layer.</td>
+<td>Identity, policy, secrets, catalogs, and audit. One of the three planes in this pack's Copilot Integration Enablement Layer.</td>
+<td>Conceptual</td>
+<td>200</td>
+<td>no</td>
+<td>Knowledge plane, Transaction plane</td>
 <td>Conceptual view, study guide</td>
+<td>UNVERIFIED</td>
 </tr>
 <tr>
 <td>Copilot (role)</td>
 <td>The user-facing intelligence layer. It is not the integration layer. Durable assets are APIs, events, identity, connectors, schemas, and policy underneath it.</td>
+<td>Conceptual</td>
+<td>200</td>
+<td>no</td>
+<td>Copilot Integration Enablement Layer</td>
 <td>Mind map, all views</td>
+<td>UNVERIFIED</td>
 </tr>
 <tr>
 <td>Copilot APIs</td>
 <td>REST endpoints under Microsoft Graph that let an app invoke Microsoft 365 Copilot. Same auth model as other Graph APIs.</td>
+<td>Platform</td>
+<td>200</td>
+<td>no</td>
+<td>Microsoft Graph, Microsoft 365 Copilot</td>
 <td>Block sources, mind map</td>
+<td>[<a class="cite" href="https://learn.microsoft.com/en-us/microsoft-365/copilot/extensibility/copilot-apis-overview" target="_blank" rel="noopener" title="Copilot APIs overview (Microsoft Learn)">S1</a>]</td>
 </tr>
 <tr>
 <td>Copilot connector</td>
 <td>Brings external knowledge into Microsoft 365 Copilot and Search. Two kinds: synced (indexed) and federated (live MCP).</td>
+<td>Integration &amp; AI</td>
+<td>100</td>
+<td>yes</td>
+<td>Synced connector, Federated connector</td>
 <td>Blocks, integration view</td>
+<td>[<a class="cite" href="https://learn.microsoft.com/en-us/microsoft-365/copilot/connectors/overview" target="_blank" rel="noopener" title="Microsoft 365 Copilot connectors overview (Microsoft Learn)">S3</a>]</td>
 </tr>
 <tr>
 <td>Copilot Integration Enablement Layer</td>
 <td>The target control point: an MCP/API catalog, gateway, policy, and audit so teams do not build one-off AI connections.</td>
+<td>Integration &amp; AI</td>
+<td>300</td>
+<td>yes</td>
+<td>MCP, Control plane</td>
 <td>Conceptual view, mind map</td>
+<td>UNVERIFIED</td>
 </tr>
 <tr>
 <td>Copilot Studio</td>
 <td>Low-code place to build task-specific business agents that call APIs, Dataverse, and approved MCP tools. Separate from GitHub Copilot.</td>
+<td>Platform</td>
+<td>100</td>
+<td>no</td>
+<td>Microsoft 365 Copilot, Dataverse</td>
 <td>Mind map, cheatsheet</td>
+<td>[<a class="cite" href="https://learn.microsoft.com/en-us/microsoft-copilot-studio/fundamentals-what-is-copilot-studio" target="_blank" rel="noopener" title="What is Copilot Studio">S22</a>]</td>
 </tr>
 <tr>
 <td>Dataverse</td>
 <td>Power Platform data store behind low-code apps and some Copilot Studio agents.</td>
+<td>Platform</td>
+<td>100</td>
+<td>no</td>
+<td>Copilot Studio, Power Platform connector</td>
 <td>Mind map</td>
+<td>[<a class="cite" href="https://learn.microsoft.com/en-us/power-apps/maker/data-platform/data-platform-intro" target="_blank" rel="noopener" title="What is Microsoft Dataverse">S25</a>]</td>
 </tr>
 <tr>
 <td>Digital-work platform</td>
-<td>The Microsoft 365 side: mail, files, chat, meetings, and business process. Microsoft Graph is its API and data plane.</td>
+<td>The Microsoft 365 side of this pack: mail, files, chat, meetings, and business process. Microsoft Graph is its API and data plane.</td>
+<td>Conceptual</td>
+<td>100</td>
+<td>no</td>
+<td>Microsoft Graph, Software-delivery platform</td>
 <td>Conceptual view</td>
+<td>[<a class="cite" href="https://learn.microsoft.com/en-us/microsoft-365/copilot/microsoft-365-copilot-overview" target="_blank" rel="noopener" title="Microsoft 365 Copilot overview">S10</a>]</td>
 </tr>
 <tr>
 <td>Entra ID</td>
-<td>Microsoft's identity service for this pack. Users and apps authenticate here; GitHub can federate to the same directory.</td>
+<td>Microsoft's identity service for this pack. Users and apps authenticate here.</td>
+<td>Physical</td>
+<td>100</td>
+<td>yes</td>
+<td>Conditional Access, Workload identity</td>
 <td>Physical view, cheatsheet</td>
+<td>[<a class="cite" href="https://learn.microsoft.com/en-us/entra/fundamentals/whatis" target="_blank" rel="noopener" title="What is Microsoft Entra ID">S18</a>]</td>
 </tr>
 <tr>
 <td>Event-driven integration</td>
 <td>A source publishes a webhook or event; a consumer reacts. Used when systems must respond to a change instead of polling.</td>
+<td>Logical</td>
+<td>200</td>
+<td>no</td>
+<td>Graph change notifications</td>
 <td>Mind map, logical view</td>
+<td>[<a class="cite" href="https://learn.microsoft.com/en-us/graph/change-notifications-overview" target="_blank" rel="noopener" title="Microsoft Graph change notifications">S20</a>]</td>
 </tr>
 <tr>
 <td>externalItem</td>
-<td>The Graph object a synced connector writes. Study guide: it must carry content, metadata, an ACL, and semantic labels.</td>
+<td>The Graph object a synced connector writes. It carries content, properties, and an ACL.</td>
+<td>Logical</td>
+<td>200</td>
+<td>yes</td>
+<td>ACL, Synced connector</td>
 <td>Study guide, physical view</td>
+<td>[<a class="cite" href="https://learn.microsoft.com/en-us/graph/connecting-external-content-manage-items" target="_blank" rel="noopener" title="Manage external items in a connection (Microsoft Graph)">S15</a>]</td>
 </tr>
 <tr>
 <td>Federated connector</td>
 <td>Live fetch at question time through MCP. Content is not copied into Microsoft Graph. Use it when data is volatile, sensitive, large, or when a write must hit the source.</td>
+<td>Logical</td>
+<td>200</td>
+<td>yes</td>
+<td>Synced connector, MCP</td>
 <td>Blocks, logical view</td>
+<td>[<a class="cite" href="https://learn.microsoft.com/en-us/microsoft-365/copilot/connectors/federated-connectors-overview" target="_blank" rel="noopener" title="Federated connectors overview (Microsoft Learn)">S4</a>] [<a class="cite" href="https://learn.microsoft.com/en-us/microsoft-365/copilot/connectors/overview" target="_blank" rel="noopener" title="Microsoft 365 Copilot connectors overview (Microsoft Learn)">S3</a>]</td>
 </tr>
 <tr>
 <td>GitHub App</td>
-<td>Server-to-server GitHub integration with fine-grained permissions and short-lived installation tokens. Preferred over a broad OAuth app.</td>
+<td>Server-to-server GitHub integration with fine-grained permissions and short-lived installation tokens. Preferred over a broad OAuth app or a PAT.</td>
+<td>Physical</td>
+<td>200</td>
+<td>yes</td>
+<td>PAT, Checks API</td>
 <td>Mind map, integration risks</td>
+<td>[<a class="cite" href="https://docs.github.com/en/apps/creating-github-apps/about-creating-github-apps/about-creating-github-apps" target="_blank" rel="noopener" title="GitHub Apps overview (GitHub Docs)">S16</a>]</td>
 </tr>
 <tr>
 <td>GitHub Cloud Knowledge connector</td>
 <td>Microsoft connector that indexes selected GitHub Markdown and docs into Graph so Microsoft 365 Copilot can ground on them.</td>
+<td>Integration &amp; AI</td>
+<td>200</td>
+<td>no</td>
+<td>Synced connector, GitHub Copilot</td>
 <td>Source ledger, logical view</td>
+<td>[<a class="cite" href="https://learn.microsoft.com/en-us/microsoft-365/copilot/connectors/github-cloud-knowledge-overview" target="_blank" rel="noopener" title="GitHub Cloud Knowledge connector overview (Microsoft Learn)">S5</a>]</td>
 </tr>
 <tr>
 <td>GitHub Copilot</td>
 <td>The coding assistant (IDE, CLI, chat, coding agent). Licensed separately from Microsoft 365 Copilot.</td>
+<td>Platform</td>
+<td>100</td>
+<td>yes</td>
+<td>Microsoft 365 Copilot, MCP</td>
 <td>Cheatsheet, mind map</td>
+<td>[<a class="cite" href="https://docs.github.com/copilot" target="_blank" rel="noopener" title="GitHub Copilot documentation (GitHub Docs)">S12</a>]</td>
 </tr>
 <tr>
 <td>GitHub Copilot Extensions</td>
-<td>Older GitHub App model for extending Copilot. GitHub has deprecated it in favor of MCP servers.</td>
+<td>Older GitHub App model for extending Copilot. GitHub documents MCP as the current extensibility path.</td>
+<td>Integration &amp; AI</td>
+<td>200</td>
+<td>no</td>
+<td>MCP server, GitHub App</td>
 <td>Mind map, study guide</td>
+<td>[<a class="cite" href="https://docs.github.com/copilot/customizing-copilot/using-model-context-protocol/extending-copilot-chat-with-mcp" target="_blank" rel="noopener" title="Extending Copilot Chat with MCP (GitHub Docs)">S7</a>]</td>
 </tr>
 <tr>
 <td>Graph change notifications</td>
-<td>Webhooks from Microsoft Graph when a resource changes. The subscriber then reads the authorized delta.</td>
+<td>Webhooks from Microsoft Graph when a resource changes. The subscriber then reads the authorized change.</td>
+<td>Physical</td>
+<td>200</td>
+<td>no</td>
+<td>Event-driven integration, Microsoft Graph</td>
 <td>Mind map</td>
+<td>[<a class="cite" href="https://learn.microsoft.com/en-us/graph/change-notifications-overview" target="_blank" rel="noopener" title="Microsoft Graph change notifications">S20</a>]</td>
 </tr>
 <tr>
 <td>Graph Data Connect</td>
 <td>Bulk, governed export of Microsoft 365 data into an Azure analytics store. Not the same as a Copilot connector.</td>
+<td>Platform</td>
+<td>200</td>
+<td>no</td>
+<td>Microsoft Graph, Copilot connector</td>
 <td>Mind map</td>
+<td>[<a class="cite" href="https://learn.microsoft.com/en-us/graph/data-connect-concept-overview" target="_blank" rel="noopener" title="Graph Data Connect overview">S21</a>]</td>
 </tr>
 <tr>
 <td>Indexed knowledge connector</td>
 <td>Same idea as a synced connector: copy external content into a Graph external connection so Search and Copilot can retrieve it.</td>
+<td>Logical</td>
+<td>200</td>
+<td>no</td>
+<td>Synced connector, externalItem</td>
 <td>Mind map, study guide</td>
+<td>[<a class="cite" href="https://learn.microsoft.com/en-us/microsoft-365/copilot/connectors/overview" target="_blank" rel="noopener" title="Microsoft 365 Copilot connectors overview (Microsoft Learn)">S3</a>] [<a class="cite" href="https://learn.microsoft.com/en-us/graph/connecting-external-content-manage-items" target="_blank" rel="noopener" title="Manage external items in a connection (Microsoft Graph)">S15</a>]</td>
 </tr>
 <tr>
 <td>Knowledge plane</td>
-<td>Curated information made searchable (synced connectors and the Graph index).</td>
+<td>Curated information made searchable through synced connectors and the Graph index. A name this pack uses, not a Microsoft product name.</td>
+<td>Conceptual</td>
+<td>200</td>
+<td>no</td>
+<td>Synced connector, Transaction plane</td>
 <td>Conceptual view</td>
+<td>UNVERIFIED</td>
 </tr>
 <tr>
 <td>MCP</td>
 <td>Model Context Protocol. A way for a host (Copilot) to call tools and read context from an external server. GitHub's primary Copilot extensibility path, and the wire for federated connectors.</td>
+<td>Integration &amp; AI</td>
+<td>100</td>
+<td>yes</td>
+<td>MCP server, Federated connector</td>
 <td>Blocks, all views</td>
+<td>[<a class="cite" href="https://docs.github.com/en/copilot/concepts/context/mcp" target="_blank" rel="noopener" title="About Model Context Protocol (MCP) (GitHub Docs)">S6</a>] [<a class="cite" href="https://learn.microsoft.com/en-us/microsoft-365/copilot/connectors/federated-connectors-overview" target="_blank" rel="noopener" title="Federated connectors overview (Microsoft Learn)">S4</a>]</td>
 </tr>
 <tr>
 <td>MCP server</td>
 <td>A process that exposes tools to Copilot. Catalog it. Split read-only tools from write tools.</td>
+<td>Integration &amp; AI</td>
+<td>200</td>
+<td>no</td>
+<td>MCP, Prompt injection</td>
 <td>Conceptual view, integration risks</td>
+<td>[<a class="cite" href="https://docs.github.com/copilot/customizing-copilot/using-model-context-protocol/extending-copilot-chat-with-mcp" target="_blank" rel="noopener" title="Extending Copilot Chat with MCP (GitHub Docs)">S7</a>]</td>
 </tr>
 <tr>
 <td>Microsoft 365 Copilot</td>
 <td>The work assistant over mail, files, meetings, and Graph. Not the same product as GitHub Copilot.</td>
+<td>Platform</td>
+<td>100</td>
+<td>yes</td>
+<td>GitHub Copilot, Microsoft Graph</td>
 <td>Cheatsheet, source ledger</td>
+<td>[<a class="cite" href="https://learn.microsoft.com/en-us/microsoft-365/copilot/microsoft-365-copilot-overview" target="_blank" rel="noopener" title="Microsoft 365 Copilot overview">S10</a>]</td>
 </tr>
 <tr>
 <td>Microsoft Graph</td>
 <td>The permission-aware API and data plane for Microsoft 365 content and for Copilot APIs.</td>
+<td>Platform</td>
+<td>100</td>
+<td>yes</td>
+<td>Copilot APIs, externalItem</td>
 <td>Mind map, conceptual view</td>
+<td>[<a class="cite" href="https://learn.microsoft.com/en-us/microsoft-365/copilot/extensibility/copilot-apis-overview" target="_blank" rel="noopener" title="Copilot APIs overview (Microsoft Learn)">S1</a>] [<a class="cite" href="https://learn.microsoft.com/en-us/graph/connecting-external-content-manage-items" target="_blank" rel="noopener" title="Manage external items in a connection (Microsoft Graph)">S15</a>]</td>
 </tr>
 <tr>
 <td>OAuth 2.0</td>
 <td>Delegated or app authorization. Graph and GitHub both use it. Broad scopes are a risk on GitHub; prefer a GitHub App for service-to-service.</td>
+<td>Physical</td>
+<td>200</td>
+<td>no</td>
+<td>GitHub App, OIDC</td>
 <td>Physical view</td>
+<td>[<a class="cite" href="https://docs.github.com/en/apps/creating-github-apps/about-creating-github-apps/about-creating-github-apps" target="_blank" rel="noopener" title="GitHub Apps overview (GitHub Docs)">S16</a>]</td>
 </tr>
 <tr>
 <td>OIDC</td>
-<td>OpenID Connect. Identity layer on OAuth, used for sign-in into Entra.</td>
+<td>OpenID Connect. Identity layer on OAuth, used for sign-in. This pack does not yet cite an Entra protocol page for it.</td>
+<td>Physical</td>
+<td>200</td>
+<td>no</td>
+<td>OAuth 2.0, SAML</td>
 <td>Physical view</td>
+<td>UNVERIFIED</td>
 </tr>
 <tr>
 <td>PAT</td>
-<td>Personal access token. Avoid it for production integrations; it is a long-lived user secret.</td>
+<td>Personal access token. A user secret with a lifetime you set. Avoid it for a service; use a GitHub App installation token.</td>
+<td>Physical</td>
+<td>300</td>
+<td>yes</td>
+<td>GitHub App</td>
 <td>Study guide</td>
+<td>[<a class="cite" href="https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens" target="_blank" rel="noopener" title="Managing personal access tokens (GitHub Docs)">S24</a>] [<a class="cite" href="https://docs.github.com/en/apps/creating-github-apps/about-creating-github-apps/about-creating-github-apps" target="_blank" rel="noopener" title="GitHub Apps overview (GitHub Docs)">S16</a>]</td>
 </tr>
 <tr>
 <td>Permission fidelity</td>
 <td>Source-system rights must survive the trip into Graph ACLs. If the mapping is wrong, Copilot retrieval spreads the mistake.</td>
+<td>Integration &amp; AI</td>
+<td>300</td>
+<td>yes</td>
+<td>ACL, externalItem</td>
 <td>Integration view</td>
+<td>[<a class="cite" href="https://learn.microsoft.com/en-us/graph/connecting-external-content-manage-items" target="_blank" rel="noopener" title="Manage external items in a connection (Microsoft Graph)">S15</a>] [<a class="cite" href="https://learn.microsoft.com/en-us/microsoft-365/copilot/connectors/overview" target="_blank" rel="noopener" title="Microsoft 365 Copilot connectors overview (Microsoft Learn)">S3</a>]</td>
 </tr>
 <tr>
 <td>Power Platform connector</td>
 <td>Low-code connector used by Power Automate and Power Apps. Different surface from a Copilot connector.</td>
+<td>Platform</td>
+<td>200</td>
+<td>no</td>
+<td>Copilot connector, Dataverse</td>
 <td>Mind map</td>
+<td>UNVERIFIED</td>
 </tr>
 <tr>
 <td>Prompt injection</td>
 <td>Hostile text inside retrieved content that tries to override the model's instructions. Treat retrieved text as data; gate actions outside the model.</td>
+<td>Integration &amp; AI</td>
+<td>300</td>
+<td>yes</td>
+<td>MCP server, Permission fidelity</td>
 <td>Integration view</td>
+<td>UNVERIFIED</td>
 </tr>
 <tr>
 <td>SAML</td>
-<td>Older SSO federation option into Entra, alternative to OIDC.</td>
+<td>Older SSO federation option, an alternative to OIDC. This pack does not yet cite an Entra SSO page for it.</td>
+<td>Physical</td>
+<td>200</td>
+<td>no</td>
+<td>OIDC, Entra ID</td>
 <td>Physical view</td>
+<td>UNVERIFIED</td>
 </tr>
 <tr>
 <td>SCIM</td>
-<td>Protocol for automated joiner, mover, and leaver provisioning.</td>
+<td>Protocol Entra app provisioning uses to create, update, and disable accounts in a target app.</td>
+<td>Physical</td>
+<td>200</td>
+<td>no</td>
+<td>Entra ID, Workload identity</td>
 <td>Physical view, study guide</td>
+<td>[<a class="cite" href="https://learn.microsoft.com/en-us/entra/identity/app-provisioning/user-provisioning" target="_blank" rel="noopener" title="What is app provisioning in Microsoft Entra ID">S23</a>]</td>
 </tr>
 <tr>
 <td>Semantic index</td>
 <td>Microsoft's index that Copilot uses for grounding. Synced connector items land where this retrieval can see them.</td>
-<td>Study guide (grounding path)</td>
+<td>Logical</td>
+<td>200</td>
+<td>yes</td>
+<td>Synced connector, Microsoft 365 Copilot</td>
+<td>Study guide</td>
+<td>[<a class="cite" href="https://learn.microsoft.com/en-us/microsoft-365/copilot/microsoft-365-copilot-architecture" target="_blank" rel="noopener" title="Microsoft 365 Copilot architecture">S11</a>] [<a class="cite" href="https://learn.microsoft.com/en-us/microsoft-365/copilot/connectors/overview" target="_blank" rel="noopener" title="Microsoft 365 Copilot connectors overview (Microsoft Learn)">S3</a>]</td>
 </tr>
 <tr>
 <td>Software-delivery platform</td>
-<td>The GitHub side: repos, review, Actions, packages, release.</td>
+<td>The GitHub side of this pack: repos, review, Actions, packages, release.</td>
+<td>Conceptual</td>
+<td>100</td>
+<td>no</td>
+<td>GitHub Copilot, Digital-work platform</td>
 <td>Conceptual view</td>
+<td>[<a class="cite" href="https://docs.github.com/copilot" target="_blank" rel="noopener" title="GitHub Copilot documentation (GitHub Docs)">S12</a>]</td>
 </tr>
 <tr>
 <td>Synced connector</td>
-<td>Pulls external content on a schedule into a Graph external connection (content, metadata, ACL, semantic labels). Good for search; bad for secrets and fast-changing records.</td>
+<td>Pulls external content on a schedule into a Graph external connection, including content, properties, and an ACL. Good for search; a poor place for secrets and fast-changing records.</td>
+<td>Logical</td>
+<td>200</td>
+<td>yes</td>
+<td>Federated connector, externalItem</td>
 <td>Blocks, logical view</td>
+<td>[<a class="cite" href="https://learn.microsoft.com/en-us/microsoft-365/copilot/connectors/overview" target="_blank" rel="noopener" title="Microsoft 365 Copilot connectors overview (Microsoft Learn)">S3</a>] [<a class="cite" href="https://learn.microsoft.com/en-us/microsoft-365/copilot/extensibility/overview-copilot-connector" target="_blank" rel="noopener" title="Overview: build a Copilot connector (Microsoft Learn)">S2</a>]</td>
 </tr>
 <tr>
 <td>System of record</td>
 <td>The one authoritative store for a fact. Copilot must not become a second one.</td>
+<td>Conceptual</td>
+<td>100</td>
+<td>yes</td>
+<td>Synced connector, API consumption</td>
 <td>Conceptual view</td>
+<td>UNVERIFIED</td>
 </tr>
 <tr>
 <td>Transaction plane</td>
-<td>APIs and workflows that change state. Distinct from the knowledge plane.</td>
+<td>APIs and workflows that change state. Distinct from the knowledge plane. A name this pack uses.</td>
+<td>Conceptual</td>
+<td>200</td>
+<td>no</td>
+<td>Knowledge plane, API consumption</td>
 <td>Conceptual view</td>
+<td>UNVERIFIED</td>
 </tr>
 <tr>
 <td>Work IQ API</td>
-<td>Microsoft extensibility API called out in the study guide as part of how Copilot reasons over work context. Treat product detail as Microsoft Learn, not as invented here.</td>
+<td>Microsoft extensibility API named in the Copilot extensibility overview as part of how Copilot reasons over work context.</td>
+<td>Platform</td>
+<td>200</td>
+<td>no</td>
+<td>Microsoft 365 Copilot, Copilot APIs</td>
 <td>Study guide, source ledger</td>
+<td>[<a class="cite" href="https://learn.microsoft.com/en-us/microsoft-365/copilot/extensibility/overview" target="_blank" rel="noopener" title="Microsoft 365 Copilot extensibility overview">S9</a>]</td>
 </tr>
 <tr>
 <td>Workload identity</td>
-<td>An app or service principal, not a person. Server-to-server calls should use this (or a GitHub App), not a shared user account.</td>
+<td>An app or service identity, not a person. Server-to-server calls should use this, or a GitHub App, not a shared user account.</td>
+<td>Physical</td>
+<td>300</td>
+<td>yes</td>
+<td>Entra ID, GitHub App</td>
 <td>Study guide</td>
+<td>[<a class="cite" href="https://learn.microsoft.com/en-us/entra/fundamentals/whatis" target="_blank" rel="noopener" title="What is Microsoft Entra ID">S18</a>] [<a class="cite" href="https://docs.github.com/en/apps/creating-github-apps/about-creating-github-apps/about-creating-github-apps" target="_blank" rel="noopener" title="GitHub Apps overview (GitHub Docs)">S16</a>]</td>
 </tr>
 </tbody>
 </table></article>

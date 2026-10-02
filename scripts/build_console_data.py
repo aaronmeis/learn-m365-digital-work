@@ -15,15 +15,17 @@ def js(obj):
 def sources():
     text = (PACK / "reference" / "source-ledger.md").read_text(encoding="utf-8")
     rows = []
-    for m in re.finditer(r"^\|\s*(\d+)\s*\|\s*([^|]+?)\s*\|\s*(https?://\S+?)\s*\|\s*([^|]*)\|\s*([^|]*)\|", text, re.M):
+    for m in re.finditer(
+        r"^\|\s*(\d+)\s*\|\s*([^|]+?)\s*\|\s*(https?://\S+?)\s*\|\s*([^|]*)\|\s*([^|]*)\|\s*([^|]*)\|\s*([^|]*)\|",
+        text, re.M):
         rows.append({
-            "n": len(rows) + 1,
-            "g": "Microsoft and GitHub primary docs",
+            "n": int(m.group(1)),
+            "g": m.group(6).strip() or "Microsoft Learn",
             "t": m.group(2).strip(),
             "u": m.group(3).strip(),
             "type": (m.group(4).strip() or "docs"),
             "trust": m.group(5).strip() or "high",
-            "b": "",
+            "b": m.group(7).strip(),
             "ledger": m.group(1),
         })
     return rows
@@ -38,30 +40,25 @@ def glossary():
         cells = [c.strip() for c in line.strip("|").split("|")]
         if len(cells) < 2 or cells[0] in ("Term",):
             continue
-        term, definition = cells[0], cells[1]
-        where = cells[2] if len(cells) > 2 else ""
-        cat = "Platform"
-        low = (where + " " + term).lower()
-        if "conceptual" in low:
-            cat = "Conceptual"
-        elif "logical" in low or "study guide" in low:
-            cat = "Logical"
-        elif "physical" in low:
-            cat = "Physical"
-        elif "integration" in low or "mind map" in low:
-            cat = "Integration & AI"
+        if len(cells) < 8:
+            continue
+        term, definition, cat, rung, essential, related, where, source = cells[:8]
         items.append({
-            "category": cat, "term": term, "rung": 200, "essential": len(items) < 18,
-            "definition": definition, "see_also": where,
+            "category": cat,
+            "term": term,
+            "rung": int(rung),
+            "essential": essential.lower() == "yes",
+            "definition": definition,
+            "see_also": related,
+            "where": where,
+            "source": source,
         })
     return items
 
 
 SRCS = sources()
-# Stable console citations used below. Vault ledger repeats 1-7; these are appearance order.
-# 1 Copilot APIs, 2 build connector, 3 connectors overview, 4 federated, 5 GitHub knowledge,
-# 6 MCP concept, 7 MCP chat, 8 Ignite talk, 9 extensibility overview, 10 M365 Copilot overview,
-# 11 architecture, 12 GitHub Copilot docs, 13 Azure editions, 14 business features.
+# Console [S#] matches the vault ledger number. Rows 1-14 keep the old appearance order.
+# Rows 15-25 were added 2026-10-02 for glossary citations.
 
 WEEKS = [
     {"n": 1, "title": "Context and scope", "time": "45 min", "rungs": "100", "lib": "block-01-context-and-scope",
@@ -454,10 +451,6 @@ MINI = [
 ]
 
 GLOSS = glossary()
-# mark a few essentials by term
-ESS = {"Copilot connector", "Federated connector", "externalItem", "Copilot Integration Enablement Layer", "GitHub App", "ACL", "Digital-work platform", "Microsoft 365 Copilot", "GitHub Copilot", "Entra ID"}
-for g in GLOSS:
-    g["essential"] = g["term"] in ESS or g["term"].startswith("Copilot")
 
 CUT_OUT = {
     "labels": CUT["labels"],
@@ -468,7 +461,7 @@ CUT_OUT = {
 }
 
 parts = []
-parts.append("/* Source ledger, renumbered in appearance order. The vault table repeats 1-7; `ledger` is the printed number. */\n")
+parts.append("/* Source ledger. `n` is the vault row number. */\n")
 parts.append("const SOURCES = " + js(SRCS) + ";\n\n")
 parts.append("const DATA = " + js({
     "weeks": WEEKS,

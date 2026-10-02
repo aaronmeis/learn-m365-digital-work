@@ -1,144 +1,254 @@
-/* Source ledger, renumbered in appearance order. The vault table repeats 1-7; `ledger` is the printed number. */
+/* Source ledger. `n` is the vault row number. */
 const SOURCES = [
   {
     "n": 1,
-    "g": "Microsoft and GitHub primary docs",
+    "g": "Microsoft Learn",
     "t": "Copilot APIs overview (Microsoft Learn)",
     "u": "https://learn.microsoft.com/en-us/microsoft-365/copilot/extensibility/copilot-apis-overview",
     "type": "docs",
     "trust": "high",
-    "b": "",
+    "b": "Copilot APIs, Graph auth",
     "ledger": "1"
   },
   {
     "n": 2,
-    "g": "Microsoft and GitHub primary docs",
+    "g": "Microsoft Learn",
     "t": "Overview: build a Copilot connector (Microsoft Learn)",
     "u": "https://learn.microsoft.com/en-us/microsoft-365/copilot/extensibility/overview-copilot-connector",
     "type": "docs",
     "trust": "high",
-    "b": "",
+    "b": "synced connector, schema",
     "ledger": "2"
   },
   {
     "n": 3,
-    "g": "Microsoft and GitHub primary docs",
+    "g": "Microsoft Learn",
     "t": "Microsoft 365 Copilot connectors overview (Microsoft Learn)",
     "u": "https://learn.microsoft.com/en-us/microsoft-365/copilot/connectors/overview",
     "type": "docs",
     "trust": "high",
-    "b": "",
+    "b": "synced vs federated, ACL",
     "ledger": "3"
   },
   {
     "n": 4,
-    "g": "Microsoft and GitHub primary docs",
+    "g": "Microsoft Learn",
     "t": "Federated connectors overview (Microsoft Learn)",
     "u": "https://learn.microsoft.com/en-us/microsoft-365/copilot/connectors/federated-connectors-overview",
     "type": "docs",
     "trust": "high",
-    "b": "",
+    "b": "federated connector, MCP",
     "ledger": "4"
   },
   {
     "n": 5,
-    "g": "Microsoft and GitHub primary docs",
+    "g": "Microsoft Learn",
     "t": "GitHub Cloud Knowledge connector overview (Microsoft Learn)",
     "u": "https://learn.microsoft.com/en-us/microsoft-365/copilot/connectors/github-cloud-knowledge-overview",
     "type": "docs",
     "trust": "high",
-    "b": "",
+    "b": "GitHub knowledge connector",
     "ledger": "5"
   },
   {
     "n": 6,
-    "g": "Microsoft and GitHub primary docs",
+    "g": "GitHub Docs",
     "t": "About Model Context Protocol (MCP) (GitHub Docs)",
     "u": "https://docs.github.com/en/copilot/concepts/context/mcp",
     "type": "docs",
     "trust": "high",
-    "b": "",
+    "b": "MCP",
     "ledger": "6"
   },
   {
     "n": 7,
-    "g": "Microsoft and GitHub primary docs",
+    "g": "GitHub Docs",
     "t": "Extending Copilot Chat with MCP (GitHub Docs)",
     "u": "https://docs.github.com/copilot/customizing-copilot/using-model-context-protocol/extending-copilot-chat-with-mcp",
     "type": "docs",
     "trust": "high",
-    "b": "",
+    "b": "MCP server, Copilot Chat",
     "ledger": "7"
   },
   {
     "n": 8,
-    "g": "Microsoft and GitHub primary docs",
-    "t": "Microsoft Ignite 2025 PBRK394: M365 Copilot Agents - Powering Retail & Consumer Goods Partner Success (named talk, Copilot Connectors + MCP)",
+    "g": "Talks",
+    "t": "Microsoft Ignite 2025 PBRK394: M365 Copilot Agents",
     "u": "https://www.youtube.com/watch?v=P8iBjDh7OZg",
-    "type": "docs",
+    "type": "talk",
     "trust": "high",
-    "b": "",
-    "ledger": "1"
+    "b": "connectors, MCP",
+    "ledger": "8"
   },
   {
     "n": 9,
-    "g": "Microsoft and GitHub primary docs",
-    "t": "Microsoft 365 Copilot extensibility overview (synced vs federated connectors, Work IQ API, MCP)",
+    "g": "Microsoft Learn",
+    "t": "Microsoft 365 Copilot extensibility overview",
     "u": "https://learn.microsoft.com/en-us/microsoft-365/copilot/extensibility/overview",
     "type": "docs",
     "trust": "high",
-    "b": "",
-    "ledger": "2"
+    "b": "synced vs federated, Work IQ, MCP",
+    "ledger": "9"
   },
   {
     "n": 10,
-    "g": "Microsoft and GitHub primary docs",
+    "g": "Microsoft Learn",
     "t": "Microsoft 365 Copilot overview",
     "u": "https://learn.microsoft.com/en-us/microsoft-365/copilot/microsoft-365-copilot-overview",
     "type": "docs",
     "trust": "high",
-    "b": "",
-    "ledger": "3"
+    "b": "Microsoft 365 Copilot",
+    "ledger": "10"
   },
   {
     "n": 11,
-    "g": "Microsoft and GitHub primary docs",
+    "g": "Microsoft Learn",
     "t": "Microsoft 365 Copilot architecture",
     "u": "https://learn.microsoft.com/en-us/microsoft-365/copilot/microsoft-365-copilot-architecture",
     "type": "docs",
     "trust": "high",
-    "b": "",
-    "ledger": "4"
+    "b": "grounding, semantic index",
+    "ledger": "11"
   },
   {
     "n": 12,
-    "g": "Microsoft and GitHub primary docs",
+    "g": "GitHub Docs",
     "t": "GitHub Copilot documentation (GitHub Docs)",
     "u": "https://docs.github.com/copilot",
     "type": "docs",
     "trust": "high",
-    "b": "",
-    "ledger": "5"
+    "b": "GitHub Copilot",
+    "ledger": "12"
   },
   {
     "n": 13,
-    "g": "Microsoft and GitHub primary docs",
+    "g": "Product pages",
     "t": "GitHub Copilot on Azure (editions)",
     "u": "https://azure.microsoft.com/en-us/products/github/copilot",
-    "type": "docs",
+    "type": "product page",
     "trust": "medium",
-    "b": "",
-    "ledger": "6"
+    "b": "editions",
+    "ledger": "13"
   },
   {
     "n": 14,
-    "g": "Microsoft and GitHub primary docs",
+    "g": "Product pages",
     "t": "GitHub Copilot Business features",
     "u": "https://github.com/features/copilot/copilot-business",
-    "type": "docs",
+    "type": "product page",
     "trust": "medium",
-    "b": "",
-    "ledger": "7"
+    "b": "Business edition",
+    "ledger": "14"
+  },
+  {
+    "n": 15,
+    "g": "Microsoft Learn",
+    "t": "Manage external items in a connection (Microsoft Graph)",
+    "u": "https://learn.microsoft.com/en-us/graph/connecting-external-content-manage-items",
+    "type": "docs",
+    "trust": "high",
+    "b": "externalItem, ACL, content",
+    "ledger": "15"
+  },
+  {
+    "n": 16,
+    "g": "GitHub Docs",
+    "t": "GitHub Apps overview (GitHub Docs)",
+    "u": "https://docs.github.com/en/apps/creating-github-apps/about-creating-github-apps/about-creating-github-apps",
+    "type": "docs",
+    "trust": "high",
+    "b": "GitHub App",
+    "ledger": "16"
+  },
+  {
+    "n": 17,
+    "g": "GitHub Docs",
+    "t": "REST API: check runs (GitHub Docs)",
+    "u": "https://docs.github.com/en/rest/checks/runs",
+    "type": "docs",
+    "trust": "high",
+    "b": "Checks API",
+    "ledger": "17"
+  },
+  {
+    "n": 18,
+    "g": "Microsoft Learn",
+    "t": "What is Microsoft Entra ID",
+    "u": "https://learn.microsoft.com/en-us/entra/fundamentals/whatis",
+    "type": "docs",
+    "trust": "high",
+    "b": "Entra ID",
+    "ledger": "18"
+  },
+  {
+    "n": 19,
+    "g": "Microsoft Learn",
+    "t": "What is Conditional Access",
+    "u": "https://learn.microsoft.com/en-us/entra/identity/conditional-access/overview",
+    "type": "docs",
+    "trust": "high",
+    "b": "Conditional Access",
+    "ledger": "19"
+  },
+  {
+    "n": 20,
+    "g": "Microsoft Learn",
+    "t": "Microsoft Graph change notifications",
+    "u": "https://learn.microsoft.com/en-us/graph/change-notifications-overview",
+    "type": "docs",
+    "trust": "high",
+    "b": "webhooks",
+    "ledger": "20"
+  },
+  {
+    "n": 21,
+    "g": "Microsoft Learn",
+    "t": "Graph Data Connect overview",
+    "u": "https://learn.microsoft.com/en-us/graph/data-connect-concept-overview",
+    "type": "docs",
+    "trust": "high",
+    "b": "bulk export",
+    "ledger": "21"
+  },
+  {
+    "n": 22,
+    "g": "Microsoft Learn",
+    "t": "What is Copilot Studio",
+    "u": "https://learn.microsoft.com/en-us/microsoft-copilot-studio/fundamentals-what-is-copilot-studio",
+    "type": "docs",
+    "trust": "high",
+    "b": "Copilot Studio",
+    "ledger": "22"
+  },
+  {
+    "n": 23,
+    "g": "Microsoft Learn",
+    "t": "What is app provisioning in Microsoft Entra ID",
+    "u": "https://learn.microsoft.com/en-us/entra/identity/app-provisioning/user-provisioning",
+    "type": "docs",
+    "trust": "high",
+    "b": "SCIM provisioning",
+    "ledger": "23"
+  },
+  {
+    "n": 24,
+    "g": "GitHub Docs",
+    "t": "Managing personal access tokens (GitHub Docs)",
+    "u": "https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens",
+    "type": "docs",
+    "trust": "high",
+    "b": "PAT",
+    "ledger": "24"
+  },
+  {
+    "n": 25,
+    "g": "Microsoft Learn",
+    "t": "What is Microsoft Dataverse",
+    "u": "https://learn.microsoft.com/en-us/power-apps/maker/data-platform/data-platform-intro",
+    "type": "docs",
+    "trust": "high",
+    "b": "Dataverse",
+    "ledger": "25"
   }
 ];
 
@@ -1174,112 +1284,140 @@ DATA.glossary = [
     "term": "ACL",
     "rung": 200,
     "essential": true,
-    "definition": "Access control list on a Microsoft Graph item. A synced connector must map source-system permissions onto this list or Copilot can overshare.",
-    "see_also": "Integration view, study guide"
+    "definition": "Access control list on a Microsoft Graph external item. A synced connector must map source-system permissions onto this list or Copilot can overshare.",
+    "see_also": "externalItem, Permission fidelity",
+    "where": "Integration view, study guide",
+    "source": "[S15] [S3]"
   },
   {
     "category": "Logical",
     "term": "Agent / tool integration",
     "rung": 200,
     "essential": false,
-    "definition": "An agent calls a governed action or workflow (create a ticket, ask for approval, update a record). State changes stay in the system of record, not in the prompt.",
-    "see_also": "Mind map, logical view"
+    "definition": "An agent calls a governed action or workflow. State changes stay in the system of record, not in the prompt.",
+    "see_also": "MCP server, System of record",
+    "where": "Mind map, logical view",
+    "source": "[S6] [S7]"
   },
   {
-    "category": "Integration & AI",
+    "category": "Logical",
     "term": "API consumption",
     "rung": 200,
     "essential": false,
     "definition": "The app calls a third-party API at request time for a transactional read or write. No copy of the record is kept as a second system of record.",
-    "see_also": "Mind map"
+    "see_also": "System of record, Federated connector",
+    "where": "Mind map",
+    "source": "UNVERIFIED"
   },
   {
-    "category": "Logical",
+    "category": "Integration & AI",
     "term": "Checks API",
     "rung": 200,
     "essential": false,
     "definition": "GitHub API that posts pass/fail and evidence onto a pull request. Used for tests, security findings, and release gates.",
-    "see_also": "Logical view, integration risks"
+    "see_also": "GitHub App",
+    "where": "Logical view, integration risks",
+    "source": "[S17]"
   },
   {
-    "category": "Integration & AI",
+    "category": "Physical",
     "term": "Conditional Access",
     "rung": 200,
     "essential": false,
-    "definition": "Entra policy that can block or step up a sign-in. Copilot APIs inherit it because they sit on Microsoft Graph.",
-    "see_also": "Mind map, Copilot APIs docs"
+    "definition": "Entra policy that can block or step up a sign-in. Copilot APIs inherit it when they sit on Microsoft Graph.",
+    "see_also": "Entra ID, Copilot APIs",
+    "where": "Mind map, Copilot APIs docs",
+    "source": "[S19]"
   },
   {
     "category": "Conceptual",
     "term": "Control plane",
     "rung": 200,
     "essential": false,
-    "definition": "Identity, policy, secrets, catalogs, and audit. One of the three planes in the Copilot Integration Enablement Layer.",
-    "see_also": "Conceptual view, study guide"
+    "definition": "Identity, policy, secrets, catalogs, and audit. One of the three planes in this pack's Copilot Integration Enablement Layer.",
+    "see_also": "Knowledge plane, Transaction plane",
+    "where": "Conceptual view, study guide",
+    "source": "UNVERIFIED"
   },
   {
-    "category": "Integration & AI",
+    "category": "Conceptual",
     "term": "Copilot (role)",
     "rung": 200,
-    "essential": true,
+    "essential": false,
     "definition": "The user-facing intelligence layer. It is not the integration layer. Durable assets are APIs, events, identity, connectors, schemas, and policy underneath it.",
-    "see_also": "Mind map, all views"
+    "see_also": "Copilot Integration Enablement Layer",
+    "where": "Mind map, all views",
+    "source": "UNVERIFIED"
   },
   {
-    "category": "Integration & AI",
+    "category": "Platform",
     "term": "Copilot APIs",
     "rung": 200,
-    "essential": true,
+    "essential": false,
     "definition": "REST endpoints under Microsoft Graph that let an app invoke Microsoft 365 Copilot. Same auth model as other Graph APIs.",
-    "see_also": "Block sources, mind map"
+    "see_also": "Microsoft Graph, Microsoft 365 Copilot",
+    "where": "Block sources, mind map",
+    "source": "[S1]"
   },
   {
     "category": "Integration & AI",
     "term": "Copilot connector",
-    "rung": 200,
+    "rung": 100,
     "essential": true,
     "definition": "Brings external knowledge into Microsoft 365 Copilot and Search. Two kinds: synced (indexed) and federated (live MCP).",
-    "see_also": "Blocks, integration view"
+    "see_also": "Synced connector, Federated connector",
+    "where": "Blocks, integration view",
+    "source": "[S3]"
   },
   {
-    "category": "Conceptual",
+    "category": "Integration & AI",
     "term": "Copilot Integration Enablement Layer",
-    "rung": 200,
+    "rung": 300,
     "essential": true,
     "definition": "The target control point: an MCP/API catalog, gateway, policy, and audit so teams do not build one-off AI connections.",
-    "see_also": "Conceptual view, mind map"
+    "see_also": "MCP, Control plane",
+    "where": "Conceptual view, mind map",
+    "source": "UNVERIFIED"
   },
   {
-    "category": "Integration & AI",
+    "category": "Platform",
     "term": "Copilot Studio",
-    "rung": 200,
-    "essential": true,
+    "rung": 100,
+    "essential": false,
     "definition": "Low-code place to build task-specific business agents that call APIs, Dataverse, and approved MCP tools. Separate from GitHub Copilot.",
-    "see_also": "Mind map, cheatsheet"
+    "see_also": "Microsoft 365 Copilot, Dataverse",
+    "where": "Mind map, cheatsheet",
+    "source": "[S22]"
   },
   {
-    "category": "Integration & AI",
+    "category": "Platform",
     "term": "Dataverse",
-    "rung": 200,
+    "rung": 100,
     "essential": false,
     "definition": "Power Platform data store behind low-code apps and some Copilot Studio agents.",
-    "see_also": "Mind map"
+    "see_also": "Copilot Studio, Power Platform connector",
+    "where": "Mind map",
+    "source": "[S25]"
   },
   {
     "category": "Conceptual",
     "term": "Digital-work platform",
-    "rung": 200,
-    "essential": true,
-    "definition": "The Microsoft 365 side: mail, files, chat, meetings, and business process. Microsoft Graph is its API and data plane.",
-    "see_also": "Conceptual view"
+    "rung": 100,
+    "essential": false,
+    "definition": "The Microsoft 365 side of this pack: mail, files, chat, meetings, and business process. Microsoft Graph is its API and data plane.",
+    "see_also": "Microsoft Graph, Software-delivery platform",
+    "where": "Conceptual view",
+    "source": "[S10]"
   },
   {
     "category": "Physical",
     "term": "Entra ID",
-    "rung": 200,
+    "rung": 100,
     "essential": true,
-    "definition": "Microsoft's identity service for this pack. Users and apps authenticate here; GitHub can federate to the same directory.",
-    "see_also": "Physical view, cheatsheet"
+    "definition": "Microsoft's identity service for this pack. Users and apps authenticate here.",
+    "see_also": "Conditional Access, Workload identity",
+    "where": "Physical view, cheatsheet",
+    "source": "[S18]"
   },
   {
     "category": "Logical",
@@ -1287,15 +1425,19 @@ DATA.glossary = [
     "rung": 200,
     "essential": false,
     "definition": "A source publishes a webhook or event; a consumer reacts. Used when systems must respond to a change instead of polling.",
-    "see_also": "Mind map, logical view"
+    "see_also": "Graph change notifications",
+    "where": "Mind map, logical view",
+    "source": "[S20]"
   },
   {
     "category": "Logical",
     "term": "externalItem",
     "rung": 200,
     "essential": true,
-    "definition": "The Graph object a synced connector writes. Study guide: it must carry content, metadata, an ACL, and semantic labels.",
-    "see_also": "Study guide, physical view"
+    "definition": "The Graph object a synced connector writes. It carries content, properties, and an ACL.",
+    "see_also": "ACL, Synced connector",
+    "where": "Study guide, physical view",
+    "source": "[S15]"
   },
   {
     "category": "Logical",
@@ -1303,55 +1445,69 @@ DATA.glossary = [
     "rung": 200,
     "essential": true,
     "definition": "Live fetch at question time through MCP. Content is not copied into Microsoft Graph. Use it when data is volatile, sensitive, large, or when a write must hit the source.",
-    "see_also": "Blocks, logical view"
+    "see_also": "Synced connector, MCP",
+    "where": "Blocks, logical view",
+    "source": "[S4] [S3]"
   },
   {
-    "category": "Integration & AI",
+    "category": "Physical",
     "term": "GitHub App",
     "rung": 200,
     "essential": true,
-    "definition": "Server-to-server GitHub integration with fine-grained permissions and short-lived installation tokens. Preferred over a broad OAuth app.",
-    "see_also": "Mind map, integration risks"
+    "definition": "Server-to-server GitHub integration with fine-grained permissions and short-lived installation tokens. Preferred over a broad OAuth app or a PAT.",
+    "see_also": "PAT, Checks API",
+    "where": "Mind map, integration risks",
+    "source": "[S16]"
   },
   {
-    "category": "Logical",
+    "category": "Integration & AI",
     "term": "GitHub Cloud Knowledge connector",
     "rung": 200,
     "essential": false,
     "definition": "Microsoft connector that indexes selected GitHub Markdown and docs into Graph so Microsoft 365 Copilot can ground on them.",
-    "see_also": "Source ledger, logical view"
+    "see_also": "Synced connector, GitHub Copilot",
+    "where": "Source ledger, logical view",
+    "source": "[S5]"
+  },
+  {
+    "category": "Platform",
+    "term": "GitHub Copilot",
+    "rung": 100,
+    "essential": true,
+    "definition": "The coding assistant (IDE, CLI, chat, coding agent). Licensed separately from Microsoft 365 Copilot.",
+    "see_also": "Microsoft 365 Copilot, MCP",
+    "where": "Cheatsheet, mind map",
+    "source": "[S12]"
   },
   {
     "category": "Integration & AI",
-    "term": "GitHub Copilot",
-    "rung": 200,
-    "essential": true,
-    "definition": "The coding assistant (IDE, CLI, chat, coding agent). Licensed separately from Microsoft 365 Copilot.",
-    "see_also": "Cheatsheet, mind map"
-  },
-  {
-    "category": "Logical",
     "term": "GitHub Copilot Extensions",
     "rung": 200,
     "essential": false,
-    "definition": "Older GitHub App model for extending Copilot. GitHub has deprecated it in favor of MCP servers.",
-    "see_also": "Mind map, study guide"
+    "definition": "Older GitHub App model for extending Copilot. GitHub documents MCP as the current extensibility path.",
+    "see_also": "MCP server, GitHub App",
+    "where": "Mind map, study guide",
+    "source": "[S7]"
   },
   {
-    "category": "Integration & AI",
+    "category": "Physical",
     "term": "Graph change notifications",
     "rung": 200,
     "essential": false,
-    "definition": "Webhooks from Microsoft Graph when a resource changes. The subscriber then reads the authorized delta.",
-    "see_also": "Mind map"
+    "definition": "Webhooks from Microsoft Graph when a resource changes. The subscriber then reads the authorized change.",
+    "see_also": "Event-driven integration, Microsoft Graph",
+    "where": "Mind map",
+    "source": "[S20]"
   },
   {
-    "category": "Integration & AI",
+    "category": "Platform",
     "term": "Graph Data Connect",
     "rung": 200,
     "essential": false,
     "definition": "Bulk, governed export of Microsoft 365 data into an Azure analytics store. Not the same as a Copilot connector.",
-    "see_also": "Mind map"
+    "see_also": "Microsoft Graph, Copilot connector",
+    "where": "Mind map",
+    "source": "[S21]"
   },
   {
     "category": "Logical",
@@ -1359,47 +1515,59 @@ DATA.glossary = [
     "rung": 200,
     "essential": false,
     "definition": "Same idea as a synced connector: copy external content into a Graph external connection so Search and Copilot can retrieve it.",
-    "see_also": "Mind map, study guide"
+    "see_also": "Synced connector, externalItem",
+    "where": "Mind map, study guide",
+    "source": "[S3] [S15]"
   },
   {
     "category": "Conceptual",
     "term": "Knowledge plane",
     "rung": 200,
     "essential": false,
-    "definition": "Curated information made searchable (synced connectors and the Graph index).",
-    "see_also": "Conceptual view"
+    "definition": "Curated information made searchable through synced connectors and the Graph index. A name this pack uses, not a Microsoft product name.",
+    "see_also": "Synced connector, Transaction plane",
+    "where": "Conceptual view",
+    "source": "UNVERIFIED"
   },
   {
-    "category": "Platform",
+    "category": "Integration & AI",
     "term": "MCP",
-    "rung": 200,
-    "essential": false,
+    "rung": 100,
+    "essential": true,
     "definition": "Model Context Protocol. A way for a host (Copilot) to call tools and read context from an external server. GitHub's primary Copilot extensibility path, and the wire for federated connectors.",
-    "see_also": "Blocks, all views"
+    "see_also": "MCP server, Federated connector",
+    "where": "Blocks, all views",
+    "source": "[S6] [S4]"
   },
   {
-    "category": "Conceptual",
+    "category": "Integration & AI",
     "term": "MCP server",
     "rung": 200,
     "essential": false,
     "definition": "A process that exposes tools to Copilot. Catalog it. Split read-only tools from write tools.",
-    "see_also": "Conceptual view, integration risks"
+    "see_also": "MCP, Prompt injection",
+    "where": "Conceptual view, integration risks",
+    "source": "[S7]"
   },
   {
     "category": "Platform",
     "term": "Microsoft 365 Copilot",
-    "rung": 200,
+    "rung": 100,
     "essential": true,
     "definition": "The work assistant over mail, files, meetings, and Graph. Not the same product as GitHub Copilot.",
-    "see_also": "Cheatsheet, source ledger"
+    "see_also": "GitHub Copilot, Microsoft Graph",
+    "where": "Cheatsheet, source ledger",
+    "source": "[S10]"
   },
   {
-    "category": "Conceptual",
+    "category": "Platform",
     "term": "Microsoft Graph",
-    "rung": 200,
-    "essential": false,
+    "rung": 100,
+    "essential": true,
     "definition": "The permission-aware API and data plane for Microsoft 365 content and for Copilot APIs.",
-    "see_also": "Mind map, conceptual view"
+    "see_also": "Copilot APIs, externalItem",
+    "where": "Mind map, conceptual view",
+    "source": "[S1] [S15]"
   },
   {
     "category": "Physical",
@@ -1407,119 +1575,149 @@ DATA.glossary = [
     "rung": 200,
     "essential": false,
     "definition": "Delegated or app authorization. Graph and GitHub both use it. Broad scopes are a risk on GitHub; prefer a GitHub App for service-to-service.",
-    "see_also": "Physical view"
+    "see_also": "GitHub App, OIDC",
+    "where": "Physical view",
+    "source": "[S16]"
   },
   {
     "category": "Physical",
     "term": "OIDC",
     "rung": 200,
     "essential": false,
-    "definition": "OpenID Connect. Identity layer on OAuth, used for sign-in into Entra.",
-    "see_also": "Physical view"
+    "definition": "OpenID Connect. Identity layer on OAuth, used for sign-in. This pack does not yet cite an Entra protocol page for it.",
+    "see_also": "OAuth 2.0, SAML",
+    "where": "Physical view",
+    "source": "UNVERIFIED"
   },
   {
-    "category": "Logical",
+    "category": "Physical",
     "term": "PAT",
-    "rung": 200,
-    "essential": false,
-    "definition": "Personal access token. Avoid it for production integrations; it is a long-lived user secret.",
-    "see_also": "Study guide"
+    "rung": 300,
+    "essential": true,
+    "definition": "Personal access token. A user secret with a lifetime you set. Avoid it for a service; use a GitHub App installation token.",
+    "see_also": "GitHub App",
+    "where": "Study guide",
+    "source": "[S24] [S16]"
   },
   {
     "category": "Integration & AI",
     "term": "Permission fidelity",
-    "rung": 200,
-    "essential": false,
+    "rung": 300,
+    "essential": true,
     "definition": "Source-system rights must survive the trip into Graph ACLs. If the mapping is wrong, Copilot retrieval spreads the mistake.",
-    "see_also": "Integration view"
+    "see_also": "ACL, externalItem",
+    "where": "Integration view",
+    "source": "[S15] [S3]"
   },
   {
-    "category": "Integration & AI",
+    "category": "Platform",
     "term": "Power Platform connector",
     "rung": 200,
     "essential": false,
     "definition": "Low-code connector used by Power Automate and Power Apps. Different surface from a Copilot connector.",
-    "see_also": "Mind map"
+    "see_also": "Copilot connector, Dataverse",
+    "where": "Mind map",
+    "source": "UNVERIFIED"
   },
   {
     "category": "Integration & AI",
     "term": "Prompt injection",
-    "rung": 200,
-    "essential": false,
+    "rung": 300,
+    "essential": true,
     "definition": "Hostile text inside retrieved content that tries to override the model's instructions. Treat retrieved text as data; gate actions outside the model.",
-    "see_also": "Integration view"
+    "see_also": "MCP server, Permission fidelity",
+    "where": "Integration view",
+    "source": "UNVERIFIED"
   },
   {
     "category": "Physical",
     "term": "SAML",
     "rung": 200,
     "essential": false,
-    "definition": "Older SSO federation option into Entra, alternative to OIDC.",
-    "see_also": "Physical view"
+    "definition": "Older SSO federation option, an alternative to OIDC. This pack does not yet cite an Entra SSO page for it.",
+    "see_also": "OIDC, Entra ID",
+    "where": "Physical view",
+    "source": "UNVERIFIED"
   },
   {
-    "category": "Logical",
+    "category": "Physical",
     "term": "SCIM",
     "rung": 200,
     "essential": false,
-    "definition": "Protocol for automated joiner, mover, and leaver provisioning.",
-    "see_also": "Physical view, study guide"
+    "definition": "Protocol Entra app provisioning uses to create, update, and disable accounts in a target app.",
+    "see_also": "Entra ID, Workload identity",
+    "where": "Physical view, study guide",
+    "source": "[S23]"
   },
   {
     "category": "Logical",
     "term": "Semantic index",
     "rung": 200,
-    "essential": false,
+    "essential": true,
     "definition": "Microsoft's index that Copilot uses for grounding. Synced connector items land where this retrieval can see them.",
-    "see_also": "Study guide (grounding path)"
+    "see_also": "Synced connector, Microsoft 365 Copilot",
+    "where": "Study guide",
+    "source": "[S11] [S3]"
   },
   {
     "category": "Conceptual",
     "term": "Software-delivery platform",
-    "rung": 200,
+    "rung": 100,
     "essential": false,
-    "definition": "The GitHub side: repos, review, Actions, packages, release.",
-    "see_also": "Conceptual view"
+    "definition": "The GitHub side of this pack: repos, review, Actions, packages, release.",
+    "see_also": "GitHub Copilot, Digital-work platform",
+    "where": "Conceptual view",
+    "source": "[S12]"
   },
   {
     "category": "Logical",
     "term": "Synced connector",
     "rung": 200,
-    "essential": false,
-    "definition": "Pulls external content on a schedule into a Graph external connection (content, metadata, ACL, semantic labels). Good for search; bad for secrets and fast-changing records.",
-    "see_also": "Blocks, logical view"
+    "essential": true,
+    "definition": "Pulls external content on a schedule into a Graph external connection, including content, properties, and an ACL. Good for search; a poor place for secrets and fast-changing records.",
+    "see_also": "Federated connector, externalItem",
+    "where": "Blocks, logical view",
+    "source": "[S3] [S2]"
   },
   {
     "category": "Conceptual",
     "term": "System of record",
-    "rung": 200,
-    "essential": false,
+    "rung": 100,
+    "essential": true,
     "definition": "The one authoritative store for a fact. Copilot must not become a second one.",
-    "see_also": "Conceptual view"
+    "see_also": "Synced connector, API consumption",
+    "where": "Conceptual view",
+    "source": "UNVERIFIED"
   },
   {
     "category": "Conceptual",
     "term": "Transaction plane",
     "rung": 200,
     "essential": false,
-    "definition": "APIs and workflows that change state. Distinct from the knowledge plane.",
-    "see_also": "Conceptual view"
+    "definition": "APIs and workflows that change state. Distinct from the knowledge plane. A name this pack uses.",
+    "see_also": "Knowledge plane, API consumption",
+    "where": "Conceptual view",
+    "source": "UNVERIFIED"
   },
   {
-    "category": "Logical",
+    "category": "Platform",
     "term": "Work IQ API",
     "rung": 200,
     "essential": false,
-    "definition": "Microsoft extensibility API called out in the study guide as part of how Copilot reasons over work context. Treat product detail as Microsoft Learn, not as invented here.",
-    "see_also": "Study guide, source ledger"
+    "definition": "Microsoft extensibility API named in the Copilot extensibility overview as part of how Copilot reasons over work context.",
+    "see_also": "Microsoft 365 Copilot, Copilot APIs",
+    "where": "Study guide, source ledger",
+    "source": "[S9]"
   },
   {
-    "category": "Logical",
+    "category": "Physical",
     "term": "Workload identity",
-    "rung": 200,
-    "essential": false,
-    "definition": "An app or service principal, not a person. Server-to-server calls should use this (or a GitHub App), not a shared user account.",
-    "see_also": "Study guide"
+    "rung": 300,
+    "essential": true,
+    "definition": "An app or service identity, not a person. Server-to-server calls should use this, or a GitHub App, not a shared user account.",
+    "see_also": "Entra ID, GitHub App",
+    "where": "Study guide",
+    "source": "[S18] [S16]"
   }
 ];
 

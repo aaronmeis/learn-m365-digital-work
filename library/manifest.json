@@ -150,7 +150,7 @@
     "slug": "glossary",
     "title": "GLOSSARY \u2014 Microsoft's Digital-Work Platform",
     "section": "Reference",
-    "desc": "Terms used across the Microsoft digital-work platform deep dive, with a one-line definition each.",
+    "desc": "Terms for the Microsoft digital-work platform deep dive, graded by rung and cited to the source ledger.",
     "nblm": false
   },
   {
@@ -171,7 +171,7 @@
     "slug": "source-ledger",
     "title": "Source ledger \u2014 Microsoft's Digital-Work Platform",
     "section": "Reference",
-    "desc": "Source ledger, minimum 3 high-trust URLs before W8.",
+    "desc": "Numbered primary sources for the digital-work platform pack. Each number is unique.",
     "nblm": false
   },
   {

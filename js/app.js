@@ -212,7 +212,7 @@ function renderFlash(){
     <div class="fc-stage" id="fcStage" title="Click or press Space to flip">
       <div class="fc-cat">${esc(c.category)} ${c.essential?'<span class="pill r100">Essential</span>':''}</div>
       <div class="fc-term">${esc(c.term)}</div>
-      ${fcShown?`<div class="fc-def">${ec(c.definition)}</div>${c.see_also?`<div class="fc-hint">see also: ${esc(c.see_also)}</div>`:""}`:`<div class="fc-hint">Click the card or press <span class="kbd-shortcut">Space</span> to flip</div>`}
+      ${fcShown?`<div class="fc-def">${ec(c.definition)}</div>${c.where?`<div class="fc-hint">Where: ${esc(c.where)}</div>`:""}${c.see_also?`<div class="fc-hint">Related: ${esc(c.see_also)}</div>`:""}${c.source?`<div class="fc-hint">${ec(c.source)}</div>`:""}`:`<div class="fc-hint">Click the card or press <span class="kbd-shortcut">Space</span> to flip</div>`}
     </div>
     <div class="btnrow" style="justify-content:center;margin-top:1rem">
       <button class="b" id="fcPrev" ${fcIdx===0?"disabled style='opacity:.4'":""}>← Prev</button>
@@ -309,24 +309,48 @@ function renderQuiz(){
 }
 
 /* ---- Glossary ---- */
+function gSlug(term){return String(term).toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");}
+function relLinks(text){
+  if(!text) return "";
+  return text.split(",").map(part=>{
+    const name=part.trim();
+    const hit=DATA.glossary.find(g=>g.term.toLowerCase()===name.toLowerCase());
+    return hit?`<a href="#/glossary" data-gto="${gSlug(hit.term)}">${esc(name)}</a>`:esc(name);
+  }).join(", ");
+}
 function renderGlossary(){
   const el=$("#v-glossary");
   const q=(LS.get(KEY+"gq","")||"").toLowerCase(), cat=LS.get(KEY+"gcat","all");
+  const rung=LS.get(KEY+"grung","all"), ess=LS.get(KEY+"gess","all");
   const cats=[...new Set(DATA.glossary.map(g=>g.category))];
-  let h=`<h2 class="vh">Glossary <span style="font-size:1rem;color:var(--text-dim)">${DATA.glossary.length} terms</span></h2>
-  <p class="lead">Feeds the flashcard decks. Each term is grouped by the view where it shows up. A cited glossary gap pass has not run for this pack yet. ${lib("glossary","Glossary note")}</p>
+  const pass=g=> (cat==="all"||g.category===cat) && (rung==="all"||String(g.rung)===String(rung)) && (ess!=="essential"||g.essential) && (!q||(g.term+g.definition+(g.see_also||"")+(g.where||"")).toLowerCase().includes(q));
+  const shown=DATA.glossary.filter(pass);
+  let h=`<h2 class="vh">Glossary <span style="font-size:1rem;color:var(--text-dim)">${shown.length} terms</span></h2>
+  <p class="lead">Feeds the flashcard decks. Category, rung, and essential come from the vault table. A cited glossary gap pass has not run for this pack yet. ${lib("glossary","Glossary note")}</p>
   <input class="search" id="gSearch" placeholder="filter terms…" value="${esc(q)}">
-  <div class="gfilters"><button class="b ${cat==="all"?"on":""}" data-gc="all">All (${DATA.glossary.length})</button>${cats.map(c=>`<button class="b ${cat===c?"on":""}" data-gc="${esc(c)}">${esc(c)} (${DATA.glossary.filter(g=>g.category===c).length})</button>`).join("")}</div>`;
-  cats.filter(c=>cat==="all"||c===cat).forEach(c=>{
-    const items=DATA.glossary.filter(g=>g.category===c&&(!q||(g.term+g.definition+(g.see_also||"")).toLowerCase().includes(q)));
-    if(!items.length)return;
+  <div class="gfilters"><button class="b ${cat==="all"?"on":""}" data-gc="all">All</button>${cats.map(c=>`<button class="b ${cat===c?"on":""}" data-gc="${esc(c)}">${esc(c)}</button>`).join("")}</div>
+  <div class="gfilters"><button class="b ${rung==="all"?"on":""}" data-gr="all">All rungs</button>${[100,200,300].map(r=>`<button class="b ${String(rung)===String(r)?"on":""}" data-gr="${r}">${r}</button>`).join("")}<button class="b ${ess==="essential"?"on":""}" data-ge="essential">Essential</button></div>`;
+  cats.filter(c=>shown.some(g=>g.category===c)).forEach(c=>{
+    const items=shown.filter(g=>g.category===c);
     h+=`<h3 style="margin:1.1rem 0 .5rem;font-size:.95rem">${esc(c)} <span style="color:var(--text-dim);font-weight:400">· ${items.length}</span></h3>`;
-    items.forEach(g=>h+=`<div class="gterm"><h4>${esc(g.term)} <span class="pill r${g.rung}">${g.rung}</span> ${g.essential?'<span class="pill r100">Essential</span>':''} ${g.source==="nblm-gap"?'<span class="pill" title="Drafted by a NotebookLM data table, checked against the source ledger">gap pass</span>':''}</h4><p>${ec(g.definition)}</p>${g.see_also?`<div class="sa">see also: ${esc(g.see_also)}</div>`:""}</div>`);
+    items.forEach(g=>h+=`<div class="gterm" id="g-${gSlug(g.term)}"><h4>${esc(g.term)} <span class="pill r${g.rung}">${g.rung}</span> ${g.essential?'<span class="pill r100">Essential</span>':''} ${g.source==="nblm-gap"?'<span class="pill" title="Drafted by a NotebookLM data table, checked against the source ledger">gap pass</span>':''}</h4><p>${ec(g.definition)}</p>${g.where?`<div class="sa">Where: ${esc(g.where)}</div>`:""}${g.see_also?`<div class="sa">Related: ${relLinks(g.see_also)}</div>`:""}${g.source?`<div class="sa">${ec(g.source)}</div>`:""}</div>`);
   });
   el.innerHTML=h;
   const s=$("#gSearch");
   s.oninput=()=>{LS.set(KEY+"gq",s.value);const p=s.selectionStart;renderGlossary();const ns=$("#gSearch");ns.focus();ns.setSelectionRange(p,p);};
   $$("[data-gc]",el).forEach(b=>b.onclick=()=>{LS.set(KEY+"gcat",b.dataset.gc);renderGlossary();});
+  $$("[data-gr]",el).forEach(b=>b.onclick=()=>{LS.set(KEY+"grung",b.dataset.gr);renderGlossary();});
+  $$("[data-ge]",el).forEach(b=>b.onclick=()=>{LS.set(KEY+"gess",LS.get(KEY+"gess","all")==="essential"?"all":"essential");renderGlossary();});
+  $$("[data-gto]",el).forEach(a=>a.onclick=e=>{
+    e.preventDefault();
+    const id="g-"+a.dataset.gto;
+    if(!document.getElementById(id)){
+      LS.set(KEY+"grung","all"); LS.set(KEY+"gcat","all"); LS.set(KEY+"gess","all"); LS.set(KEY+"gq","");
+      renderGlossary();
+    }
+    const n=document.getElementById(id);
+    if(n) n.scrollIntoView({block:"start"});
+  });
 }
 
 /* ---- Prompts ---- */
@@ -424,7 +448,7 @@ function renderReferences(){
   const q=(LS.get(KEY+"refq","")||"").toLowerCase(), sel=LS.get(KEY+"refcat","all");
   const cats=[...new Set(SOURCES.map(s=>s.g))];
   let h=`<h2 class="vh">Source ledger <span style="font-size:1rem;color:var(--text-dim)">${SOURCES.length} sources</span></h2>
-  <p class="lead">Microsoft Learn, GitHub Docs, Microsoft service descriptions, and named Microsoft talks. ${SOURCES.length} rows, numbered in the order they appear in the vault note. That note repeats numbers 1-7, so a printed S1-S7 can mean either of two rows until the ledger is renumbered. ${lib("source-ledger","Ledger note")} · ${lib("resources","Resources by kind")}</p>
+  <p class="lead">Microsoft Learn, GitHub Docs, product pages, and one named talk. ${SOURCES.length} rows, numbered once in the vault ledger. ${lib("source-ledger","Ledger note")} · ${lib("resources","Resources by kind")}</p>
   <input class="search" id="refSearch" placeholder="filter by title, URL, or type…" value="${esc(q)}">
   <div class="gfilters"><button class="b ${sel==="all"?"on":""}" data-rcat="all">All (${SOURCES.length})</button>${cats.map(c=>`<button class="b ${sel===c?"on":""}" data-rcat="${esc(c)}">${esc(c)} (${SOURCES.filter(s=>s.g===c).length})</button>`).join("")}</div>`;
   cats.filter(c=>sel==="all"||sel===c).forEach(c=>{
