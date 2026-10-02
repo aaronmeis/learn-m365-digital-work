@@ -4,6 +4,7 @@ import html
 import io
 import json
 import re
+import shutil
 from pathlib import Path
 
 import markdown
@@ -11,6 +12,8 @@ import yaml
 
 SITE = Path(__file__).resolve().parent.parent
 LIB = SITE / "library"
+LIB_CSS = SITE / "css" / "library.css"
+SITE_NAME = "Learn the digital-work platform"
 PACK = Path(r"C:\obsidian\personal_research_2026\Learning\tech-deep-dive\m365-digital-work-platform")
 EXP = PACK / "notebooklm" / "exports"
 OUT = Path(r"C:\output\obsidian\notebooklm\tdd-m365-digital-work-platform")
@@ -116,7 +119,12 @@ def convert_obsidian(md):
         target = m.group(1).split("|")[0].strip()
         if target.lower().endswith((".png", ".jpg", ".jpeg", ".gif", ".svg")):
             name = target.rsplit("/", 1)[-1]
-            sub = "diagrams" if "diagrams" in target else "slides"
+            if (SITE / "assets" / "diagrams" / name).is_file():
+                sub = "diagrams"
+            elif (SITE / "assets" / "slides" / name).is_file():
+                sub = "slides"
+            else:
+                sub = "diagrams" if "diagrams" in target.replace("\\", "/") else "slides"
             m_sl = re.fullmatch(r"(?i)slide(\d+)\.jpe?g", name)
             if m_sl:
                 name = f"slide-{int(m_sl.group(1)):02d}.jpg"
@@ -282,7 +290,7 @@ PAGE_TMPL = """<!DOCTYPE html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>{title} | Learn Purview</title>
+<title>{title} | {site}</title>
 <meta name="description" content="{desc}">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -292,7 +300,7 @@ PAGE_TMPL = """<!DOCTYPE html>
 </head>
 <body>
 <header class="topbar">
-  <a href="../index.html" class="home">&larr; Learn Purview console</a>
+  <a href="../index.html" class="home">&larr; {site}</a>
   <span class="crumb">Library · {section}</span>
   <a href="index.html" class="home">All pages</a>
 </header>
@@ -319,6 +327,8 @@ mermaid.initialize({{startOnLoad:true,theme:dark?"dark":"default",securityLevel:
 
 def main():
     LIB.mkdir(exist_ok=True)
+    if LIB_CSS.is_file():
+        shutil.copyfile(LIB_CSS, LIB / "library.css")
     manifest = []
     for idx, (slug, path, section, title, nblm) in enumerate(PAGES):
         if path.is_dir():
@@ -353,6 +363,7 @@ def main():
                  (f'<a href="{next_[0]}.html">Next &rarr;</a>' if next_ else "<span></span>") + "</div>"
         src_rel = str(path.relative_to(PACK.parent.parent.parent)) if PACK.parent.parent.parent in path.parents else str(path)
         (LIB / f"{slug}.html").write_text(PAGE_TMPL.format(
+            site=SITE_NAME,
             title=html.escape(page_title), desc=html.escape(desc), section=html.escape(section),
             descblock=f'<p class="lead">{html.escape(desc)}</p>' if desc else "", caveat=caveat,
             body=body, source=html.escape(src_rel), prevnext=pn), encoding="utf-8")
@@ -367,9 +378,10 @@ def main():
             f'<li><a href="{m["slug"]}.html">{html.escape(m["title"])}</a>' +
             (f' <span class="muted">— {html.escape(m["desc"])}</span>' if m["desc"] else "") + "</li>" for m in items) + "</ul>"
     (LIB / "index.html").write_text(PAGE_TMPL.format(
-        title="Library", desc="Every Purview study note rendered as a web page.", section="Index",
+        site=SITE_NAME,
+        title="Library", desc="Every digital-work study note rendered as a web page.", section="Index",
         descblock=f'<p class="lead">{len(manifest)} pages rendered from the Obsidian deep-dive pack and the NotebookLM exports.</p>',
-        caveat="", body=idx_body, source="Learning/tech-deep-dive/microsoft-purview/", prevnext=""), encoding="utf-8")
+        caveat="", body=idx_body, source="Learning/tech-deep-dive/m365-digital-work-platform/", prevnext=""), encoding="utf-8")
     (LIB / "manifest.json").write_text(json.dumps(manifest, indent=2), encoding="utf-8")
     (LIB / "manifest.js").write_text("window.LIBRARY = " + json.dumps(manifest) + ";\n", encoding="utf-8")
     print(f"built {len(manifest)} pages + index; {len(SOURCES)} sources linked")

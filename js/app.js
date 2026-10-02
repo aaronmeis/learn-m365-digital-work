@@ -55,10 +55,10 @@ function renderDashboard(){
   <h1 style="margin-top:.9rem">Microsoft's Digital-Work Platform: Architect Study Console</h1>
   <p class="lead">One long, architecture-heavy day (about 7 hours, 8 blocks) on Microsoft's digital-work platform: Microsoft 365 Copilot, GitHub Copilot, connectors, and MCP. Conceptual, logical, and physical views, the AI data path, and a TOGAF / DoDAF lens, ending in a design review.</p>
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1rem;margin-bottom:1.5rem">
-    ${pillar("security","Data security","Labels · DLP · Insider Risk","var(--r200)")}
-    ${pillar("governance","Data governance","Data Map · Unified Catalog","var(--r300)")}
-    ${pillar("compliance","Data compliance","Audit · eDiscovery · Compliance Mgr","var(--r100)")}
-    ${pillar("ai","AI protections","DSPM for AI · AI audit","var(--warn)")}
+    ${pillar("security","Knowledge and connectors","Graph · synced and federated","var(--r200)")}
+    ${pillar("governance","Permission fidelity","ACL · trimming · oversharing","var(--r300)")}
+    ${pillar("compliance","Identity and audit","Entra · GitHub App · audit log","var(--r100)")}
+    ${pillar("ai","AI path","Grounding · MCP · write gate","var(--warn)")}
   </div>
   <div class="grid" style="margin-bottom:1.5rem;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))">
     <div class="statcard"><div class="num">${pct}%</div><div class="lbl">curriculum complete (${done}/${mods.length} modules)</div>
@@ -73,7 +73,7 @@ function renderDashboard(){
     <div class="card"><h3>Architecture views</h3><p style="color:var(--text-secondary);font-size:.86rem">Conceptual, logical, physical, integration and AI, plus the government cloud matrix, with diagrams.</p><div class="btnrow" style="margin:.8rem 0 0"><button class="b" onclick="go('views')">Open views →</button></div></div>
     <div class="card"><h3>Progress map</h3><p style="color:var(--text-secondary);font-size:.86rem">The 100 / 200 / 300 ladder across five lanes. Self-rate each rung.</p><div class="btnrow" style="margin:.8rem 0 0"><button class="b" onclick="go('map')">Open map →</button></div></div>
     <div class="card"><h3>Flashcards and quiz</h3><p style="color:var(--text-secondary);font-size:.86rem">${DATA.glossary.length} spaced-repetition cards and the ${DATA.quiz.length}-question design-review quiz bank.</p><div class="btnrow" style="margin:.8rem 0 0"><button class="b" onclick="go('flash')">Flashcards →</button><button class="b" onclick="go('quiz')">Quiz →</button></div></div>
-    <div class="card"><h3>Shorts and media</h3><p style="color:var(--text-secondary);font-size:.86rem">Six vertical NotebookLM explainers, the 8.5-minute narrated deep-dive cut, and the audio overview.</p><div class="btnrow" style="margin:.8rem 0 0"><button class="b" onclick="go('shorts')">Open media →</button><button class="b" onclick="go('deck')">Slide deck →</button></div></div>
+    <div class="card"><h3>Shorts and media</h3><p style="color:var(--text-secondary);font-size:.86rem">${(window.SHORTS&&SHORTS.total)||0} vertical NotebookLM explainers, the 8.5-minute narrated deep-dive cut, and the audio overview.</p><div class="btnrow" style="margin:.8rem 0 0"><button class="b" onclick="go('shorts')">Open media →</button><button class="b" onclick="go('deck')">Slide deck →</button></div></div>
     <div class="card"><h3>Failure modes</h3><p style="color:var(--text-secondary);font-size:.86rem">${DATA.checklist.length} failure modes across all four views: the tell, the fix, and the source.</p><div class="btnrow" style="margin:.8rem 0 0"><button class="b" onclick="go('failures')">Failure modes →</button><button class="b" onclick="go('cheat')">Decision rules →</button></div></div>
     <div class="card"><h3>EA mapping</h3><p style="color:var(--text-secondary);font-size:.86rem">TOGAF ADM phases, DoDAF viewpoints, altitude rules, and a component cross-walk.</p><div class="btnrow" style="margin:.8rem 0 0"><button class="b" onclick="go('ea')">EA mapping →</button></div></div>
     <div class="card"><h3>Library</h3><p style="color:var(--text-secondary);font-size:.86rem">${libCount} vault notes and NotebookLM reports rendered as web pages, with live source links.</p><div class="btnrow" style="margin:.8rem 0 0"><button class="b" onclick="go('library')">Open library →</button><button class="b" onclick="go('refs')">Source ledger →</button></div></div>
@@ -91,7 +91,7 @@ function renderCurriculum(){
   let h=`<h2 class="vh">Eight-block curriculum</h2>
   <p class="lead">Work the blocks in order (about 420 focused minutes plus breaks). Each block has an architect context, action steps, artifact previews ("What does this look like?"), the primary Microsoft sources, and an exit criterion. ${lib("day-plan","Timed day plan")}</p>
   <div class="timeline" style="margin-bottom:1.2rem">${DATA.weeks.map(w=>`<span class="t">Block ${w.n}</span><span class="b">${esc(w.title)}</span><span class="m">${esc(w.time)}</span>`).join("")}</div>
-  <details class="look-box" style="margin:0 0 1.4rem"><summary>Scope mind map (what the day covers, block by block)</summary><p style="font-size:.8rem;color:var(--text-dim)">The draw.io mind map is still a vault-only artifact for this pack. ${lib("mindmap","Mind map as text")}</p></details>`;
+  <details class="look-box" style="margin:0 0 1.4rem"><summary>Scope mind map (what the day covers, block by block)</summary><img class="diagram" src="assets/diagrams/00-mindmap.png" alt="Scope mind map"><p style="font-size:.8rem;color:var(--text-dim)">Drawn from the reviewed intake mind map. ${lib("mindmap","Mind map as text")}</p></details>`;
   DATA.weeks.forEach(w=>{
     const total=w.mods.length, done=w.mods.filter((_,i)=>LS.get(moduleKey(w.n,i),false)).length;
     h+=`<div class="card">
@@ -252,7 +252,7 @@ const ytSrc=id=>`https://www.youtube-nocookie.com/embed/${id}?rel=0&playsinline=
 function renderDeck(){
   const el=$("#v-deck"), C=DATA.cut||{labels:[],slides:[],cards:[]};
   const video=DEEP.youtube
-    ?`<iframe class="wide-player" src="${ytSrc(DEEP.youtube)}" title="Digital-work platform deep dive cut" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen loading="lazy" style="border:0"></iframe>`
+    ?`<iframe class="wide-player" src="${ytSrc(DEEP.youtube)}" title="Digital-work platform deep dive cut" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" loading="lazy" style="border:0"></iframe>`
     :`<video class="wide-player" controls preload="metadata" src="${esc(DEEP.file)}"></video>`;
   let h=`<h2 class="vh">Deck and deep-dive cut</h2>
   <p class="lead">The NotebookLM detailed deck (15 slides) and the narrated 8.5-minute cut built from it. Each slide shows its narration line and the question card the cut asks before it. Slides outlined in amber carry claims the source ledger does not support; the caption says what is wrong.</p>
@@ -314,7 +314,7 @@ function renderGlossary(){
   const q=(LS.get(KEY+"gq","")||"").toLowerCase(), cat=LS.get(KEY+"gcat","all");
   const cats=[...new Set(DATA.glossary.map(g=>g.category))];
   let h=`<h2 class="vh">Glossary <span style="font-size:1rem;color:var(--text-dim)">${DATA.glossary.length} terms</span></h2>
-  <p class="lead">Feeds the flashcard decks. The first four groups follow the view where a term is earned; the rest came from the 2026-09-28 glossary gap pass (NotebookLM data table, checked against the source ledger). ${lib("glossary","Glossary note")} · ${lib("nblm-gap-table","Gap pass data table")}</p>
+  <p class="lead">Feeds the flashcard decks. Each term is grouped by the view where it shows up. A cited glossary gap pass has not run for this pack yet. ${lib("glossary","Glossary note")}</p>
   <input class="search" id="gSearch" placeholder="filter terms…" value="${esc(q)}">
   <div class="gfilters"><button class="b ${cat==="all"?"on":""}" data-gc="all">All (${DATA.glossary.length})</button>${cats.map(c=>`<button class="b ${cat===c?"on":""}" data-gc="${esc(c)}">${esc(c)} (${DATA.glossary.filter(g=>g.category===c).length})</button>`).join("")}</div>`;
   cats.filter(c=>cat==="all"||c===cat).forEach(c=>{
@@ -424,7 +424,7 @@ function renderReferences(){
   const q=(LS.get(KEY+"refq","")||"").toLowerCase(), sel=LS.get(KEY+"refcat","all");
   const cats=[...new Set(SOURCES.map(s=>s.g))];
   let h=`<h2 class="vh">Source ledger <span style="font-size:1rem;color:var(--text-dim)">${SOURCES.length} sources</span></h2>
-  <p class="lead">Microsoft Learn, service descriptions, reference architectures, and Microsoft Mechanics only. Row 27 is partner-authored; row 31 is a vendor page used only to confirm the far side of the OneTrust connection. ${lib("source-ledger","Ledger note")} · ${lib("resources","Resources by kind")}</p>
+  <p class="lead">Microsoft Learn, GitHub Docs, Microsoft service descriptions, and named Microsoft talks. ${SOURCES.length} rows, numbered in the order they appear in the vault note. That note repeats numbers 1-7, so a printed S1-S7 can mean either of two rows until the ledger is renumbered. ${lib("source-ledger","Ledger note")} · ${lib("resources","Resources by kind")}</p>
   <input class="search" id="refSearch" placeholder="filter by title, URL, or type…" value="${esc(q)}">
   <div class="gfilters"><button class="b ${sel==="all"?"on":""}" data-rcat="all">All (${SOURCES.length})</button>${cats.map(c=>`<button class="b ${sel===c?"on":""}" data-rcat="${esc(c)}">${esc(c)} (${SOURCES.filter(s=>s.g===c).length})</button>`).join("")}</div>`;
   cats.filter(c=>sel==="all"||sel===c).forEach(c=>{

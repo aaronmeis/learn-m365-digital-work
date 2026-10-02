@@ -1,4 +1,4 @@
-"""Check that every file in the Purview pack and its NotebookLM output folder is reachable on the site.
+"""Check that every file in the digital-work pack and its NotebookLM output folder is reachable on the site.
 
 Usage: python scripts/coverage_audit.py [--all]
 Prints one line per file: where it lives on the site, or MISSING. Exits 1 if anything is MISSING.
