@@ -3,7 +3,7 @@
   "title": "Learn Microsoft's Digital-Work Platform - NotebookLM shorts",
   "deep_dive": {
     "file": "media/deep-dive-cut.mp4",
-    "youtube": ""
+    "youtube": "EWcgztIW-Z8"
   },
   "total": 6,
   "ready": 6,
@@ -23,8 +23,8 @@
       ],
       "duration": 80,
       "poster": "media/posters/01-boundary.webp",
-      "file": "media/shorts/01-boundary.mp4",
-      "youtube": "",
+      "file": "",
+      "youtube": "LkzxRQAXn7I",
       "status": "ready"
     },
     {
@@ -42,8 +42,8 @@
       ],
       "duration": 79,
       "poster": "media/posters/02-synced-index.webp",
-      "file": "media/shorts/02-synced-index.mp4",
-      "youtube": "",
+      "file": "",
+      "youtube": "y6vdWrhzguw",
       "status": "ready"
     },
     {
@@ -60,8 +60,8 @@
       ],
       "duration": 105,
       "poster": "media/posters/03-live-fetch.webp",
-      "file": "media/shorts/03-live-fetch.mp4",
-      "youtube": "",
+      "file": "",
+      "youtube": "UWwPnbAfN2s",
       "status": "ready"
     },
     {
@@ -78,8 +78,8 @@
       ],
       "duration": 77,
       "poster": "media/posters/04-federated-protect.webp",
-      "file": "media/shorts/04-federated-protect.mp4",
-      "youtube": "",
+      "file": "",
+      "youtube": "gGJvC3IbF70",
       "status": "ready"
     },
     {
@@ -97,8 +97,8 @@
       ],
       "duration": 66,
       "poster": "media/posters/05-oversharing.webp",
-      "file": "media/shorts/05-oversharing.mp4",
-      "youtube": "",
+      "file": "",
+      "youtube": "rLK27JyJLL8",
       "status": "ready"
     },
     {
@@ -115,8 +115,8 @@
       ],
       "duration": 80,
       "poster": "media/posters/06-sync-overshare.webp",
-      "file": "media/shorts/06-sync-overshare.mp4",
-      "youtube": "",
+      "file": "",
+      "youtube": "6bAqImgw-2s",
       "status": "ready"
     }
   ]

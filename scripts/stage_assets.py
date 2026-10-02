@@ -28,8 +28,16 @@ SHORTS = [
      ["sync", "acl", "oversharing", "permission"]),
 ]
 
-YOUTUBE = {name: "" for name, *_ in SHORTS}
-YOUTUBE["deep-dive-cut"] = ""
+# Unlisted uploads, 2026-10-02. Empty string falls back to the local MP4.
+YOUTUBE = {
+    "deep-dive-cut": "EWcgztIW-Z8",
+    "01-boundary": "LkzxRQAXn7I",
+    "02-synced-index": "y6vdWrhzguw",
+    "03-live-fetch": "UWwPnbAfN2s",
+    "04-federated-protect": "gGJvC3IbF70",
+    "05-oversharing": "rLK27JyJLL8",
+    "06-sync-overshare": "6bAqImgw-2s",
+}
 
 
 def duration(path: Path) -> float:
@@ -83,7 +91,8 @@ def main():
         items.append({
             "id": name, "name": name, "title": title, "tag": tag, "pillar": pillar, "keywords": keywords,
             "duration": round(duration(mp4)), "poster": f"media/posters/{name}.webp",
-            "file": f"media/shorts/{name}.mp4", "youtube": YOUTUBE.get(name, ""), "status": "ready",
+            "file": "" if YOUTUBE.get(name) else f"media/shorts/{name}.mp4",
+            "youtube": YOUTUBE.get(name, ""), "status": "ready",
         })
     catalog = {
         "notebook_alias": "tdd-m365-digital-work-platform",

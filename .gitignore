@@ -7,4 +7,7 @@ Thumbs.db
 __pycache__/
 .playwright-mcp/
 
-
+# Hosted on YouTube (unlisted). See YOUTUBE in scripts/stage_assets.py.
+media/deep-dive-cut.mp4
+media/shorts/*.mp4
+youtube-ids.json

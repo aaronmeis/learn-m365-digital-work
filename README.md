@@ -16,4 +16,4 @@ python scripts/build_console_data.py
 
 Saved progress uses the `lm365dw:` prefix so it does not collide with the other study sites on this GitHub Pages origin.
 
-There is no separate scope mind-map PNG in this pack yet. The mind map note is in the library. Shorts and the deep-dive cut play from the files in `media/` (they are not on YouTube).
+There is no separate scope mind-map PNG in this pack yet. The mind map note is in the library. The deep-dive cut and the six shorts play from unlisted YouTube videos. IDs live in `scripts/stage_assets.py`. Local MP4s are the fallback and are not in git.
