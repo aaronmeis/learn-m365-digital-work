@@ -1,0 +1,14 @@
+flowchart TB
+  subgraph Cloud["Cloud / tenant boundary"]
+    SVC["Platform services"]
+    STORE["Data stores and indexes"]
+    PORTAL["Admin portal"]
+  end
+  subgraph OnPrem["Customer estate"]
+    AGENT["Agents, scanners, connectors"]
+    ENDPT["Endpoints"]
+  end
+  AGENT --> SVC
+  ENDPT --> SVC
+  SVC --> STORE
+  PORTAL --> SVC

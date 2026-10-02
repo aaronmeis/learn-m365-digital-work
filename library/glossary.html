@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GLOSSARY — Microsoft&#x27;s Digital-Work Platform | Learn Purview</title>
+<meta name="description" content="Terms used across the Microsoft digital-work platform deep dive, with a one-line definition each.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="library.css">
+<script>try{var p=JSON.parse(localStorage.getItem("appPalette"))||"github",m=JSON.parse(localStorage.getItem("appMode"))||"dark";document.documentElement.setAttribute("data-theme",p+"-"+m);}catch(e){document.documentElement.setAttribute("data-theme","github-dark");}</script>
+</head>
+<body>
+<header class="topbar">
+  <a href="../index.html" class="home">&larr; Learn Purview console</a>
+  <span class="crumb">Library · Reference</span>
+  <a href="index.html" class="home">All pages</a>
+</header>
+<main class="doc">
+  <div class="kicker">Reference</div>
+  <h1 class="doctitle">GLOSSARY — Microsoft&#x27;s Digital-Work Platform</h1>
+  <p class="lead">Terms used across the Microsoft digital-work platform deep dive, with a one-line definition each.</p>
+  
+  <article>
+<p>Collected from the mind map, the four architecture views, the study guide, and the cheatsheet. External URLs live on <a href="resources.html">RESOURCES</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Definition</th>
+<th>Where it shows up</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ACL</td>
+<td>Access control list on a Microsoft Graph item. A synced connector must map source-system permissions onto this list or Copilot can overshare.</td>
+<td>Integration view, study guide</td>
+</tr>
+<tr>
+<td>Agent / tool integration</td>
+<td>An agent calls a governed action or workflow (create a ticket, ask for approval, update a record). State changes stay in the system of record, not in the prompt.</td>
+<td>Mind map, logical view</td>
+</tr>
+<tr>
+<td>API consumption</td>
+<td>The app calls a third-party API at request time for a transactional read or write. No copy of the record is kept as a second system of record.</td>
+<td>Mind map</td>
+</tr>
+<tr>
+<td>Checks API</td>
+<td>GitHub API that posts pass/fail and evidence onto a pull request. Used for tests, security findings, and release gates.</td>
+<td>Logical view, integration risks</td>
+</tr>
+<tr>
+<td>Conditional Access</td>
+<td>Entra policy that can block or step up a sign-in. Copilot APIs inherit it because they sit on Microsoft Graph.</td>
+<td>Mind map, Copilot APIs docs</td>
+</tr>
+<tr>
+<td>Control plane</td>
+<td>Identity, policy, secrets, catalogs, and audit. One of the three planes in the Copilot Integration Enablement Layer.</td>
+<td>Conceptual view, study guide</td>
+</tr>
+<tr>
+<td>Copilot (role)</td>
+<td>The user-facing intelligence layer. It is not the integration layer. Durable assets are APIs, events, identity, connectors, schemas, and policy underneath it.</td>
+<td>Mind map, all views</td>
+</tr>
+<tr>
+<td>Copilot APIs</td>
+<td>REST endpoints under Microsoft Graph that let an app invoke Microsoft 365 Copilot. Same auth model as other Graph APIs.</td>
+<td>Block sources, mind map</td>
+</tr>
+<tr>
+<td>Copilot connector</td>
+<td>Brings external knowledge into Microsoft 365 Copilot and Search. Two kinds: synced (indexed) and federated (live MCP).</td>
+<td>Blocks, integration view</td>
+</tr>
+<tr>
+<td>Copilot Integration Enablement Layer</td>
+<td>The target control point: an MCP/API catalog, gateway, policy, and audit so teams do not build one-off AI connections.</td>
+<td>Conceptual view, mind map</td>
+</tr>
+<tr>
+<td>Copilot Studio</td>
+<td>Low-code place to build task-specific business agents that call APIs, Dataverse, and approved MCP tools. Separate from GitHub Copilot.</td>
+<td>Mind map, cheatsheet</td>
+</tr>
+<tr>
+<td>Dataverse</td>
+<td>Power Platform data store behind low-code apps and some Copilot Studio agents.</td>
+<td>Mind map</td>
+</tr>
+<tr>
+<td>Digital-work platform</td>
+<td>The Microsoft 365 side: mail, files, chat, meetings, and business process. Microsoft Graph is its API and data plane.</td>
+<td>Conceptual view</td>
+</tr>
+<tr>
+<td>Entra ID</td>
+<td>Microsoft's identity service for this pack. Users and apps authenticate here; GitHub can federate to the same directory.</td>
+<td>Physical view, cheatsheet</td>
+</tr>
+<tr>
+<td>Event-driven integration</td>
+<td>A source publishes a webhook or event; a consumer reacts. Used when systems must respond to a change instead of polling.</td>
+<td>Mind map, logical view</td>
+</tr>
+<tr>
+<td>externalItem</td>
+<td>The Graph object a synced connector writes. Study guide: it must carry content, metadata, an ACL, and semantic labels.</td>
+<td>Study guide, physical view</td>
+</tr>
+<tr>
+<td>Federated connector</td>
+<td>Live fetch at question time through MCP. Content is not copied into Microsoft Graph. Use it when data is volatile, sensitive, large, or when a write must hit the source.</td>
+<td>Blocks, logical view</td>
+</tr>
+<tr>
+<td>GitHub App</td>
+<td>Server-to-server GitHub integration with fine-grained permissions and short-lived installation tokens. Preferred over a broad OAuth app.</td>
+<td>Mind map, integration risks</td>
+</tr>
+<tr>
+<td>GitHub Cloud Knowledge connector</td>
+<td>Microsoft connector that indexes selected GitHub Markdown and docs into Graph so Microsoft 365 Copilot can ground on them.</td>
+<td>Source ledger, logical view</td>
+</tr>
+<tr>
+<td>GitHub Copilot</td>
+<td>The coding assistant (IDE, CLI, chat, coding agent). Licensed separately from Microsoft 365 Copilot.</td>
+<td>Cheatsheet, mind map</td>
+</tr>
+<tr>
+<td>GitHub Copilot Extensions</td>
+<td>Older GitHub App model for extending Copilot. GitHub has deprecated it in favor of MCP servers.</td>
+<td>Mind map, study guide</td>
+</tr>
+<tr>
+<td>Graph change notifications</td>
+<td>Webhooks from Microsoft Graph when a resource changes. The subscriber then reads the authorized delta.</td>
+<td>Mind map</td>
+</tr>
+<tr>
+<td>Graph Data Connect</td>
+<td>Bulk, governed export of Microsoft 365 data into an Azure analytics store. Not the same as a Copilot connector.</td>
+<td>Mind map</td>
+</tr>
+<tr>
+<td>Indexed knowledge connector</td>
+<td>Same idea as a synced connector: copy external content into a Graph external connection so Search and Copilot can retrieve it.</td>
+<td>Mind map, study guide</td>
+</tr>
+<tr>
+<td>Knowledge plane</td>
+<td>Curated information made searchable (synced connectors and the Graph index).</td>
+<td>Conceptual view</td>
+</tr>
+<tr>
+<td>MCP</td>
+<td>Model Context Protocol. A way for a host (Copilot) to call tools and read context from an external server. GitHub's primary Copilot extensibility path, and the wire for federated connectors.</td>
+<td>Blocks, all views</td>
+</tr>
+<tr>
+<td>MCP server</td>
+<td>A process that exposes tools to Copilot. Catalog it. Split read-only tools from write tools.</td>
+<td>Conceptual view, integration risks</td>
+</tr>
+<tr>
+<td>Microsoft 365 Copilot</td>
+<td>The work assistant over mail, files, meetings, and Graph. Not the same product as GitHub Copilot.</td>
+<td>Cheatsheet, source ledger</td>
+</tr>
+<tr>
+<td>Microsoft Graph</td>
+<td>The permission-aware API and data plane for Microsoft 365 content and for Copilot APIs.</td>
+<td>Mind map, conceptual view</td>
+</tr>
+<tr>
+<td>OAuth 2.0</td>
+<td>Delegated or app authorization. Graph and GitHub both use it. Broad scopes are a risk on GitHub; prefer a GitHub App for service-to-service.</td>
+<td>Physical view</td>
+</tr>
+<tr>
+<td>OIDC</td>
+<td>OpenID Connect. Identity layer on OAuth, used for sign-in into Entra.</td>
+<td>Physical view</td>
+</tr>
+<tr>
+<td>PAT</td>
+<td>Personal access token. Avoid it for production integrations; it is a long-lived user secret.</td>
+<td>Study guide</td>
+</tr>
+<tr>
+<td>Permission fidelity</td>
+<td>Source-system rights must survive the trip into Graph ACLs. If the mapping is wrong, Copilot retrieval spreads the mistake.</td>
+<td>Integration view</td>
+</tr>
+<tr>
+<td>Power Platform connector</td>
+<td>Low-code connector used by Power Automate and Power Apps. Different surface from a Copilot connector.</td>
+<td>Mind map</td>
+</tr>
+<tr>
+<td>Prompt injection</td>
+<td>Hostile text inside retrieved content that tries to override the model's instructions. Treat retrieved text as data; gate actions outside the model.</td>
+<td>Integration view</td>
+</tr>
+<tr>
+<td>SAML</td>
+<td>Older SSO federation option into Entra, alternative to OIDC.</td>
+<td>Physical view</td>
+</tr>
+<tr>
+<td>SCIM</td>
+<td>Protocol for automated joiner, mover, and leaver provisioning.</td>
+<td>Physical view, study guide</td>
+</tr>
+<tr>
+<td>Semantic index</td>
+<td>Microsoft's index that Copilot uses for grounding. Synced connector items land where this retrieval can see them.</td>
+<td>Study guide (grounding path)</td>
+</tr>
+<tr>
+<td>Software-delivery platform</td>
+<td>The GitHub side: repos, review, Actions, packages, release.</td>
+<td>Conceptual view</td>
+</tr>
+<tr>
+<td>Synced connector</td>
+<td>Pulls external content on a schedule into a Graph external connection (content, metadata, ACL, semantic labels). Good for search; bad for secrets and fast-changing records.</td>
+<td>Blocks, logical view</td>
+</tr>
+<tr>
+<td>System of record</td>
+<td>The one authoritative store for a fact. Copilot must not become a second one.</td>
+<td>Conceptual view</td>
+</tr>
+<tr>
+<td>Transaction plane</td>
+<td>APIs and workflows that change state. Distinct from the knowledge plane.</td>
+<td>Conceptual view</td>
+</tr>
+<tr>
+<td>Work IQ API</td>
+<td>Microsoft extensibility API called out in the study guide as part of how Copilot reasons over work context. Treat product detail as Microsoft Learn, not as invented here.</td>
+<td>Study guide, source ledger</td>
+</tr>
+<tr>
+<td>Workload identity</td>
+<td>An app or service principal, not a person. Server-to-server calls should use this (or a GitHub App), not a shared user account.</td>
+<td>Study guide</td>
+</tr>
+</tbody>
+</table></article>
+  <footer class="docfoot">
+    Rendered from <code>Learning\tech-deep-dive\m365-digital-work-platform\GLOSSARY.md</code>. The Obsidian vault is the source of truth. Study material only. Citations <span class="cite">S#</span> link to the Microsoft source ledger.
+    <div class="prevnext"><span></span><a href="cheatsheet.html">Next &rarr;</a></div>
+  </footer>
+</main>
+<script type="module">
+import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+const dark=(document.documentElement.getAttribute("data-theme")||"").endsWith("dark");
+mermaid.initialize({startOnLoad:true,theme:dark?"dark":"default",securityLevel:"strict"});
+</script>
+</body>
+</html>

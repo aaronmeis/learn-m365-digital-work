@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Integration and AI Elements — Microsoft&#x27;s Digital-Work Platform | Learn Purview</title>
+<meta name="description" content="Integration and AI elements of Microsoft&#x27;s Digital-Work Platform: third-party and external systems, APIs, identity, AI features and AI data paths.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="library.css">
+<script>try{var p=JSON.parse(localStorage.getItem("appPalette"))||"github",m=JSON.parse(localStorage.getItem("appMode"))||"dark";document.documentElement.setAttribute("data-theme",p+"-"+m);}catch(e){document.documentElement.setAttribute("data-theme","github-dark");}</script>
+</head>
+<body>
+<header class="topbar">
+  <a href="../index.html" class="home">&larr; Learn Purview console</a>
+  <span class="crumb">Library · Architecture views</span>
+  <a href="index.html" class="home">All pages</a>
+</header>
+<main class="doc">
+  <div class="kicker">Architecture views</div>
+  <h1 class="doctitle">Integration and AI Elements — Microsoft&#x27;s Digital-Work Platform</h1>
+  <p class="lead">Integration and AI elements of Microsoft&#x27;s Digital-Work Platform: third-party and external systems, APIs, identity, AI features and AI data paths.</p>
+  
+  <article>
+<p>Pack: <a href="hub.html">00 - Microsoft's Digital-Work Platform Hub</a> · Block: <a href="block-05-integration-and-ai.html">Block 5</a> · Prev: <a href="view-03-physical.html">Physical</a></p>
+<h2>Third-party and external systems</h2>
+<div class="callout important" markdown="0"><div class="callout-title">Required section</div><p>Every system outside the platform boundary that sends data in, receives data out, or is governed by it. Include non-vendor clouds, SaaS, SIEM/SOAR, ITSM, on-prem estates, and competing or complementary governance tools. Mark gov-cloud support per row; it is often where a design fails.</p></div>
+
+<table>
+<thead>
+<tr>
+<th>System</th>
+<th>Vendor</th>
+<th>Direction (in/out/bi)</th>
+<th>Mechanism</th>
+<th>Data exchanged</th>
+<th>Auth</th>
+<th>Owner</th>
+<th>Gov-cloud support</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GitHub (repos, PRs, Actions)</td>
+<td>GitHub/Microsoft</td>
+<td>bi</td>
+<td>GitHub Cloud Knowledge connector (sync into Graph) + GitHub REST/GraphQL APIs + webhooks</td>
+<td>Markdown docs, ADRs, runbooks (synced); issues, PRs, checks, deployment state (API/event)</td>
+<td>Entra app registration (connector); GitHub App installation tokens (API/webhooks)</td>
+<td>Platform/DevOps team</td>
+<td>Synced connector: commercial, GCC, GCCH, DoD; GitHub Cloud Knowledge connector availability varies — verify per tenant</td>
+</tr>
+<tr>
+<td>ServiceNow / generic ITSM</td>
+<td>Third-party</td>
+<td>bi</td>
+<td>Federated MCP connector (live) or synced connector (indexed knowledge articles)</td>
+<td>Incident/change status (federated); knowledge articles (synced)</td>
+<td>MCP-supported auth (OAuth 2.0 or service-specific) / Entra app registration</td>
+<td>ITSM team</td>
+<td>Federated connector gov-cloud availability varies by connector — verify per tenant</td>
+</tr>
+<tr>
+<td>Jira / Azure DevOps</td>
+<td>Atlassian/Microsoft</td>
+<td>in</td>
+<td>GitHub Copilot MCP server or Copilot Studio agent action</td>
+<td>Work item / sprint state queries</td>
+<td>MCP-supported auth</td>
+<td>Engineering PM</td>
+<td>Verify per MCP server implementation</td>
+</tr>
+<tr>
+<td>Datadog / observability platform</td>
+<td>Third-party</td>
+<td>in</td>
+<td>MCP server tool (traces, logs)</td>
+<td>Telemetry data returned to Copilot agent context</td>
+<td>MCP-supported auth</td>
+<td>SRE/Observability</td>
+<td>Verify per MCP server implementation</td>
+</tr>
+<tr>
+<td>Salesforce / CRM</td>
+<td>Third-party</td>
+<td>bi</td>
+<td>Teams app / Power Platform connector API call</td>
+<td>Account, opportunity, case records</td>
+<td>OAuth delegated or service principal</td>
+<td>Sales/CRM team</td>
+<td>Verify per connector</td>
+</tr>
+<tr>
+<td>Confluence / knowledge repositories</td>
+<td>Atlassian or internal</td>
+<td>in</td>
+<td>Synced Copilot connector</td>
+<td>Extracted text, metadata, source ACLs mapped to M365 permissions</td>
+<td>Entra app registration, admin consent</td>
+<td>Knowledge/Docs team</td>
+<td>Commercial, GCC, GCCH, DoD (synced connector baseline)</td>
+</tr>
+<tr>
+<td>Power Platform / Dataverse</td>
+<td>Microsoft</td>
+<td>bi</td>
+<td>Power Platform connectors, Copilot Studio actions</td>
+<td>Workflow triggers, approval state, business data</td>
+<td>Entra app registration / service principal</td>
+<td>Power Platform CoE</td>
+<td>Commercial, GCC, GCCH, DoD</td>
+</tr>
+<tr>
+<td>SIEM/SOAR</td>
+<td>Third-party</td>
+<td>out</td>
+<td>Audit/telemetry export, Graph audit logs</td>
+<td>Prompt/response logs, tool-call telemetry, access events</td>
+<td>Service principal, API keys</td>
+<td>Security ops</td>
+<td>Verify per SIEM integration</td>
+</tr>
+</tbody>
+</table>
+<h3>Context diagram (platform boundary)</h3>
+<pre class="mermaid">flowchart LR
+  subgraph P[&quot;Microsoft&#x27;s Digital-Work Platform boundary&quot;]
+    CORE[&quot;Microsoft&#x27;s Digital-Work Platform&quot;]
+  end
+  SIEM[&quot;SIEM / SOAR&quot;] &lt;--&gt; CORE
+  ITSM[&quot;ITSM / ticketing&quot;] &lt;-- CORE
+  CLOUDS[&quot;Other clouds and SaaS data sources&quot;] --&gt; CORE
+  ONPREM[&quot;On-prem file shares and databases&quot;] --&gt; CORE
+  GOV[&quot;Other governance / privacy tools&quot;] &lt;--&gt; CORE
+  IDP[&quot;Identity provider&quot;] --&gt; CORE
+</pre>
+
+<!-- tech_deep_dive:diagram-embed -->
+<p><a href="../assets/diagrams/04-integration-ai-1.png" target="_blank"><img class="embed" src="../assets/diagrams/04-integration-ai-1.png" alt="04-integration-ai-1.png"></a></p>
+<h2>APIs and extensibility</h2>
+<table>
+<thead>
+<tr>
+<th>API / SDK / connector framework</th>
+<th>Purpose</th>
+<th>Auth model</th>
+<th>Rate limits / quotas</th>
+<th>Gov-cloud endpoint</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Microsoft Graph API</td>
+<td>Read/write M365 resources (Teams, mail, calendar, files, users/groups, SharePoint)</td>
+<td>Entra ID OAuth 2.0/OIDC, delegated or app-only</td>
+<td>Per-tenant Graph throttling (varies by workload)</td>
+<td>Graph endpoints exist for GCC/GCCH/DoD; verify per API</td>
+</tr>
+<tr>
+<td>Microsoft Graph change notifications</td>
+<td>Event-driven webhook callbacks on resource change</td>
+<td>Entra app registration, subscription-based</td>
+<td>Subscription expiry/renewal limits</td>
+<td>Verify per environment</td>
+</tr>
+<tr>
+<td>Microsoft Graph Data Connect</td>
+<td>Governed bulk/batch extraction into Azure data platforms</td>
+<td>Entra app registration, admin consent</td>
+<td>Batch job quotas</td>
+<td>Verify per environment</td>
+</tr>
+<tr>
+<td>Copilot connector SDK / Microsoft 365 Agents Toolkit</td>
+<td>Build custom synced Copilot connectors</td>
+<td>Entra app registration, admin consent for Graph permissions</td>
+<td>Per-connector ingestion quotas</td>
+<td>Commercial, GCC, GCCH, DoD</td>
+</tr>
+<tr>
+<td>Federated connector (MCP-based)</td>
+<td>Live query-time fetch without Graph indexing</td>
+<td>MCP-supported auth (OAuth 2.0 or service-specific)</td>
+<td>Set by target MCP server</td>
+<td>Availability varies by federated connector</td>
+</tr>
+<tr>
+<td>GitHub REST / GraphQL API</td>
+<td>Operational actions on repos, issues, PRs, teams</td>
+<td>GitHub App installation token / OAuth app / PAT</td>
+<td>Standard GitHub API rate limits</td>
+<td>N/A (GitHub.com or GHES)</td>
+</tr>
+<tr>
+<td>GitHub webhooks</td>
+<td>Event-driven reaction to push/PR/issue/deployment/check events</td>
+<td>GitHub App webhook secret</td>
+<td>Delivery retry limits</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>GitHub MCP servers</td>
+<td>Give GitHub Copilot controlled access to external tools/context</td>
+<td>MCP-supported auth, org-approved tool catalog</td>
+<td>Set by target MCP server</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>Copilot APIs (M365)</td>
+<td>Programmatic invocation of Copilot capabilities in custom apps</td>
+<td>Same as Graph (Entra OAuth), inherits Conditional Access/sensitivity labels/permission trimming</td>
+<td>Per-tenant Graph throttling</td>
+<td>Verify per API — Graph-hosted namespace</td>
+</tr>
+</tbody>
+</table>
+<h2>Identity and access</h2>
+<ul>
+<li>Identity provider: Microsoft Entra ID — OAuth 2.0/OIDC and SAML SSO for federated user identity; SCIM for joiner-mover-leaver lifecycle automation.</li>
+<li>Delegated (user-context) authorization preferred for user-requested retrieval where entitlement is evaluated dynamically; managed application/workload identities, certificates, and short-lived tokens preferred for service-to-service workloads.</li>
+<li>Least-privilege scopes: read/search permissions kept separate from write/action permissions.</li>
+<li>Distinct application registrations and credentials maintained across dev/test/staging/prod; no generic shared accounts or long-lived static tokens.</li>
+<li>GitHub side: GitHub Apps (installation-scoped, short-lived tokens) are the default for server-to-server integration; OAuth apps for user-delegated third-party access; PATs avoided for durable enterprise service integration.</li>
+<li>MCP servers treated as production integration endpoints — centrally cataloged (owner, purpose, data classification, action permissions, auth method, lifecycle state, approval date); read-only tools separated from write-capable tools; consequential actions (create/modify/delete/deploy/approve/transmit) require user confirmation or workflow approval, bound to verified identity rather than natural-language request alone.</li>
+</ul>
+<h2>Event and data flows across the boundary</h2>
+<table>
+<thead>
+<tr>
+<th>Flow</th>
+<th>Source</th>
+<th>Destination</th>
+<th>Data</th>
+<th>Frequency</th>
+<th>Classification</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Synced connector ingestion</td>
+<td>Third-party source system (GitHub docs, Confluence, ServiceNow KB, CRM)</td>
+<td>Microsoft Graph external connection / semantic index</td>
+<td>Content, metadata, source-mapped ACLs, semantic labels</td>
+<td>Scheduled delta sync</td>
+<td>Per source classification, propagated via ACL</td>
+</tr>
+<tr>
+<td>Federated connector query</td>
+<td>Microsoft 365 Copilot / agent</td>
+<td>Third-party system of record (ITSM, CRM, observability)</td>
+<td>Runtime query + response, citations</td>
+<td>Per-request (real time)</td>
+<td>Not persisted in Graph — governed at source</td>
+</tr>
+<tr>
+<td>GitHub PR event → change record</td>
+<td>GitHub webhook</td>
+<td>Integration gateway/event bus → ITSM (e.g., ServiceNow)</td>
+<td>PR metadata, status, evidence link</td>
+<td>Event-driven (on PR open/update)</td>
+<td>Per repo/org policy</td>
+</tr>
+<tr>
+<td>GitHub Copilot MCP tool call</td>
+<td>GitHub Copilot Agent mode</td>
+<td>Approved MCP tool (observability, ITSM, internal API)</td>
+<td>Query parameters, returned traces/logs/tickets</td>
+<td>On-demand during dev session</td>
+<td>Per MCP server data classification</td>
+</tr>
+<tr>
+<td>GitHub knowledge → M365 search</td>
+<td>GitHub repositories (README, ADRs, docs)</td>
+<td>Microsoft Graph index via GitHub Cloud Knowledge connector</td>
+<td>Markdown/text content and metadata</td>
+<td>Scheduled sync</td>
+<td>Per repo visibility, mapped to M365 ACL</td>
+</tr>
+<tr>
+<td>Audit/telemetry export</td>
+<td>Copilot / MCP gateway / Graph audit log</td>
+<td>SIEM/SOAR</td>
+<td>Tool calls, parameters, identity, decision outcome, response references, errors</td>
+<td>Continuous/streamed</td>
+<td>Security-classified, retained per policy</td>
+</tr>
+</tbody>
+</table>
+<h2>AI elements</h2>
+<table>
+<thead>
+<tr>
+<th>AI feature</th>
+<th>What it does</th>
+<th>Data it reads</th>
+<th>Data it writes or emits</th>
+<th>Controls that govern it</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Microsoft 365 Copilot Chat/in-app</td>
+<td>Answers questions, summarizes, drafts using enterprise grounding data</td>
+<td>Graph-indexed content (synced), live MCP responses (federated), M365 app context</td>
+<td>Chat responses, citations, generated documents/drafts</td>
+<td>Conditional Access, sensitivity labels, permission trimming, DLP/Purview</td>
+<td>learn.microsoft.com/microsoft-365/copilot/extensibility/copilot-apis-overview</td>
+</tr>
+<tr>
+<td>Synced Copilot connector</td>
+<td>Indexes external content into Graph for search/Copilot grounding</td>
+<td>Third-party content + metadata via connector service</td>
+<td>Graph external items with ACLs and semantic labels</td>
+<td>ACL fidelity to source permissions; admin consent at registration</td>
+<td>learn.microsoft.com/microsoft-365/copilot/connectors/overview</td>
+</tr>
+<tr>
+<td>Federated (MCP) connector</td>
+<td>Fetches live external data at query time, no indexing</td>
+<td>Third-party system of record, authenticated per-request</td>
+<td>Real-time response + citation to source (not stored in Graph)</td>
+<td>MCP tool policy evaluation, per-request auth, write/update/delete gated by connector capability</td>
+<td>learn.microsoft.com/microsoft-365/copilot/connectors/federated-connectors-overview</td>
+</tr>
+<tr>
+<td>Copilot Studio agent</td>
+<td>Task-specific business agent invoking APIs/workflows/Dataverse/MCP tools</td>
+<td>Connected APIs, Dataverse, enterprise knowledge, approved MCP tools</td>
+<td>Actions (ticket creation, record updates), approval requests</td>
+<td>Workflow/approval gates, read vs. write tool separation</td>
+<td>mind-map intake</td>
+</tr>
+<tr>
+<td>Copilot APIs (M365)</td>
+<td>Programmatic access to Copilot capabilities from custom apps</td>
+<td>Same Graph-authorized data as Copilot Chat</td>
+<td>API responses consumed by calling application</td>
+<td>Same Graph auth/Conditional Access/sensitivity labels as other Graph APIs</td>
+<td>learn.microsoft.com/microsoft-365/copilot/extensibility/copilot-apis-overview</td>
+</tr>
+<tr>
+<td>GitHub Copilot (Agent mode / Chat / CLI)</td>
+<td>Investigates, plans, generates code/patches using repo context + MCP tools</td>
+<td>Repo code, PR/issue context, MCP tool responses (observability, ITSM, internal APIs)</td>
+<td>Draft PRs, patches, tests, chat responses</td>
+<td>Branch protection, required reviews, quality gates, MCP tool allowlisting</td>
+<td>docs.github.com/copilot/concepts/context/mcp</td>
+</tr>
+<tr>
+<td>GitHub Cloud Knowledge connector</td>
+<td>Indexes repo Markdown/docs into Graph for M365 Copilot/Search</td>
+<td>GitHub repository Markdown and text files</td>
+<td>Graph external items (indexed)</td>
+<td>Repo visibility mapped to M365 ACL</td>
+<td>learn.microsoft.com/microsoft-365/copilot/connectors/github-cloud-knowledge-overview</td>
+</tr>
+</tbody>
+</table>
+<h3>AI data path</h3>
+<pre class="mermaid">flowchart LR
+  USER[&quot;User prompt&quot;] --&gt; AI[&quot;AI feature / copilot&quot;]
+  AI --&gt; GROUND[&quot;Grounding data&quot;]
+  GROUND --&gt; CTRL{&quot;Labels, DLP, access checks&quot;}
+  CTRL --&gt;|allowed| AI
+  AI --&gt; RESP[&quot;Response&quot;]
+  AI --&gt; LOG[&quot;Audit and interaction logs&quot;]
+</pre>
+
+<!-- tech_deep_dive:diagram-embed -->
+<p><a href="../assets/diagrams/04-integration-ai-2.png" target="_blank"><img class="embed" src="../assets/diagrams/04-integration-ai-2.png" alt="04-integration-ai-2.png"></a></p>
+<h2>Integration risks</h2>
+<table>
+<thead>
+<tr>
+<th>Risk</th>
+<th>Where</th>
+<th>Mitigation</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Oversharing / permission mismatch</td>
+<td>Synced connector ACL translation from source system to M365</td>
+<td>Map source-system entitlements precisely into connector ACLs; classify data before indexing; audit ACL fidelity before go-live</td>
+<td>mind-map: "permission fidelity" is non-negotiable, learn.microsoft.com/microsoft-365/copilot/connectors/overview</td>
+</tr>
+<tr>
+<td>Stale or duplicated regulated data</td>
+<td>Synced connector indexing dynamic/sensitive records that should stay authoritative in source</td>
+<td>Use federated MCP connector instead of syncing for highly dynamic, sensitive, or too-large-to-duplicate data</td>
+<td>learn.microsoft.com/microsoft-365/copilot/connectors/federated-connectors-overview</td>
+</tr>
+<tr>
+<td>Prompt injection via retrieved content</td>
+<td>Any AI feature grounding on external/synced/federated content</td>
+<td>Separate retrieved content from system instructions; validate parameters; allowlist tools; enforce action policy outside the model</td>
+<td>mind-map: Agent and MCP controls</td>
+</tr>
+<tr>
+<td>Unauthorized consequential action via MCP tool</td>
+<td>MCP servers with write/action capability (ticket creation, deploy, delete)</td>
+<td>Separate read-only vs. write-capable tools; require user confirmation/workflow approval for consequential actions; bind to verified identity, not NL request alone</td>
+<td>mind-map: Agent and MCP controls</td>
+</tr>
+<tr>
+<td>Ungoverned/point-to-point AI connections</td>
+<td>Ad hoc connector or MCP integrations built outside a central catalog</td>
+<td>Central MCP/API catalog with owner, purpose, classification, auth method, lifecycle state; Copilot Integration Enablement Layer (gateway/catalog/policy/audit)</td>
+<td>mind-map: Recommended target state</td>
+</tr>
+<tr>
+<td>Deletion/legal-hold propagation gaps</td>
+<td>Synced content in Graph index/cache after source deletion or legal hold</td>
+<td>Ensure deletions, permission changes, and legal holds propagate to indexes, caches, downstream stores, and AI retrieval layers</td>
+<td>mind-map: Data and content controls</td>
+</tr>
+<tr>
+<td>Broad OAuth scope on GitHub integration</td>
+<td>Third-party GitHub integration using OAuth app instead of GitHub App</td>
+<td>Default to GitHub App (fine-grained repo/org permissions, short-lived installation tokens) for server-to-server integration; reserve OAuth for genuine user-delegated cases</td>
+<td>mind-map: GitHub App versus OAuth app</td>
+</tr>
+<tr>
+<td>LLM coordinating lifecycle state directly</td>
+<td>Using Copilot/agent as the system of record for PR/change lifecycle transitions</td>
+<td>Keep API/event integrations (webhooks, Checks API, branch protection) as system of record; Copilot explains/accelerates but does not own state transitions</td>
+<td>mind-map: Event-driven GitHub pattern</td>
+</tr>
+</tbody>
+</table>
+<h2>Terms on this page</h2>
+<p>Full list: <a href="glossary.html">GLOSSARY</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Definition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Permission fidelity</td>
+<td>Source permissions must be mapped onto Graph ACLs. A bad map becomes oversharing once Copilot retrieves the item.</td>
+</tr>
+<tr>
+<td>Prompt injection</td>
+<td>Instructions hidden in retrieved content. Do not let that text authorize a tool call.</td>
+</tr>
+<tr>
+<td>GitHub App</td>
+<td>Preferred server-to-server GitHub identity: scoped permissions, short-lived tokens.</td>
+</tr>
+<tr>
+<td>OAuth app (GitHub)</td>
+<td>User-delegated GitHub access. Easy to over-scope; not the default for service integrations.</td>
+</tr>
+<tr>
+<td>MCP server</td>
+<td>Endpoint that exposes tools. Catalog it and separate read tools from write tools.</td>
+</tr>
+<tr>
+<td>Copilot Studio</td>
+<td>Low-code agent host on the Microsoft 365 side.</td>
+</tr>
+<tr>
+<td>GitHub Copilot</td>
+<td>Coding assistant. Separate license and product from Microsoft 365 Copilot.</td>
+</tr>
+</tbody>
+</table>
+<h2>Framework lens</h2>
+<table>
+<thead>
+<tr>
+<th>Framework</th>
+<th>Maps to</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TOGAF</td>
+<td>Phase C Application interfaces · Phase D Technology · Architecture Governance for AI</td>
+</tr>
+<tr>
+<td>DoDAF</td>
+<td>SV-1/SV-2 external interfaces · SV-6 Systems Resource Flow Matrix · OV-3 Operational Resource Flow Matrix · StdV-1 for API/protocol standards</td>
+</tr>
+<tr>
+<td>Altitude</td>
+<td>Crosses conceptual (who we trust), logical (interfaces), physical (connectors and endpoints)</td>
+</tr>
+</tbody>
+</table></article>
+  <footer class="docfoot">
+    Rendered from <code>Learning\tech-deep-dive\m365-digital-work-platform\views\04 - Integration and AI Elements.md</code>. The Obsidian vault is the source of truth. Study material only. Citations <span class="cite">S#</span> link to the Microsoft source ledger.
+    <div class="prevnext"><a href="view-03-physical.html">&larr; Previous</a><a href="diagram-index.html">Next &rarr;</a></div>
+  </footer>
+</main>
+<script type="module">
+import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+const dark=(document.documentElement.getAttribute("data-theme")||"").endsWith("dark");
+mermaid.initialize({startOnLoad:true,theme:dark?"dark":"default",securityLevel:"strict"});
+</script>
+</body>
+</html>

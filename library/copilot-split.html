@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Microsoft 365 Copilot vs GitHub Copilot | Learn Purview</title>
+<meta name="description" content="Reference comparison: Microsoft 365 / Microsoft 365 Copilot vs. GitHub / GitHub Copilot — stack layers, architecture placement, tiers, editions, connection points, and governance readiness.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="library.css">
+<script>try{var p=JSON.parse(localStorage.getItem("appPalette"))||"github",m=JSON.parse(localStorage.getItem("appMode"))||"dark";document.documentElement.setAttribute("data-theme",p+"-"+m);}catch(e){document.documentElement.setAttribute("data-theme","github-dark");}</script>
+</head>
+<body>
+<header class="topbar">
+  <a href="../index.html" class="home">&larr; Learn Purview console</a>
+  <span class="crumb">Library · Reference</span>
+  <a href="index.html" class="home">All pages</a>
+</header>
+<main class="doc">
+  <div class="kicker">Reference</div>
+  <h1 class="doctitle">Microsoft 365 Copilot vs GitHub Copilot</h1>
+  <p class="lead">Reference comparison: Microsoft 365 / Microsoft 365 Copilot vs. GitHub / GitHub Copilot — stack layers, architecture placement, tiers, editions, connection points, and governance readiness.</p>
+  
+  <article><h1>Microsoft 365 Copilot vs. GitHub Copilot — reference comparison</h1>
+<p>Pack: <a href="hub.html">Hub</a> · Feeds: <a href="view-01-conceptual.html">Conceptual</a> · <a href="view-03-physical.html">Physical</a> · <a href="view-04-integration-ai.html">Integration and AI</a></p>
+<div class="callout info" markdown="0"><div class="callout-title">Why this note exists</div><p>The views in this pack are architecture-first (capabilities, services, APIs, data flows). This note is the executive/product-framing counterpart: it names the licensing tiers, editions, and governance checklists a leader or architect needs when explaining <em>"is GitHub Copilot part of Microsoft 365 Copilot?"</em> — the answer is no, they are separately licensed products that can be connected operationally.</p></div>
+
+<h2>Core claim</h2>
+<p>Microsoft 365 is the cloud productivity platform — identity, collaboration, content, endpoint management, security, compliance, and business applications — while GitHub Copilot is a separate developer-productivity capability that sits primarily in the software-engineering toolchain, not inside the core Microsoft 365 workload stack. The products can be connected operationally, especially through GitHub knowledge connectors and shared identity/governance, but a Microsoft 365 Copilot license does not inherently include GitHub Copilot, nor vice versa. Microsoft explicitly identifies GitHub Copilot, Security Copilot, and Copilot Studio as independently licensed offerings that do not require a Microsoft 365 Copilot Premium license. (Sources: <a href="https://learn.microsoft.com/en-us/microsoft-365/copilot/microsoft-365-copilot-overview">Microsoft 365 Copilot overview</a>, <a href="https://learn.microsoft.com/en-us/microsoft-365/copilot/microsoft-365-copilot-architecture">Microsoft 365 Copilot architecture</a>)</p>
+<h2>The Microsoft 365 stack — six layers</h2>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Core components</th>
+<th>Primary role</th>
+<th>Typical owner</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Identity and tenant</td>
+<td>Microsoft Entra ID, tenant configuration, groups, roles, Conditional Access, MFA</td>
+<td>Establishes who users are, what they can access, and under what conditions</td>
+<td>IAM / Security</td>
+</tr>
+<tr>
+<td>Productivity apps</td>
+<td>Word, Excel, PowerPoint, Outlook, OneNote, Loop, Forms</td>
+<td>Individual content creation, analysis, email, presentations, notes, lightweight collaboration</td>
+<td>End users / Workplace IT</td>
+</tr>
+<tr>
+<td>Collaboration and communications</td>
+<td>Teams, Exchange Online, SharePoint Online, OneDrive for Business, Viva</td>
+<td>Chat, meetings, calling, mail, intranet, document collaboration, employee experience</td>
+<td>Workplace / Collaboration</td>
+</tr>
+<tr>
+<td>Content and knowledge</td>
+<td>SharePoint sites, OneDrive, Teams files, lists, Stream, Search, Microsoft Graph</td>
+<td>Stores and connects files, conversations, people, meetings, and organizational context</td>
+<td>Information management</td>
+</tr>
+<tr>
+<td>Security, compliance, and governance</td>
+<td>Microsoft Purview, Defender, Intune, Entra, audit, eDiscovery, retention, sensitivity labels, DLP</td>
+<td>Protects identities, devices, content, and data; supports legal, regulatory, and records needs</td>
+<td>Security / Compliance</td>
+</tr>
+<tr>
+<td>Automation and extension</td>
+<td>Power Platform, Microsoft Graph APIs, Teams apps, Microsoft 365 Copilot agents, Copilot Studio</td>
+<td>Builds workflows, applications, integrations, and tailored AI experiences</td>
+<td>IT / Business technology / Developers</td>
+</tr>
+</tbody>
+</table>
+<p>At the center is the <strong>Microsoft 365 tenant</strong> — the organization's logical boundary for users, licenses, policies, settings, and data. Copilot runs within this Microsoft 365 service boundary but does not receive blanket access to everything in the tenant; retrieval is scoped to the permissions of the signed-in user. See <a href="view-04-integration-ai.html">Integration and AI Elements</a> for how permission fidelity is enforced mechanically (Conditional Access, sensitivity labels, permission trimming, DLP/Purview).</p>
+<h3>Foundational layers, in brief</h3>
+<ul>
+<li><strong>Identity (Entra ID):</strong> control plane for SSO, RBAC, Conditional Access, MFA, guest access. Copilot inherits the identity and authorization context of the requesting user — if a user cannot open a file, chat, or mailbox, Copilot should not use it to formulate an answer, and Copilot honors configured Conditional Access/MFA.</li>
+<li><strong>Core workload layer:</strong> Exchange Online, Teams, SharePoint Online, OneDrive for Business, the Office apps, Planner/Tasks/To Do, Viva, Power Platform.</li>
+<li><strong>Microsoft Graph:</strong> the API and relationship layer connecting people, files, mail, calendars, chats, meetings, tasks, group membership, and security signals — this is why Microsoft 365 Copilot's enterprise value comes from retrieving authorized work context, not just producing text from a public model. Compare <a href="view-01-conceptual.html">C1: Enterprise data/API plane</a>.</li>
+</ul>
+<h2>Where Microsoft 365 Copilot sits</h2>
+<pre><code class="language-text">                     ┌─────────────────────────────────┐
+                     │ Microsoft 365 user experiences   │
+                     │ Word • Excel • PowerPoint        │
+                     │ Outlook • Teams • OneNote        │
+                     │ Microsoft 365 Copilot app        │
+                     └───────────────┬─────────────────┘
+                                     │
+                     ┌───────────────▼─────────────────┐
+                     │ Microsoft 365 Copilot            │
+                     │ Chat • in-app Copilot • agents   │
+                     │ Search • orchestration           │
+                     └───────────────┬─────────────────┘
+                                     │
+           ┌─────────────────────────▼──────────────────────────┐
+           │ Grounding and retrieval                             │
+           │ Microsoft Graph • Work IQ • semantic indexing       │
+           │ Microsoft Search • approved connectors              │
+           └─────────────────────────┬──────────────────────────┘
+                                     │
+           ┌─────────────────────────▼──────────────────────────┐
+           │ Work data, subject to user permissions              │
+           │ Exchange • Teams • SharePoint • OneDrive • calendar │
+           │ meetings • files • organizational relationships     │
+           └────────────────────────────────────────────────────┘
+</code></pre>
+<p>Prompt flow: (1) user submits a prompt in Teams, Word, PowerPoint, Outlook, or the Microsoft 365 Copilot app; (2) Copilot grounds the prompt using authorized context from Microsoft Graph and enterprise intelligence; (3) the grounded prompt goes to an underlying LLM; (4) the response returns to the app, retaining identity, permission, privacy, compliance, and audit controls. This matches the AI data path already diagrammed in <a href="view-04-integration-ai.html">Integration and AI Elements § AI data path</a>.</p>
+<h3>Copilot tiers</h3>
+<table>
+<thead>
+<tr>
+<th>Experience</th>
+<th>Grounding</th>
+<th>Practical meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Copilot Chat (Basic)</td>
+<td>Primarily web-based; users may attach or explicitly provide work content</td>
+<td>Secure enterprise chat, but not automatic broad work-data retrieval</td>
+</tr>
+<tr>
+<td>Microsoft 365 Copilot (Basic)</td>
+<td>Web-based plus more limited in-app capabilities</td>
+<td>Standard app access that can vary by capacity and configuration</td>
+</tr>
+<tr>
+<td>Microsoft 365 Copilot (Premium)</td>
+<td>Web plus automatic organizational grounding through Microsoft Graph and Work IQ</td>
+<td>Full work-aware Copilot, deeper in-app capabilities, agents, search, and advanced administration</td>
+</tr>
+</tbody>
+</table>
+<h3>Workload-specific examples</h3>
+<table>
+<thead>
+<tr>
+<th>Workload</th>
+<th>What Copilot typically helps do</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Word</td>
+<td>Draft, rewrite, summarize, transform tone, extract themes, create structured documents</td>
+</tr>
+<tr>
+<td>Excel</td>
+<td>Analyze tables, generate formulas, identify patterns, build visuals, explain data</td>
+</tr>
+<tr>
+<td>PowerPoint</td>
+<td>Create or revise presentations, summarize decks, reformat slides, create content from prompts or source material</td>
+</tr>
+<tr>
+<td>Outlook</td>
+<td>Summarize email threads, draft replies, adjust tone, assist with inbox-heavy work</td>
+</tr>
+<tr>
+<td>Teams</td>
+<td>Summarize meetings and chats, surface decisions, identify action items, answer questions about meeting context</td>
+</tr>
+<tr>
+<td>OneNote</td>
+<td>Draft plans, synthesize notes, create lists, organize ideas</td>
+</tr>
+<tr>
+<td>SharePoint and OneDrive</td>
+<td>Provide the governed document and knowledge base Copilot retrieves context from</td>
+</tr>
+<tr>
+<td>Microsoft 365 Copilot Search</td>
+<td>Search across Microsoft 365 and connected external sources, then move into conversational follow-up</td>
+</tr>
+</tbody>
+</table>
+<p>Semantic indexing improves relevance using lexical and semantic understanding of Microsoft Graph data while preserving the user's existing security and compliance boundary.</p>
+<h2>Where GitHub Copilot sits</h2>
+<p>GitHub Copilot belongs in the software delivery lifecycle, not the office productivity stack:</p>
+<pre><code class="language-text">Business-work system                     Software-engineering system
+────────────────────                     ───────────────────────────
+Microsoft 365                            GitHub platform
+Word / Excel / Outlook                   Repos / Issues / PRs / Actions
+Teams / SharePoint / OneDrive            GitHub.com / GitHub Mobile
+Microsoft 365 Copilot                    GitHub Copilot
+        │                                        │
+Microsoft Graph / Work IQ                 IDE context / repo context /
+                                          GitHub artifacts / developer tools
+</code></pre>
+<p>GitHub Copilot operates in and around: IDEs (VS Code, Visual Studio, JetBrains, Neovim, others), GitHub.com (codebase-oriented chat, especially in enterprise offerings), pull requests (review support), the CLI, agentic software-delivery workflows (cloud agents, coding tasks, issue-to-PR flows, sandboxes, controlled tool use), and GitHub's own engineering artifacts (repos, issues, PRs, discussions, docs). This is the same surface already catalogued with named APIs and auth models in <a href="view-04-integration-ai.html">Integration and AI Elements § APIs and extensibility</a>.</p>
+<h3>GitHub Copilot editions</h3>
+<table>
+<thead>
+<tr>
+<th>Edition</th>
+<th>Intended use</th>
+<th>Key distinction</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GitHub Copilot Individual / Pro-type offerings</td>
+<td>Individual developers</td>
+<td>Personal developer assistant and coding workflows</td>
+</tr>
+<tr>
+<td>GitHub Copilot Business</td>
+<td>Organizations</td>
+<td>Central licensing and management; primarily IDE-centered developer assistance</td>
+</tr>
+<tr>
+<td>GitHub Copilot Enterprise</td>
+<td>Larger organizations with GitHub-centric development</td>
+<td>Builds on Business, adds GitHub.com and codebase-level context/customization</td>
+</tr>
+</tbody>
+</table>
+<p>Microsoft/GitHub position Copilot Business as primarily centered on coding-environment experiences; Copilot Enterprise adds GitHub.com chat plus enterprise-oriented customization and codebase interaction. GitHub states data from Copilot Business and Enterprise is not used to train GitHub's models, and provides an optional code-referencing filter to suppress suggestions closely matching public GitHub code, plus output scanning for vulnerable code. (<a href="https://azure.microsoft.com/en-us/products/github/copilot">Copilot Business</a>, <a href="https://github.com/features/copilot/copilot-business">Copilot Business features</a>)</p>
+<h3>GitHub Copilot workflow</h3>
+<pre><code class="language-text">Developer intent
+  &quot;Add an authenticated API endpoint with tests&quot;
+             │
+             ▼
+IDE / GitHub Copilot Chat / CLI
+             │
+             ▼
+Relevant code context, open files, repo instructions,
+tests, dependencies, GitHub issues and PR context where enabled
+             │
+             ▼
+Generated code, explanation, tests, refactoring,
+debugging guidance, review comments, or agent-created changes
+             │
+             ▼
+Human review, CI/CD checks, security scanning, pull-request approval
+</code></pre>
+<p>GitHub Copilot should augment, not replace, engineering controls: architecture review, peer review, tests, dependency management, secret scanning, SAST/DAST, CI/CD gates, branch protection, release approval — consistent with the "Copilot does not own state transitions" risk already logged in <a href="view-04-integration-ai.html">Integration and AI Elements § Integration risks</a>.</p>
+<h2>Side-by-side comparison</h2>
+<table>
+<thead>
+<tr>
+<th>Dimension</th>
+<th>Microsoft 365 Copilot</th>
+<th>GitHub Copilot</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Primary user</td>
+<td>Knowledge worker, manager, analyst, operations staff, business user</td>
+<td>Software developer, platform engineer, DevOps engineer, technical contributor</td>
+</tr>
+<tr>
+<td>Primary environment</td>
+<td>Teams, Word, Excel, PowerPoint, Outlook, OneNote, Microsoft 365 Copilot app</td>
+<td>IDEs, GitHub.com, pull requests, CLI, coding-agent workflows</td>
+</tr>
+<tr>
+<td>Main context</td>
+<td>Authorized enterprise work data: files, mail, meetings, chats, calendars, people</td>
+<td>Code, repositories, open files, development artifacts, issues, pull requests, instructions</td>
+</tr>
+<tr>
+<td>Core platform</td>
+<td>Microsoft 365 tenant, Microsoft Graph, Work IQ, Search, semantic index</td>
+<td>GitHub platform and developer tools</td>
+</tr>
+<tr>
+<td>Main purpose</td>
+<td>Create, summarize, analyze, search, coordinate, automate knowledge work</td>
+<td>Generate, explain, test, refactor, review, automate software-development work</td>
+</tr>
+<tr>
+<td>Administration</td>
+<td>Microsoft 365 admin center, Entra, Purview, Microsoft 365 security/compliance controls</td>
+<td>GitHub organization/enterprise administration and GitHub Copilot policies</td>
+</tr>
+<tr>
+<td>Licensing relationship</td>
+<td>Separate Microsoft 365 Copilot entitlement</td>
+<td>Separate GitHub Copilot entitlement</td>
+</tr>
+<tr>
+<td>Typical data risks</td>
+<td>Overshared SharePoint sites, excessive Teams/OneDrive permissions, ungoverned agent connections</td>
+<td>Insecure generated code, secrets exposure, repository-context controls, IP/open-source similarity, agent permissions</td>
+</tr>
+</tbody>
+</table>
+<h2>How they connect</h2>
+<ol>
+<li><strong>Shared enterprise identity and governance.</strong> GitHub identity can align with Entra ID (SSO, SCIM provisioning, group-based access, lifecycle management), but authorization stays split: M365 permissions govern M365 content; GitHub organizations/teams/repo permissions/enterprise policies/branch protections govern development artifacts. Both should share one identity, access-review, offboarding, and security-monitoring model. This is the identity model already detailed in <a href="view-04-integration-ai.html">Integration and AI Elements § Identity and access</a>.</li>
+<li><strong>GitHub knowledge in Microsoft 365 Copilot.</strong> The GitHub Cloud Knowledge connector indexes repository documentation — READMEs, Markdown guides, plain-text technical notes — so it surfaces through Microsoft 365 Copilot, Copilot Search, and Microsoft Search in Teams, Outlook, SharePoint. This does <strong>not</strong> make GitHub Copilot into Microsoft 365 Copilot; it means selected GitHub knowledge becomes discoverable to M365 Copilot users through a governed connector. Already tabulated as a system row in <a href="view-04-integration-ai.html">Integration and AI Elements § Third-party and external systems</a>.</li>
+<li><strong>Copilot Studio as the bridge.</strong> Copilot Studio builds low-code agents connecting to business systems and automating workflows; GitHub Copilot assists the professional developers building the code, tests, APIs, infrastructure-as-code, integration components, and CI/CD controls underneath.</li>
+</ol>
+<h3>Division of labor</h3>
+<table>
+<thead>
+<tr>
+<th>Need</th>
+<th>Primary product</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Draft a program brief from meetings, emails, and files</td>
+<td>Microsoft 365 Copilot</td>
+</tr>
+<tr>
+<td>Analyze a business spreadsheet</td>
+<td>Microsoft 365 Copilot in Excel</td>
+</tr>
+<tr>
+<td>Summarize a technical design meeting</td>
+<td>Microsoft 365 Copilot in Teams</td>
+</tr>
+<tr>
+<td>Generate a Python service, Terraform module, unit tests, or pull request</td>
+<td>GitHub Copilot</td>
+</tr>
+<tr>
+<td>Build a governed low-code business agent</td>
+<td>Copilot Studio</td>
+</tr>
+<tr>
+<td>Build production code behind an agent or enterprise integration</td>
+<td>GitHub Copilot plus GitHub, CI/CD, and engineering controls</td>
+</tr>
+<tr>
+<td>Surface GitHub Markdown runbooks in enterprise search</td>
+<td>Microsoft 365 Copilot connector for GitHub knowledge</td>
+</tr>
+</tbody>
+</table>
+<h2>Governance implications</h2>
+<h3>Microsoft 365 Copilot readiness</h3>
+<p>The central risk is usually not model access but <strong>permission hygiene</strong> — since Microsoft 365 Copilot respects existing permissions, existing oversharing becomes easier to discover at natural-language speed. Prioritize:</p>
+<ul>
+<li>SharePoint and OneDrive permission remediation</li>
+<li>Sensitivity labels and data classification</li>
+<li>DLP policies</li>
+<li>Retention, eDiscovery, audit, and records controls</li>
+<li>Restricted SharePoint Search and other measures to constrain content discovery during cleanup</li>
+<li>Conditional Access, MFA, device compliance, managed endpoints</li>
+<li>Clear policies for web grounding, external connectors, agent creation, and agent actions</li>
+<li>Adoption analytics tied to measurable workflows rather than generic "prompt counts"</li>
+</ul>
+<p>Microsoft highlights SharePoint Advanced Management and restricted content discovery for reducing oversharing during review, and positions Purview for classification, leakage prevention, and review of Copilot prompts and responses.</p>
+<h3>GitHub Copilot readiness</h3>
+<p>The main question is whether engineering guardrails are mature enough to safely accelerate delivery. Prioritize:</p>
+<ul>
+<li>SSO, managed-user or enterprise identity strategy, SCIM, least-privilege repository access</li>
+<li>Secure software-development lifecycle controls</li>
+<li>Pull-request review and protected branches</li>
+<li>Code scanning, dependency review, secret scanning, CI test gates</li>
+<li>Secure coding practices and developer training</li>
+<li>Repository instructions and content-exclusion controls where required</li>
+<li>Clear rules for agent-generated code — tests, reviews, approvals, audit trails</li>
+<li>IP and open-source policy, including code-reference controls where appropriate</li>
+</ul>
+<p>These map onto the mitigations already listed row-by-row in <a href="view-04-integration-ai.html">Integration and AI Elements § Integration risks</a>.</p>
+<h2>The executive mental model</h2>
+<blockquote>
+<p>Microsoft 365 is the enterprise work system. Microsoft 365 Copilot is the work-aware AI layer across that system. GitHub is the software delivery system. GitHub Copilot is the AI engineering layer across that system. Copilot Studio and connectors can bridge the business-work and software-delivery domains — but governance, identity, data permissions, and human approval remain the control points.</p>
+</blockquote>
+<p>Avoid treating "Copilot" as one platform or one licensing decision. It is a product portfolio with separate data planes, control planes, admin portals, personas, licenses and billing, risk profiles, adoption metrics, and governance requirements.</p>
+<h2>Sources</h2>
+<ul>
+<li><a href="https://learn.microsoft.com/en-us/microsoft-365/copilot/microsoft-365-copilot-overview">Microsoft 365 Copilot overview (Microsoft Learn)</a></li>
+<li><a href="https://learn.microsoft.com/en-us/microsoft-365/copilot/microsoft-365-copilot-architecture">Microsoft 365 Copilot architecture (Microsoft Learn)</a></li>
+<li><a href="https://docs.github.com/copilot">GitHub Copilot documentation (GitHub Docs)</a></li>
+<li><a href="https://azure.microsoft.com/en-us/products/github/copilot">GitHub Copilot on Azure (product/editions)</a></li>
+<li><a href="https://github.com/features/copilot/copilot-business">GitHub Copilot Business features (github.com)</a></li>
+<li><a href="https://learn.microsoft.com/en-us/microsoft-365/copilot/connectors/github-cloud-knowledge-overview">GitHub Cloud Knowledge connector overview (Microsoft Learn)</a></li>
+</ul></article>
+  <footer class="docfoot">
+    Rendered from <code>Learning\tech-deep-dive\m365-digital-work-platform\reference\m365-vs-github-copilot.md</code>. The Obsidian vault is the source of truth. Study material only. Citations <span class="cite">S#</span> link to the Microsoft source ledger.
+    
+  </footer>
+</main>
+<script type="module">
+import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+const dark=(document.documentElement.getAttribute("data-theme")||"").endsWith("dark");
+mermaid.initialize({startOnLoad:true,theme:dark?"dark":"default",securityLevel:"strict"});
+</script>
+</body>
+</html>

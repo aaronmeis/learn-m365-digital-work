@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Block 7: Failure modes and security | Learn Purview</title>
+<meta name="description" content="Block 7 of the Microsoft&#x27;s Digital-Work Platform deep dive - failure modes and security.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="library.css">
+<script>try{var p=JSON.parse(localStorage.getItem("appPalette"))||"github",m=JSON.parse(localStorage.getItem("appMode"))||"dark";document.documentElement.setAttribute("data-theme",p+"-"+m);}catch(e){document.documentElement.setAttribute("data-theme","github-dark");}</script>
+</head>
+<body>
+<header class="topbar">
+  <a href="../index.html" class="home">&larr; Learn Purview console</a>
+  <span class="crumb">Library · Day blocks</span>
+  <a href="index.html" class="home">All pages</a>
+</header>
+<main class="doc">
+  <div class="kicker">Day blocks</div>
+  <h1 class="doctitle">Block 7: Failure modes and security</h1>
+  <p class="lead">Block 7 of the Microsoft&#x27;s Digital-Work Platform deep dive - failure modes and security.</p>
+  
+  <article>
+<p><strong>Time:</strong> 45 minutes · <strong>Goal:</strong> What breaks, what leaks, and what the controls actually stop</p>
+<h2>Focus from mind map</h2>
+<ul>
+<li>Use <strong>synced/indexed</strong> content when discovery, search quality, and repeated knowledge retrieval matter more than instantaneous freshness.</li>
+<li>Metadata, such as title, URL, content type, author, timestamps, tags, and business identifiers</li>
+<li>Semantic labels that improve retrieval and Copilot understanding</li>
+<li><strong>Use a Microsoft or partner prebuilt connector</strong> when it meets security, coverage, permission, lifecycle, and support requirements.</li>
+<li><strong>Build a federated MCP connector</strong> when real-time data, external-system authority, and controlled actions are the priorities.</li>
+<li><strong>Use Copilot Studio</strong> for low-code agent experiences and Power Platform-native workflow orchestration.</li>
+<li>An operator asks Copilot to find approved deployment and rollback procedures.</li>
+<li>A solution architect searches across SharePoint standards and GitHub API documentation.</li>
+</ul>
+<h2>Sources</h2>
+<ul>
+<li><a href="https://learn.microsoft.com/en-us/microsoft-365/copilot/extensibility/copilot-apis-overview">Copilot APIs overview (Microsoft Learn)</a></li>
+<li><a href="https://learn.microsoft.com/en-us/microsoft-365/copilot/extensibility/overview-copilot-connector">Overview: build a Copilot connector (Microsoft Learn)</a></li>
+<li><a href="https://learn.microsoft.com/en-us/microsoft-365/copilot/connectors/overview">Microsoft 365 Copilot connectors overview (Microsoft Learn)</a></li>
+<li><a href="https://learn.microsoft.com/en-us/microsoft-365/copilot/connectors/federated-connectors-overview">Federated connectors overview (Microsoft Learn)</a></li>
+<li><a href="https://learn.microsoft.com/en-us/microsoft-365/copilot/connectors/github-cloud-knowledge-overview">GitHub Cloud Knowledge connector overview (Microsoft Learn)</a></li>
+<li><a href="https://docs.github.com/en/copilot/concepts/context/mcp">About Model Context Protocol (MCP) (GitHub Docs)</a></li>
+<li><a href="https://docs.github.com/copilot/customizing-copilot/using-model-context-protocol/extending-copilot-chat-with-mcp">Extending Copilot Chat with MCP (GitHub Docs)</a></li>
+<li><a href="https://www.youtube.com/watch?v=P8iBjDh7OZg">Microsoft Ignite 2025 PBRK394: M365 Copilot Agents - Powering Retail &amp; Consumer Goods Partner Success (named talk, Copilot Connectors + MCP)</a></li>
+</ul>
+<h2>Actions</h2>
+<ul>
+<li class="task"><input type="checkbox" disabled> List the top failure modes per view (conceptual, logical, physical, integration).</li>
+<li class="task"><input type="checkbox" disabled> For each, name the tell and the control that should catch it.</li>
+<li class="task"><input type="checkbox" disabled> Include AI oversharing and third-party connector failure.</li>
+</ul>
+<h2>Retrieval check</h2>
+<div class="callout question" markdown="0"><div class="callout-title">Question</div><p>What is the most likely failure in a real Microsoft's Digital-Work Platform deployment, and what is its first visible tell?</p></div>
+
+<div class="callout success" markdown="0"><div class="callout-title">Answer cues</div><p>No auto-extracted answer available yet for this block — the views may not be filled. Re-run <code>blocks</code> after research so this cue pulls real content.</p></div>
+
+<h2>Exit criteria</h2>
+<ul>
+<li class="task"><input type="checkbox" disabled> Failure-mode table covers all four views.</li>
+</ul></article>
+  <footer class="docfoot">
+    Rendered from <code>Learning\tech-deep-dive\m365-digital-work-platform\blocks\07-failure-modes-and-security.md</code>. The Obsidian vault is the source of truth. Study material only. Citations <span class="cite">S#</span> link to the Microsoft source ledger.
+    <div class="prevnext"><a href="block-06-hands-on-lab.html">&larr; Previous</a><a href="block-08-design-review.html">Next &rarr;</a></div>
+  </footer>
+</main>
+<script type="module">
+import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+const dark=(document.documentElement.getAttribute("data-theme")||"").endsWith("dark");
+mermaid.initialize({startOnLoad:true,theme:dark?"dark":"default",securityLevel:"strict"});
+</script>
+</body>
+</html>

@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>External resources — Microsoft&#x27;s Digital-Work Platform | Learn Purview</title>
+<meta name="description" content="External sources and local output files for the Microsoft digital-work platform deep dive.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="library.css">
+<script>try{var p=JSON.parse(localStorage.getItem("appPalette"))||"github",m=JSON.parse(localStorage.getItem("appMode"))||"dark";document.documentElement.setAttribute("data-theme",p+"-"+m);}catch(e){document.documentElement.setAttribute("data-theme","github-dark");}</script>
+</head>
+<body>
+<header class="topbar">
+  <a href="../index.html" class="home">&larr; Learn Purview console</a>
+  <span class="crumb">Library · Reference</span>
+  <a href="index.html" class="home">All pages</a>
+</header>
+<main class="doc">
+  <div class="kicker">Reference</div>
+  <h1 class="doctitle">External resources — Microsoft&#x27;s Digital-Work Platform</h1>
+  <p class="lead">External sources and local output files for the Microsoft digital-work platform deep dive.</p>
+  
+  <article>
+<p>Pack root index. Terms: <a href="glossary.html">GLOSSARY</a>. Ledger (same URLs, trust column): <a href="source-ledger.html">source-ledger</a>.</p>
+<h2>Microsoft Learn and GitHub Docs</h2>
+<table>
+<thead>
+<tr>
+<th>Title</th>
+<th>URL</th>
+<th>Why it is here</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Copilot APIs overview</td>
+<td>https://learn.microsoft.com/en-us/microsoft-365/copilot/extensibility/copilot-apis-overview</td>
+<td>Copilot REST APIs live under Graph and inherit Graph auth and Conditional Access.</td>
+</tr>
+<tr>
+<td>Build a Copilot connector</td>
+<td>https://learn.microsoft.com/en-us/microsoft-365/copilot/extensibility/overview-copilot-connector</td>
+<td>How a connector is built.</td>
+</tr>
+<tr>
+<td>Copilot connectors overview</td>
+<td>https://learn.microsoft.com/en-us/microsoft-365/copilot/connectors/overview</td>
+<td>Synced connectors, ACLs, and what gets indexed.</td>
+</tr>
+<tr>
+<td>Federated connectors overview</td>
+<td>https://learn.microsoft.com/en-us/microsoft-365/copilot/connectors/federated-connectors-overview</td>
+<td>Live MCP fetch; content stays in the source system.</td>
+</tr>
+<tr>
+<td>GitHub Cloud Knowledge connector</td>
+<td>https://learn.microsoft.com/en-us/microsoft-365/copilot/connectors/github-cloud-knowledge-overview</td>
+<td>Indexes GitHub docs into Graph for Microsoft 365 Copilot.</td>
+</tr>
+<tr>
+<td>Microsoft 365 Copilot extensibility overview</td>
+<td>https://learn.microsoft.com/en-us/microsoft-365/copilot/extensibility/overview</td>
+<td>Synced vs federated, Work IQ, MCP on one page.</td>
+</tr>
+<tr>
+<td>Microsoft 365 Copilot overview</td>
+<td>https://learn.microsoft.com/en-us/microsoft-365/copilot/microsoft-365-copilot-overview</td>
+<td>Product scope of Microsoft 365 Copilot.</td>
+</tr>
+<tr>
+<td>Microsoft 365 Copilot architecture</td>
+<td>https://learn.microsoft.com/en-us/microsoft-365/copilot/microsoft-365-copilot-architecture</td>
+<td>Microsoft's own architecture description.</td>
+</tr>
+<tr>
+<td>About MCP (GitHub Docs)</td>
+<td>https://docs.github.com/en/copilot/concepts/context/mcp</td>
+<td>MCP as GitHub Copilot's extension model.</td>
+</tr>
+<tr>
+<td>Extending Copilot Chat with MCP</td>
+<td>https://docs.github.com/copilot/customizing-copilot/using-model-context-protocol/extending-copilot-chat-with-mcp</td>
+<td>How to attach an MCP server to Copilot Chat.</td>
+</tr>
+<tr>
+<td>GitHub Copilot documentation</td>
+<td>https://docs.github.com/copilot</td>
+<td>Product home for GitHub Copilot (not Microsoft 365 Copilot).</td>
+</tr>
+<tr>
+<td>GitHub Copilot on Azure</td>
+<td>https://azure.microsoft.com/en-us/products/github/copilot</td>
+<td>Edition names as Microsoft markets them. Medium trust (marketing).</td>
+</tr>
+<tr>
+<td>GitHub Copilot Business</td>
+<td>https://github.com/features/copilot/copilot-business</td>
+<td>Business-tier feature list. Medium trust (marketing).</td>
+</tr>
+</tbody>
+</table>
+<h2>Named talk</h2>
+<table>
+<thead>
+<tr>
+<th>Title</th>
+<th>URL</th>
+<th>Why it is here</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ignite 2025 PBRK394 — M365 Copilot agents, retail and consumer goods</td>
+<td>https://www.youtube.com/watch?v=P8iBjDh7OZg</td>
+<td>Named session that shows Copilot connectors and MCP in a partner story.</td>
+</tr>
+</tbody>
+</table>
+<h2>Local output (not in git)</h2>
+<p>Heavy NotebookLM and video files. Vault copies of the markdown and CSV live under <code>notebooklm/exports/</code>. Inventory: <a href="pipeline-inventory.html">01 - Download Inventory</a>.</p>
+<p>Root: <code>C:\output\obsidian\notebooklm\tdd-m365-digital-work-platform\</code></p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>What it is</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tdd-m365-digital-work-platform-presentation.pptx</code></td>
+<td>NotebookLM slide deck. JPG gallery is <a href="media-slides.html">Presentation slides</a>.</td>
+</tr>
+<tr>
+<td><code>tdd-m365-digital-work-platform-deep-dive-cut.mp4</code></td>
+<td>Stitched study-cut video. Note: <a href="media-deep-dive-cut.html">Deep Dive Cut</a>.</td>
+</tr>
+<tr>
+<td><code>tdd-m365-digital-work-platform__2026-09-28__notebooklm.json</code></td>
+<td>Download manifest for that run.</td>
+</tr>
+<tr>
+<td><code>shorts-manifest.json</code> / <code>shorts-topics.json</code></td>
+<td>Shorts topic list. Vault copies under <code>notebooklm/exports/</code>.</td>
+</tr>
+<tr>
+<td><code>NEXUS _ tdd-m365-digital-work-platform _ 2026-09-28 _ tech-deep-dive\Governed AI Blueprint.pdf</code></td>
+<td>NotebookLM PDF brief.</td>
+</tr>
+<tr>
+<td><code>...\How Copilot Federated Connectors Protect Data.mp4</code></td>
+<td>Audio overview video.</td>
+</tr>
+<tr>
+<td><code>...\How Copilot Fetches Live Data.mp4</code></td>
+<td>Audio overview video.</td>
+</tr>
+<tr>
+<td><code>...\How Copilot Stops Data Oversharing.mp4</code></td>
+<td>Audio overview video.</td>
+</tr>
+<tr>
+<td><code>...\How Copilot Syncing Causes Data Oversharing.mp4</code></td>
+<td>Audio overview video (not in the older vault inventory).</td>
+</tr>
+<tr>
+<td><code>...\How Microsoft Copilot Indexes External Knowledge.mp4</code></td>
+<td>Audio overview video.</td>
+</tr>
+<tr>
+<td><code>...\How Microsoft's Digital-Work Platform Boundary Works.mp4</code></td>
+<td>Audio overview video.</td>
+</tr>
+<tr>
+<td><code>...\Securing Copilot across Microsoft and GitHub.m4a</code></td>
+<td>Audio overview.</td>
+</tr>
+<tr>
+<td><code>...\*.md</code> and <code>Microsoft Digital-Work Platform Major Claims and Analysis.csv</code></td>
+<td>Same reports as **.</td>
+</tr>
+<tr>
+<td><code>_deep_dive_cut\</code></td>
+<td>Render intermediates (per-slide mp3/png, segments). Not a study artifact.</td>
+</tr>
+<tr>
+<td><code>qc-frames\</code></td>
+<td>Spot-check frames from the cut.</td>
+</tr>
+<tr>
+<td><code>sources\</code></td>
+<td>Markdown snapshots uploaded as notebook sources.</td>
+</tr>
+<tr>
+<td><code>tdd-m365-digital-work-platform-presentation\</code></td>
+<td>Slide JPGs. Vault copies: <code>assets/presentation/</code>.</td>
+</tr>
+</tbody>
+</table>
+<h2>Pack files worth opening with this index</h2>
+<table>
+<thead>
+<tr>
+<th>Kind</th>
+<th>Path</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Diagrams (PNG, draw.io, Mermaid)</td>
+<td><a href="diagram-index.html">00 - Diagram Index</a></td>
+</tr>
+<tr>
+<td>Comparison note</td>
+<td><a href="copilot-split.html">m365-vs-github-copilot</a></td>
+</tr>
+<tr>
+<td>Operator commands</td>
+<td><a href="pipeline-operator.html">OPERATOR-COMMANDS</a></td>
+</tr>
+</tbody>
+</table></article>
+  <footer class="docfoot">
+    Rendered from <code>Learning\tech-deep-dive\m365-digital-work-platform\RESOURCES.md</code>. The Obsidian vault is the source of truth. Study material only. Citations <span class="cite">S#</span> link to the Microsoft source ledger.
+    <div class="prevnext"><a href="source-ledger.html">&larr; Previous</a><span></span></div>
+  </footer>
+</main>
+<script type="module">
+import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+const dark=(document.documentElement.getAttribute("data-theme")||"").endsWith("dark");
+mermaid.initialize({startOnLoad:true,theme:dark?"dark":"default",securityLevel:"strict"});
+</script>
+</body>
+</html>

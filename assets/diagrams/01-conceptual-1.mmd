@@ -1,0 +1,7 @@
+flowchart LR
+  subgraph Org["Organization boundary"]
+    U["People and teams"] --> CAP["Microsoft's Digital-Work Platform capabilities"]
+    CAP --> DATA["Governed information"]
+  end
+  EXT["External parties and systems"] <--> CAP
+  REG["Regulators / auditors"] -.evidence.-> CAP

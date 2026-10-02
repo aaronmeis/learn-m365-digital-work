@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Logical View — Microsoft&#x27;s Digital-Work Platform | Learn Purview</title>
+<meta name="description" content="Logical view of Microsoft&#x27;s Digital-Work Platform: components, data entities, and flows, still vendor-neutral.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="library.css">
+<script>try{var p=JSON.parse(localStorage.getItem("appPalette"))||"github",m=JSON.parse(localStorage.getItem("appMode"))||"dark";document.documentElement.setAttribute("data-theme",p+"-"+m);}catch(e){document.documentElement.setAttribute("data-theme","github-dark");}</script>
+</head>
+<body>
+<header class="topbar">
+  <a href="../index.html" class="home">&larr; Learn Purview console</a>
+  <span class="crumb">Library · Architecture views</span>
+  <a href="index.html" class="home">All pages</a>
+</header>
+<main class="doc">
+  <div class="kicker">Architecture views</div>
+  <h1 class="doctitle">Logical View — Microsoft&#x27;s Digital-Work Platform</h1>
+  <p class="lead">Logical view of Microsoft&#x27;s Digital-Work Platform: components, data entities, and flows, still vendor-neutral.</p>
+  
+  <article>
+<p>Pack: <a href="hub.html">00 - Microsoft's Digital-Work Platform Hub</a> · Block: <a href="block-03-logical-view.html">Block 3</a> · Prev: <a href="view-01-conceptual.html">Conceptual</a> · Next: <a href="view-03-physical.html">Physical</a></p>
+<div class="callout info" markdown="0"><div class="callout-title">Altitude rule</div><p>Logical means <strong>which parts and how they talk</strong>, independent of where they run. Components have responsibilities and interfaces. Data entities have attributes and relationships. Still no regions, SKUs, or hostnames.</p></div>
+
+<h2>Logical components</h2>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Responsibility</th>
+<th>Realizes capability</th>
+<th>Inputs</th>
+<th>Outputs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Microsoft Graph API</td>
+<td>Unified read/write access to M365 resources</td>
+<td>C1</td>
+<td>Entra-authorized requests</td>
+<td>Resource data, permission-trimmed</td>
+</tr>
+<tr>
+<td>Graph change notifications</td>
+<td>Event-driven callback on resource change</td>
+<td>C1</td>
+<td>Subscribed resource mutations</td>
+<td>Webhook callback + authorized delta fetch</td>
+</tr>
+<tr>
+<td>Graph Data Connect</td>
+<td>Bulk governed extraction for analytics</td>
+<td>C1</td>
+<td>Batch export request</td>
+<td>Approved dataset in Azure data platform</td>
+</tr>
+<tr>
+<td>Copilot connector service (synced)</td>
+<td>Extracts, normalizes, and ACL-maps third-party content into Graph</td>
+<td>C4</td>
+<td>Third-party content + source permissions</td>
+<td>Graph external items with ACLs and semantic labels</td>
+</tr>
+<tr>
+<td>Federated (MCP) connector</td>
+<td>Authenticates and invokes external system at query time</td>
+<td>C5</td>
+<td>User/agent query</td>
+<td>Real-time response + citation, not persisted</td>
+</tr>
+<tr>
+<td>Copilot Studio agent runtime</td>
+<td>Orchestrates API/workflow/Dataverse/MCP tool calls for a business task</td>
+<td>C6</td>
+<td>Task request, approval state</td>
+<td>Ticket/record actions, approval prompts</td>
+</tr>
+<tr>
+<td>Copilot APIs (M365)</td>
+<td>Exposes Copilot capability via Graph-hosted REST endpoints to custom apps</td>
+<td>C3</td>
+<td>Application request, Graph auth context</td>
+<td>Copilot-generated response</td>
+</tr>
+<tr>
+<td>GitHub REST/GraphQL API</td>
+<td>Operational actions and relationship queries on GitHub resources</td>
+<td>C2</td>
+<td>Authenticated API call</td>
+<td>Resource state, query results</td>
+</tr>
+<tr>
+<td>GitHub webhooks</td>
+<td>Event-driven reaction to repo/PR/issue/deployment/check events</td>
+<td>C2</td>
+<td>Repo event</td>
+<td>Delivered payload to subscriber</td>
+</tr>
+<tr>
+<td>GitHub Actions</td>
+<td>CI/CD and operational automation</td>
+<td>C2</td>
+<td>Workflow trigger</td>
+<td>Build/test/scan/deploy results, API calls</td>
+</tr>
+<tr>
+<td>GitHub MCP server</td>
+<td>Exposes external tools/context to GitHub Copilot</td>
+<td>C2, C6</td>
+<td>Copilot tool-call request</td>
+<td>Tool result (data or action)</td>
+</tr>
+<tr>
+<td>Copilot Integration Enablement Layer (MCP gateway, API gateway, catalog, policy, audit)</td>
+<td>Central chokepoint for connector lifecycle, agent policy, workflow approval, telemetry</td>
+<td>C7</td>
+<td>All connector/API/MCP traffic</td>
+<td>Enforced policy decisions, audit records</td>
+</tr>
+</tbody>
+</table>
+<!-- tech_deep_dive:diagram-embed -->
+<p><a href="../assets/diagrams/02-logical-3.png" target="_blank"><img class="embed" src="../assets/diagrams/02-logical-3.png" alt="02-logical-3.png"></a></p>
+<h2>Logical data model</h2>
+<table>
+<thead>
+<tr>
+<th>Entity</th>
+<th>Key attributes</th>
+<th>Relationships</th>
+<th>Classification</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>externalItem (Graph external connection)</td>
+<td>content, metadata (title/URL/type/author/timestamps/tags), ACL, semantic labels</td>
+<td>Belongs to one connector; indexed into Graph semantic index</td>
+<td>Inherits source classification via ACL</td>
+</tr>
+<tr>
+<td>ACL (access control list)</td>
+<td>source-system entitlement mapped to M365 user/group context</td>
+<td>Attached to each externalItem</td>
+<td>Security-critical — "permission fidelity" is the non-negotiable requirement</td>
+</tr>
+<tr>
+<td>MCP tool</td>
+<td>name, purpose, data classification, auth method, read/write capability</td>
+<td>Registered in MCP catalog; invoked by Copilot/agent</td>
+<td>Classified per tool, not per call</td>
+</tr>
+<tr>
+<td>MCP catalog entry</td>
+<td>owner, purpose, data classification, action permissions, auth method, logs, lifecycle state, approval date</td>
+<td>One entry per production MCP server</td>
+<td>Governance record</td>
+</tr>
+<tr>
+<td>GitHub App installation</td>
+<td>scoped repo/org permissions, short-lived installation token</td>
+<td>Bound to one GitHub App, many repos</td>
+<td>Least-privilege scoped</td>
+</tr>
+<tr>
+<td>Webhook event</td>
+<td>event type (push/PR/issue/deployment/check/discussion/installation), payload</td>
+<td>Triggers integration gateway/event bus consumers</td>
+<td>Per repo/org policy</td>
+</tr>
+<tr>
+<td>Audit/telemetry record</td>
+<td>tool calls, parameters, identity, decision outcome, response references, error conditions</td>
+<td>Emitted by Copilot Integration Enablement Layer to SIEM/SOAR</td>
+<td>Security-classified, retained per policy</td>
+</tr>
+</tbody>
+</table>
+<pre class="mermaid">erDiagram
+  POLICY ||--o{ RULE : contains
+  RULE }o--o{ DATA_ASSET : &quot;applies to&quot;
+  DATA_ASSET ||--o{ EVENT : emits
+</pre>
+
+<!-- tech_deep_dive:diagram-embed -->
+<p><a href="../assets/diagrams/02-logical-1.png" target="_blank"><img class="embed" src="../assets/diagrams/02-logical-1.png" alt="02-logical-1.png"></a></p>
+<h2>Logical flows</h2>
+<pre class="mermaid">flowchart LR
+  SRC[&quot;Data sources&quot;] --&gt; DISC[&quot;Discover and classify&quot;]
+  DISC --&gt; POL[&quot;Policy decision&quot;]
+  POL --&gt; ENF[&quot;Enforce&quot;]
+  ENF --&gt; EVT[&quot;Events and alerts&quot;]
+  EVT --&gt; INV[&quot;Investigate and report&quot;]
+</pre>
+
+<!-- tech_deep_dive:diagram-embed -->
+<p><a href="../assets/diagrams/02-logical-2.png" target="_blank"><img class="embed" src="../assets/diagrams/02-logical-2.png" alt="02-logical-2.png"></a></p>
+<table>
+<thead>
+<tr>
+<th>Flow</th>
+<th>From</th>
+<th>To</th>
+<th>Payload</th>
+<th>Trigger</th>
+<th>Sync/async</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Synced connector ingestion</td>
+<td>Third-party source system</td>
+<td>Microsoft Graph external connection</td>
+<td>Content + metadata + ACL + semantic labels</td>
+<td>Scheduled delta sync (add/update/delete detection)</td>
+<td>Async, batch</td>
+</tr>
+<tr>
+<td>Federated connector query</td>
+<td>Microsoft 365 Copilot/agent</td>
+<td>Third-party system of record via MCP</td>
+<td>Query params → live response + citation</td>
+<td>User/agent request</td>
+<td>Sync, request/response</td>
+</tr>
+<tr>
+<td>GitHub event → integration gateway</td>
+<td>GitHub webhook</td>
+<td>Integration gateway/event bus</td>
+<td>PR/issue/deployment/check event payload</td>
+<td>Repo state change</td>
+<td>Async, event-driven</td>
+</tr>
+<tr>
+<td>Check run / status update</td>
+<td>Integration gateway (SAST, change-mgmt, architecture checks)</td>
+<td>GitHub Check Run / PR status</td>
+<td>Pass/fail + evidence link</td>
+<td>Downstream check completion</td>
+<td>Async</td>
+</tr>
+<tr>
+<td>GitHub Copilot MCP tool call</td>
+<td>GitHub Copilot Agent mode</td>
+<td>Approved MCP tool</td>
+<td>Query/action parameters → tool result</td>
+<td>Developer request during coding/troubleshooting</td>
+<td>Sync, request/response</td>
+</tr>
+<tr>
+<td>GitHub knowledge sync</td>
+<td>GitHub repositories (Markdown/docs)</td>
+<td>Microsoft Graph index (via GitHub Cloud Knowledge connector)</td>
+<td>Content + metadata</td>
+<td>Scheduled sync</td>
+<td>Async, batch</td>
+</tr>
+</tbody>
+</table>
+<h2>Design decisions at this level</h2>
+<ul>
+<li>Prefer <strong>synced</strong> for durable, broadly-discoverable knowledge where search quality matters more than instantaneous freshness; prefer <strong>federated (MCP)</strong> for highly dynamic, sensitive, or too-large-to-duplicate data, or where the use case needs a governed write/update/delete action. Source: mind-map, "The architectural decision is often simple."</li>
+<li>Copilot is explicitly <strong>not</strong> the integration layer — it is a user-facing orchestration layer sitting above durable integration assets (APIs, event streams, identity relationships, connectors, schemas, policy controls). This shapes where logic should live: in the gateway/catalog/policy layer, not in agent prompts. Source: mind-map, "key architectural correction."</li>
+<li>Lifecycle state transitions (PR merge, deployment gates) stay owned by API/event integrations (Checks API, branch protection), not by an LLM coordinating state independently — "more reliable and auditable." Source: mind-map, "Event-driven GitHub pattern."</li>
+</ul>
+<h2>Terms on this page</h2>
+<p>Full list: <a href="glossary.html">GLOSSARY</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Definition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Synced connector</td>
+<td>Scheduled copy of external content into a Graph external connection, including ACL and semantic labels.</td>
+</tr>
+<tr>
+<td>Federated connector</td>
+<td>Live MCP query. Nothing is stored in Graph.</td>
+</tr>
+<tr>
+<td>externalItem</td>
+<td>Graph object written by a synced connector.</td>
+</tr>
+<tr>
+<td>MCP</td>
+<td>Protocol a Copilot host uses to call tools on an external server.</td>
+</tr>
+<tr>
+<td>Checks API</td>
+<td>GitHub API that attaches pass/fail evidence to a pull request.</td>
+</tr>
+<tr>
+<td>GitHub Cloud Knowledge connector</td>
+<td>Syncs selected GitHub docs into Graph for Microsoft 365 Copilot.</td>
+</tr>
+</tbody>
+</table>
+<h2>Framework lens</h2>
+<table>
+<thead>
+<tr>
+<th>Framework</th>
+<th>Maps to</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TOGAF</td>
+<td>Information Systems Architectures (Phase C: Data and Application)</td>
+</tr>
+<tr>
+<td>DoDAF</td>
+<td>OV-2 Operational Resource Flow · OV-5b Operational Activity Model · SV-1 (logical) · DIV-2 Logical Data Model</td>
+</tr>
+<tr>
+<td>Altitude</td>
+<td>Logical: components, entities, flows; vendor-neutral</td>
+</tr>
+</tbody>
+</table></article>
+  <footer class="docfoot">
+    Rendered from <code>Learning\tech-deep-dive\m365-digital-work-platform\views\02 - Logical View.md</code>. The Obsidian vault is the source of truth. Study material only. Citations <span class="cite">S#</span> link to the Microsoft source ledger.
+    <div class="prevnext"><a href="view-01-conceptual.html">&larr; Previous</a><a href="view-03-physical.html">Next &rarr;</a></div>
+  </footer>
+</main>
+<script type="module">
+import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+const dark=(document.documentElement.getAttribute("data-theme")||"").endsWith("dark");
+mermaid.initialize({startOnLoad:true,theme:dark?"dark":"default",securityLevel:"strict"});
+</script>
+</body>
+</html>

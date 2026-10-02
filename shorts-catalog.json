@@ -1,0 +1,123 @@
+{
+  "notebook_alias": "tdd-m365-digital-work-platform",
+  "title": "Learn Microsoft's Digital-Work Platform - NotebookLM shorts",
+  "deep_dive": {
+    "file": "media/deep-dive-cut.mp4",
+    "youtube": ""
+  },
+  "total": 6,
+  "ready": 6,
+  "items": [
+    {
+      "id": "01-boundary",
+      "name": "01-boundary",
+      "title": "Where the platform boundary sits",
+      "tag": "Block 1 \u00b7 scope",
+      "pillar": "Architecture",
+      "keywords": [
+        "boundary",
+        "copilot",
+        "graph",
+        "github",
+        "enablement"
+      ],
+      "duration": 80,
+      "poster": "media/posters/01-boundary.webp",
+      "file": "media/shorts/01-boundary.mp4",
+      "youtube": "",
+      "status": "ready"
+    },
+    {
+      "id": "02-synced-index",
+      "name": "02-synced-index",
+      "title": "How synced connectors index knowledge",
+      "tag": "Block 5 \u00b7 integration",
+      "pillar": "Connectors",
+      "keywords": [
+        "synced",
+        "acl",
+        "graph",
+        "index",
+        "externalitem"
+      ],
+      "duration": 79,
+      "poster": "media/posters/02-synced-index.webp",
+      "file": "media/shorts/02-synced-index.mp4",
+      "youtube": "",
+      "status": "ready"
+    },
+    {
+      "id": "03-live-fetch",
+      "name": "03-live-fetch",
+      "title": "How federated connectors fetch live",
+      "tag": "Block 5 \u00b7 integration",
+      "pillar": "Connectors",
+      "keywords": [
+        "federated",
+        "mcp",
+        "live",
+        "servicenow"
+      ],
+      "duration": 105,
+      "poster": "media/posters/03-live-fetch.webp",
+      "file": "media/shorts/03-live-fetch.mp4",
+      "youtube": "",
+      "status": "ready"
+    },
+    {
+      "id": "04-federated-protect",
+      "name": "04-federated-protect",
+      "title": "How federated connectors protect data",
+      "tag": "Block 5 \u00b7 AI",
+      "pillar": "AI path",
+      "keywords": [
+        "federated",
+        "mcp",
+        "permission",
+        "gateway"
+      ],
+      "duration": 77,
+      "poster": "media/posters/04-federated-protect.webp",
+      "file": "media/shorts/04-federated-protect.mp4",
+      "youtube": "",
+      "status": "ready"
+    },
+    {
+      "id": "05-oversharing",
+      "name": "05-oversharing",
+      "title": "How Copilot stops data oversharing",
+      "tag": "Block 7 \u00b7 failure modes",
+      "pillar": "AI path",
+      "keywords": [
+        "oversharing",
+        "label",
+        "dlp",
+        "acl",
+        "purview"
+      ],
+      "duration": 66,
+      "poster": "media/posters/05-oversharing.webp",
+      "file": "media/shorts/05-oversharing.mp4",
+      "youtube": "",
+      "status": "ready"
+    },
+    {
+      "id": "06-sync-overshare",
+      "name": "06-sync-overshare",
+      "title": "How a bad sync overshares",
+      "tag": "Block 7 \u00b7 failure modes",
+      "pillar": "Connectors",
+      "keywords": [
+        "sync",
+        "acl",
+        "oversharing",
+        "permission"
+      ],
+      "duration": 80,
+      "poster": "media/posters/06-sync-overshare.webp",
+      "file": "media/shorts/06-sync-overshare.mp4",
+      "youtube": "",
+      "status": "ready"
+    }
+  ]
+}

@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Source as uploaded: 20-view-03-physical | Learn Purview</title>
+<meta name="description" content="Physical view of Microsoft&#x27;s Digital-Work Platform: services, regions, tenants, licensing, and deployment as built.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="library.css">
+<script>try{var p=JSON.parse(localStorage.getItem("appPalette"))||"github",m=JSON.parse(localStorage.getItem("appMode"))||"dark";document.documentElement.setAttribute("data-theme",p+"-"+m);}catch(e){document.documentElement.setAttribute("data-theme","github-dark");}</script>
+</head>
+<body>
+<header class="topbar">
+  <a href="../index.html" class="home">&larr; Learn Purview console</a>
+  <span class="crumb">Library · NotebookLM source bundle</span>
+  <a href="index.html" class="home">All pages</a>
+</header>
+<main class="doc">
+  <div class="kicker">NotebookLM source bundle</div>
+  <h1 class="doctitle">Source as uploaded: 20-view-03-physical</h1>
+  <p class="lead">Physical view of Microsoft&#x27;s Digital-Work Platform: services, regions, tenants, licensing, and deployment as built.</p>
+  
+  <article><h1>Physical View — Microsoft's Digital-Work Platform</h1>
+<p>Pack: <a href="hub.html">00 - Microsoft's Digital-Work Platform Hub</a> · Block: <a href="block-04-physical-view.html">Block 4</a> · Prev: <a href="view-02-logical.html">Logical</a> · Next: <a href="view-04-integration-ai.html">Integration and AI</a></p>
+<div class="callout info" markdown="0"><div class="callout-title">Altitude rule</div><p>Physical means <strong>what is actually deployed and where</strong>. Name the product services, portals, agents, regions, tenant boundaries, and license SKUs. Every row should trace back to a logical component.</p></div>
+
+<h2>Logical → physical mapping</h2>
+<table>
+<thead>
+<tr>
+<th>Logical component</th>
+<th>Physical realization (service / feature)</th>
+<th>Where it runs</th>
+<th>License / SKU</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Microsoft Graph API</td>
+<td>Microsoft Graph REST/GraphQL endpoints</td>
+<td>Microsoft-managed cloud service (commercial + gov clouds)</td>
+<td>Requires Entra app registration; underlying M365 license for accessed resources — mind map does not name specific SKUs (silence — verify in Microsoft Learn licensing docs)</td>
+<td>learn.microsoft.com/microsoft-365/copilot/extensibility/copilot-apis-overview</td>
+</tr>
+<tr>
+<td>Synced Copilot connector</td>
+<td>Microsoft 365 Agents Toolkit, connector SDK, or Copilot connector APIs</td>
+<td>Microsoft-managed; indexed data lands in Microsoft Graph</td>
+<td>Requires admin consent for Graph permissions — SKU/licensing tier not specified in mind map (silence)</td>
+<td>learn.microsoft.com/microsoft-365/copilot/extensibility/overview-copilot-connector</td>
+</tr>
+<tr>
+<td>Federated (MCP) connector</td>
+<td>Federated connector configuration referencing an external MCP server</td>
+<td>External MCP server (customer/vendor-hosted) + Microsoft-managed invocation path</td>
+<td>Availability varies by federated connector — verify per connector (silence on specific SKU)</td>
+<td>learn.microsoft.com/microsoft-365/copilot/connectors/federated-connectors-overview</td>
+</tr>
+<tr>
+<td>Copilot Studio</td>
+<td>Copilot Studio low-code agent builder</td>
+<td>Microsoft-managed, Power Platform-native</td>
+<td>Not specified in mind map (silence)</td>
+<td>mind-map intake</td>
+</tr>
+<tr>
+<td>GitHub Cloud Knowledge connector</td>
+<td>Prebuilt Microsoft connector for GitHub repos</td>
+<td>Microsoft-managed, reads from GitHub Cloud (github.com)</td>
+<td>Not specified in mind map — GitHub Enterprise Server support not confirmed (silence)</td>
+<td>learn.microsoft.com/microsoft-365/copilot/connectors/github-cloud-knowledge-overview</td>
+</tr>
+<tr>
+<td>GitHub Apps / OAuth apps</td>
+<td>GitHub App or OAuth App registration</td>
+<td>GitHub-managed (github.com or GHES)</td>
+<td>Not specified in mind map (silence)</td>
+<td>docs.github.com/copilot/concepts/context/mcp</td>
+</tr>
+<tr>
+<td>GitHub MCP servers</td>
+<td>Custom or vendor-built MCP server tailored to org</td>
+<td>Customer/vendor-hosted, invoked by GitHub Copilot</td>
+<td>Not specified (silence)</td>
+<td>docs.github.com/copilot/customizing-copilot/using-model-context-protocol/extending-copilot-chat-with-mcp</td>
+</tr>
+<tr>
+<td>Copilot Integration Enablement Layer</td>
+<td>MCP gateway, API gateway, connector lifecycle, agent policy, workflow/approval, audit/telemetry, schema registry</td>
+<td>Customer-built/operated (recommended target state, not a named Microsoft product)</td>
+<td>N/A — architectural recommendation</td>
+<td>mind-map: "Recommended target state"</td>
+</tr>
+</tbody>
+</table>
+<h2>Deployment topology</h2>
+<pre class="mermaid">flowchart TB
+  subgraph Cloud[&quot;Cloud / tenant boundary&quot;]
+    SVC[&quot;Platform services&quot;]
+    STORE[&quot;Data stores and indexes&quot;]
+    PORTAL[&quot;Admin portal&quot;]
+  end
+  subgraph OnPrem[&quot;Customer estate&quot;]
+    AGENT[&quot;Agents, scanners, connectors&quot;]
+    ENDPT[&quot;Endpoints&quot;]
+  end
+  AGENT --&gt; SVC
+  ENDPT --&gt; SVC
+  SVC --&gt; STORE
+  PORTAL --&gt; SVC
+</pre>
+
+<!-- tech_deep_dive:diagram-embed -->
+<p><a href="../assets/diagrams/03-physical-1.png" target="_blank"><img class="embed" src="../assets/diagrams/03-physical-1.png" alt="03-physical-1.png"></a></p>
+<h2>Cloud and tenant variants</h2>
+<table>
+<thead>
+<tr>
+<th>Environment</th>
+<th>Available?</th>
+<th>Feature gaps</th>
+<th>Data residency</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Commercial</td>
+<td>Yes — synced and federated Copilot connectors both supported</td>
+<td>None specified in mind map</td>
+<td>Not specified (silence — verify Microsoft Learn)</td>
+<td>learn.microsoft.com/microsoft-365/copilot/extensibility/overview-copilot-connector</td>
+</tr>
+<tr>
+<td>GCC</td>
+<td>Yes — synced connectors confirmed</td>
+<td>Federated (MCP-based) connector availability "varies by federated connector" — not blanket-confirmed for GCC in mind map (silence)</td>
+<td>Not specified (silence)</td>
+<td>learn.microsoft.com/microsoft-365/copilot/extensibility/overview-copilot-connector</td>
+</tr>
+<tr>
+<td>GCC High</td>
+<td>Yes — synced connectors confirmed</td>
+<td>Same federated-connector caveat as GCC</td>
+<td>Not specified (silence)</td>
+<td>learn.microsoft.com/microsoft-365/copilot/extensibility/overview-copilot-connector</td>
+</tr>
+<tr>
+<td>DoD / Gov Secret</td>
+<td>Yes — synced connectors confirmed for DoD</td>
+<td>Same federated-connector caveat; Gov Secret/air-gapped tier not addressed in mind map (silence)</td>
+<td>Not specified (silence)</td>
+<td>learn.microsoft.com/microsoft-365/copilot/extensibility/overview-copilot-connector</td>
+</tr>
+</tbody>
+</table>
+<h2>Physical data model and storage</h2>
+<table>
+<thead>
+<tr>
+<th>Store</th>
+<th>Holds</th>
+<th>Retention</th>
+<th>Encryption / keys</th>
+<th>Region</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Microsoft Graph semantic index</td>
+<td>externalItems from synced connectors (content, metadata, ACL, semantic labels)</td>
+<td>Not specified in mind map (silence — verify Microsoft Learn retention docs)</td>
+<td>Not specified (silence)</td>
+<td>Tenant-bound; specific regions not named (silence)</td>
+</tr>
+<tr>
+<td>MCP server / federated source</td>
+<td>Live data at the source system — nothing persisted into Graph by design</td>
+<td>N/A — no sync, retrieved per-query</td>
+<td>Governed by source system, not by M365</td>
+<td>Wherever the MCP server / source system is hosted</td>
+</tr>
+<tr>
+<td>SIEM/SOAR audit store</td>
+<td>Tool calls, parameters, identity, decision outcomes, response references, errors</td>
+<td>"Configure retention and audit requirements" — specific period not named (silence)</td>
+<td>Not specified (silence)</td>
+<td>Not specified (silence)</td>
+</tr>
+</tbody>
+</table>
+<h2>Standards and protocols (StdV-1)</h2>
+<table>
+<thead>
+<tr>
+<th>Standard / protocol</th>
+<th>Used for</th>
+<th>Required or optional</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>OAuth 2.0 / OIDC</td>
+<td>Federated user identity, service-to-service auth, MCP connector auth</td>
+<td>Required</td>
+</tr>
+<tr>
+<td>SAML</td>
+<td>SSO federation into Entra ID</td>
+<td>Optional (alternative to OIDC for SSO)</td>
+</tr>
+<tr>
+<td>SCIM</td>
+<td>Automated joiner-mover-leaver identity lifecycle</td>
+<td>Recommended</td>
+</tr>
+<tr>
+<td>Model Context Protocol (MCP)</td>
+<td>Federated connector live data fetch; GitHub Copilot tool/context access</td>
+<td>Required for federated connectors and GitHub MCP integration</td>
+</tr>
+<tr>
+<td>Microsoft Graph externalItem schema</td>
+<td>Defines synced connector content/metadata/ACL structure</td>
+<td>Required for synced connectors</td>
+</tr>
+<tr>
+<td>REST</td>
+<td>Microsoft Graph API, GitHub REST API, Copilot APIs</td>
+<td>Required</td>
+</tr>
+<tr>
+<td>GraphQL</td>
+<td>GitHub GraphQL API for relationship-rich queries</td>
+<td>Optional (alternative to REST)</td>
+</tr>
+<tr>
+<td>Webhooks (HTTP callback)</td>
+<td>GitHub event delivery, Graph change notifications</td>
+<td>Required for event-driven patterns</td>
+</tr>
+</tbody>
+</table>
+<h2>Framework lens</h2>
+<table>
+<thead>
+<tr>
+<th>Framework</th>
+<th>Maps to</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TOGAF</td>
+<td>Technology Architecture (Phase D) · Opportunities and Solutions (Phase E)</td>
+</tr>
+<tr>
+<td>DoDAF</td>
+<td>SV-1/SV-2 Systems Interface and Resource Flow · SV-4 Systems Functionality · DIV-3 Physical Data Model · StdV-1 Standards Profile</td>
+</tr>
+<tr>
+<td>Altitude</td>
+<td>Physical: named services, regions, SKUs, agents</td>
+</tr>
+</tbody>
+</table></article>
+  <footer class="docfoot">
+    Rendered from <code>C:\output\obsidian\notebooklm\tdd-m365-digital-work-platform\sources\20-view-03-physical.md</code>. The Obsidian vault is the source of truth. Study material only. Citations <span class="cite">S#</span> link to the Microsoft source ledger.
+    <div class="prevnext"><a href="source-20-view-02-logical.html">&larr; Previous</a><a href="source-20-view-04-integration-ai.html">Next &rarr;</a></div>
+  </footer>
+</main>
+<script type="module">
+import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+const dark=(document.documentElement.getAttribute("data-theme")||"").endsWith("dark");
+mermaid.initialize({startOnLoad:true,theme:dark?"dark":"default",securityLevel:"strict"});
+</script>
+</body>
+</html>

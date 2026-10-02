@@ -1,0 +1,10 @@
+flowchart LR
+  subgraph P["Microsoft's Digital-Work Platform boundary"]
+    CORE["Microsoft's Digital-Work Platform"]
+  end
+  SIEM["SIEM / SOAR"] <--> CORE
+  ITSM["ITSM / ticketing"] <-- CORE
+  CLOUDS["Other clouds and SaaS data sources"] --> CORE
+  ONPREM["On-prem file shares and databases"] --> CORE
+  GOV["Other governance / privacy tools"] <--> CORE
+  IDP["Identity provider"] --> CORE

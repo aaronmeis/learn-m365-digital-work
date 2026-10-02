@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Conceptual View — Microsoft&#x27;s Digital-Work Platform | Learn Purview</title>
+<meta name="description" content="Conceptual view of Microsoft&#x27;s Digital-Work Platform: capabilities, actors, and value with no products named.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="library.css">
+<script>try{var p=JSON.parse(localStorage.getItem("appPalette"))||"github",m=JSON.parse(localStorage.getItem("appMode"))||"dark";document.documentElement.setAttribute("data-theme",p+"-"+m);}catch(e){document.documentElement.setAttribute("data-theme","github-dark");}</script>
+</head>
+<body>
+<header class="topbar">
+  <a href="../index.html" class="home">&larr; Learn Purview console</a>
+  <span class="crumb">Library · Architecture views</span>
+  <a href="index.html" class="home">All pages</a>
+</header>
+<main class="doc">
+  <div class="kicker">Architecture views</div>
+  <h1 class="doctitle">Conceptual View — Microsoft&#x27;s Digital-Work Platform</h1>
+  <p class="lead">Conceptual view of Microsoft&#x27;s Digital-Work Platform: capabilities, actors, and value with no products named.</p>
+  
+  <article>
+<p>Pack: <a href="hub.html">00 - Microsoft's Digital-Work Platform Hub</a> · Block: <a href="block-02-conceptual-view.html">Block 2</a> · Next: <a href="view-02-logical.html">Logical view</a></p>
+<div class="callout info" markdown="0"><div class="callout-title">Altitude rule</div><p>Conceptual means <strong>what and why</strong>, not how. Name capabilities and actors. Do not name products, SKUs, services, or regions here. If a sentence needs a product name, it belongs in the physical view.</p></div>
+
+<h2>Problem and purpose</h2>
+<ul>
+<li>Enterprises run two distinct platforms that must interoperate without becoming one undifferentiated blob: a <strong>digital-work platform</strong> (communication, documents, collaboration, business process) and a <strong>software-delivery platform</strong> (source code, review, build, release). Each needs its own AI orchestration layer, but third parties, data, and identity must cross the boundary safely.</li>
+<li>The problem this deep dive frames is: how does a governed enterprise let AI (Copilot on either side) act as a <strong>consumer and orchestrator</strong> of existing integration, authorization, and control architecture — rather than becoming an ungoverned bypass around it.</li>
+<li>If absent: point-to-point AI connections proliferate, permission fidelity breaks (oversharing), duplicate systems of record emerge, and there is no auditable evidence trail for AI-initiated actions. Source: mind-map intake, "Recommended target state."</li>
+</ul>
+<h2>Actors</h2>
+<table>
+<thead>
+<tr>
+<th>Actor</th>
+<th>Role</th>
+<th>Goal</th>
+<th>Trust level</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>End user (knowledge worker)</td>
+<td>Asks Copilot questions, requests actions via chat</td>
+<td>Fast, grounded answers and safe automation of routine tasks</td>
+<td>Delegated, user-context authorization</td>
+</tr>
+<tr>
+<td>Developer</td>
+<td>Uses GitHub Copilot in IDE/CLI/Chat, reviews AI-proposed PRs</td>
+<td>Faster, higher-quality code changes with human-in-the-loop review</td>
+<td>Delegated, developer identity + branch protection</td>
+</tr>
+<tr>
+<td>AI administrator</td>
+<td>Registers Copilot connectors/apps, grants Graph permission consent</td>
+<td>Controlled extensibility surface, auditable connector catalog</td>
+<td>Elevated (admin consent), scoped to registration</td>
+</tr>
+<tr>
+<td>Platform/integration architect</td>
+<td>Designs the Copilot Integration Enablement Layer, MCP/API gateway, catalog</td>
+<td>Governed, reusable integration surface instead of point-to-point sprawl</td>
+<td>Design authority, not runtime access</td>
+</tr>
+<tr>
+<td>Third-party system of record (ITSM, CRM, observability, GitHub)</td>
+<td>Source or sink of data reached via connector, API, or MCP</td>
+<td>Retain authority over its own data; expose only what's approved</td>
+<td>Least-privilege, scoped credentials</td>
+</tr>
+<tr>
+<td>Security/compliance (SIEM/SOAR, Purview, auditors)</td>
+<td>Monitors, classifies, and audits data and AI actions across both platforms</td>
+<td>Full evidence trail, policy enforcement, incident detection</td>
+<td>Read-only + policy-enforcement, not user-facing</td>
+</tr>
+<tr>
+<td>MCP server operator</td>
+<td>Builds/maintains an MCP server exposing tools to Copilot</td>
+<td>Reliable, scoped, auditable tool access for AI agents</td>
+<td>Production-endpoint trust level, cataloged</td>
+</tr>
+</tbody>
+</table>
+<h2>Capabilities</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Capability</th>
+<th>Outcome it delivers</th>
+<th>Actors</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>C1</td>
+<td>Enterprise data/API plane (Microsoft Graph)</td>
+<td>Unified, permission-aware access to work content across M365 apps</td>
+<td>End user, admin, third-party system</td>
+<td>mind-map: "Microsoft Graph as its API/data plane"</td>
+</tr>
+<tr>
+<td>C2</td>
+<td>Software-delivery extension plane (GitHub APIs/webhooks/Actions/MCP)</td>
+<td>Programmatic, event-driven control of source, review, and release lifecycle</td>
+<td>Developer, third-party system, MCP server operator</td>
+<td>mind-map: "GitHub APIs, webhooks, Actions, and MCP as its extension plane"</td>
+</tr>
+<tr>
+<td>C3</td>
+<td>AI interaction/orchestration (Copilot on both platforms)</td>
+<td>Natural-language access to grounded knowledge and governed actions</td>
+<td>End user, developer</td>
+<td>mind-map: "Copilot... sit above those platforms as AI interaction and orchestration layers"</td>
+</tr>
+<tr>
+<td>C4</td>
+<td>Knowledge grounding (synced connectors)</td>
+<td>Durable, searchable index of external knowledge inside Copilot/Search</td>
+<td>Admin, end user</td>
+<td>learn.microsoft.com/microsoft-365/copilot/connectors/overview</td>
+</tr>
+<tr>
+<td>C5</td>
+<td>Live federation (federated MCP connectors)</td>
+<td>Real-time facts from authoritative source without duplicating sensitive data</td>
+<td>End user, third-party system</td>
+<td>learn.microsoft.com/microsoft-365/copilot/connectors/federated-connectors-overview</td>
+</tr>
+<tr>
+<td>C6</td>
+<td>Governed agent/tool execution</td>
+<td>Multi-step task execution (ticket creation, PR drafting) with approval gates</td>
+<td>Developer, end user, admin</td>
+<td>mind-map: "Agent/tool integration"</td>
+</tr>
+<tr>
+<td>C7</td>
+<td>Centralized integration governance</td>
+<td>Single control point for MCP/API catalog, policy, audit across both platforms</td>
+<td>Platform architect, security/compliance</td>
+<td>mind-map: "Copilot Integration Enablement Layer"</td>
+</tr>
+</tbody>
+</table>
+<h2>Key concepts (conceptual data)</h2>
+<table>
+<thead>
+<tr>
+<th>Concept</th>
+<th>Meaning</th>
+<th>Related to</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Digital-work platform</td>
+<td>The M365 domain: communication, documents, collaboration, business process</td>
+<td>C1, C3</td>
+</tr>
+<tr>
+<td>Software-delivery platform</td>
+<td>The GitHub domain: source code, review, CI/CD, release</td>
+<td>C2, C3</td>
+</tr>
+<tr>
+<td>Knowledge plane</td>
+<td>Curated information made retrievable to people and AI (search/index)</td>
+<td>C4</td>
+</tr>
+<tr>
+<td>Transaction plane</td>
+<td>Controlled APIs/workflows that can alter system state</td>
+<td>C2, C6</td>
+</tr>
+<tr>
+<td>Control plane</td>
+<td>Identity, access, policy, secrets, observability, audit, lifecycle governance</td>
+<td>C7</td>
+</tr>
+<tr>
+<td>Synced vs. federated</td>
+<td>Two connector models: index-then-query vs. query-time live fetch</td>
+<td>C4, C5</td>
+</tr>
+<tr>
+<td>System of record</td>
+<td>The single authoritative owner of a given data domain; AI must not create a second one</td>
+<td>All capabilities — "make AI a governed consumer... not a bypass"</td>
+</tr>
+</tbody>
+</table>
+<h2>Operational concept (OV-1 style)</h2>
+<pre class="mermaid">flowchart LR
+  subgraph Org[&quot;Organization boundary&quot;]
+    U[&quot;People and teams&quot;] --&gt; CAP[&quot;Microsoft&#x27;s Digital-Work Platform capabilities&quot;]
+    CAP --&gt; DATA[&quot;Governed information&quot;]
+  end
+  EXT[&quot;External parties and systems&quot;] &lt;--&gt; CAP
+  REG[&quot;Regulators / auditors&quot;] -.evidence.-&gt; CAP
+</pre>
+
+<!-- tech_deep_dive:diagram-embed -->
+<p><a href="../assets/diagrams/01-conceptual-1.png" target="_blank"><img class="embed" src="../assets/diagrams/01-conceptual-1.png" alt="01-conceptual-1.png"></a></p>
+<h2>Open questions</h2>
+<ul>
+<li>The mind map does not state how conflicts are resolved when the same real-world entity (e.g., "the customer") has records in both M365-adjacent CRM and a GitHub-tracked engineering system — data stewardship across the boundary is asserted as a principle ("avoid duplicate ownership") but not mechanized. Mark silence; verify in Block 6 hands-on or via Microsoft Learn / GitHub Docs.</li>
+<li>The mind map does not name a specific human role/title that owns the "Copilot Integration Enablement Layer" — treat as an architectural target state, not an observed organizational structure.</li>
+</ul>
+<h2>Terms on this page</h2>
+<p>Full list: <a href="glossary.html">GLOSSARY</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Definition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Digital-work platform</td>
+<td>Microsoft 365 work: communication, documents, collaboration, process. Graph is the API plane.</td>
+</tr>
+<tr>
+<td>Software-delivery platform</td>
+<td>GitHub: source, review, CI/CD, release.</td>
+</tr>
+<tr>
+<td>Knowledge plane</td>
+<td>Information made searchable for people and Copilot.</td>
+</tr>
+<tr>
+<td>Transaction plane</td>
+<td>APIs and workflows that change system state.</td>
+</tr>
+<tr>
+<td>Control plane</td>
+<td>Identity, policy, secrets, catalog, and audit.</td>
+</tr>
+<tr>
+<td>Copilot Integration Enablement Layer</td>
+<td>Shared catalog and gateway so AI connections are not one-off.</td>
+</tr>
+<tr>
+<td>System of record</td>
+<td>The one store allowed to own a fact. Copilot must not become a second copy of record.</td>
+</tr>
+<tr>
+<td>Synced vs federated</td>
+<td>Index-then-search versus fetch live at question time.</td>
+</tr>
+</tbody>
+</table>
+<h2>Framework lens</h2>
+<table>
+<thead>
+<tr>
+<th>Framework</th>
+<th>Maps to</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TOGAF</td>
+<td>Architecture Vision (Phase A) · Business Architecture (Phase B)</td>
+</tr>
+<tr>
+<td>DoDAF</td>
+<td>OV-1 High-Level Operational Concept · CV-2 Capability Taxonomy · DIV-1 Conceptual Data Model</td>
+</tr>
+<tr>
+<td>Altitude</td>
+<td>Conceptual: capabilities and concepts only, vendor-neutral</td>
+</tr>
+</tbody>
+</table></article>
+  <footer class="docfoot">
+    Rendered from <code>Learning\tech-deep-dive\m365-digital-work-platform\views\01 - Conceptual View.md</code>. The Obsidian vault is the source of truth. Study material only. Citations <span class="cite">S#</span> link to the Microsoft source ledger.
+    <div class="prevnext"><span></span><a href="view-02-logical.html">Next &rarr;</a></div>
+  </footer>
+</main>
+<script type="module">
+import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+const dark=(document.documentElement.getAttribute("data-theme")||"").endsWith("dark");
+mermaid.initialize({startOnLoad:true,theme:dark?"dark":"default",securityLevel:"strict"});
+</script>
+</body>
+</html>

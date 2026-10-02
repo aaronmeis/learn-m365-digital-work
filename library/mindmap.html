@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mind map (scope) | Learn Purview</title>
+<meta name="description" content="">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="library.css">
+<script>try{var p=JSON.parse(localStorage.getItem("appPalette"))||"github",m=JSON.parse(localStorage.getItem("appMode"))||"dark";document.documentElement.setAttribute("data-theme",p+"-"+m);}catch(e){document.documentElement.setAttribute("data-theme","github-dark");}</script>
+</head>
+<body>
+<header class="topbar">
+  <a href="../index.html" class="home">&larr; Learn Purview console</a>
+  <span class="crumb">Library · Plan</span>
+  <a href="index.html" class="home">All pages</a>
+</header>
+<main class="doc">
+  <div class="kicker">Plan</div>
+  <h1 class="doctitle">Mind map (scope)</h1>
+  
+  
+  <article><h1>Mind map — Microsoft's Digital-Work Platform</h1>
+<p>From an integration-architecture perspective, Microsoft 365 is a <strong>digital-work platform</strong> with Microsoft Graph as its API/data plane, while GitHub is a <strong>software-delivery platform</strong> with GitHub APIs, webhooks, Actions, and MCP as its extension plane. Microsoft 365 Copilot and GitHub Copilot sit above those platforms as AI interaction and orchestration layers; third parties integrate through APIs, connectors, agents, events, identity federation, and—now increasingly—Model Context Protocol (MCP). <a href="https://learn.microsoft.com/en-us/microsoft-365/copilot/extensibility/copilot-apis-overview">learn.microsoft</a></p>
+<h2>Reference architecture</h2>
+<pre><code class="language-text"> ┌────────────────────────── Enterprise Identity &amp; Control Plane ───────────────────────────┐
+ │ Microsoft Entra ID │ OAuth 2.0 / OIDC │ SAML SSO │ SCIM │ MFA │ Conditional Access       │
+ │ Purview / DLP / labels │ Audit │ SIEM/SOAR │ API governance │ Secrets / certificates      │
+ └───────────────────────────────────────────────────────────────────────────────────────────┘
+                 │                                             │
+                 ▼                                             ▼
+ ┌───────────────────────────────┐             ┌─────────────────────────────────┐
+ │ Microsoft 365 work platform   │             │ GitHub software-delivery platform│
+ │                               │             │                                 │
+ │ Exchange │ Teams │ SharePoint │             │ Repos │ Issues │ PRs │ Actions  │
+ │ OneDrive │ Word │ Excel │ PPT │             │ Packages │ Projects │ Security  │
+ │ Power Platform │ Dataverse    │             │ GitHub Apps │ Webhooks │ APIs    │
+ └──────────────┬────────────────┘             └────────────────┬────────────────┘
+                │                                               │
+                ▼                                               ▼
+ ┌───────────────────────────────┐             ┌─────────────────────────────────┐
+ │ Microsoft Graph               │             │ GitHub REST / GraphQL APIs       │
+ │ Graph Change Notifications    │             │ Webhooks / Events / Actions      │
+ │ Copilot APIs                  │             │ MCP servers                      │
+ │ Connector APIs                │             │ CLI / IDE extension APIs         │
+ └──────────────┬────────────────┘             └────────────────┬────────────────┘
+                │                                               │
+                ▼                                               ▼
+ ┌───────────────────────────────┐             ┌─────────────────────────────────┐
+ │ Microsoft 365 Copilot         │             │ GitHub Copilot                  │
+ │ Chat │ in-app │ agents        │             │ IDE │ Chat │ CLI │ coding agents │
+ │ Copilot Studio                │             │ code review │ PR workflows       │
+ └───────────────────────────────┘             └─────────────────────────────────┘
+                │                                               │
+                └───────────── Integration / API / Event / MCP ─┘
+                                      │
+                                      ▼
+            ┌────────────────────────────────────────────────┐
+            │ Third-party SaaS, line-of-business systems,      │
+            │ data platforms, ITSM, CRM, ERP, observability,   │
+            │ engineering tools, external APIs, data products  │
+            └────────────────────────────────────────────────┘
+</code></pre>
+<p>The key architectural correction is this: <strong>Copilot is not the integration layer itself</strong>. Copilot is a user-facing intelligence/orchestration layer. The durable integration assets are APIs, event streams, identity relationships, connectors, schemas, service contracts, and policy controls beneath it.</p>
+<h2>Integration surfaces</h2>
+<h3>Microsoft 365 integration surfaces</h3>
+<table>
+<thead>
+<tr>
+<th>Surface</th>
+<th>Best used for</th>
+<th>Typical third-party patterns</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Microsoft Graph API</td>
+<td>Read or write Microsoft 365 resources</td>
+<td>Provision Teams, create channels, read calendars, send mail, manage files, query users/groups, access SharePoint content</td>
+</tr>
+<tr>
+<td>Microsoft Graph change notifications</td>
+<td>Event-driven integrations</td>
+<td>Receive a webhook callback when a resource changes, then retrieve the authorized changed data</td>
+</tr>
+<tr>
+<td>Microsoft Graph Data Connect</td>
+<td>Large-scale governed analytics extraction</td>
+<td>Move approved Microsoft 365 datasets into Azure data platforms for batch analytics and data engineering</td>
+</tr>
+<tr>
+<td>Teams platform</td>
+<td>Collaboration-native apps and notifications</td>
+<td>Tabs, bots, message extensions, adaptive cards, meeting apps, workflow notifications</td>
+</tr>
+<tr>
+<td>Power Platform connectors</td>
+<td>Low-code integration and orchestration</td>
+<td>Trigger automation from SaaS events, expose an API to Power Automate/Power Apps, implement approval flows</td>
+</tr>
+<tr>
+<td>Microsoft 365 Copilot connectors</td>
+<td>Make external knowledge discoverable to Copilot and Search</td>
+<td>Index a third-party content repository or retrieve it live through MCP</td>
+</tr>
+<tr>
+<td>Copilot Studio</td>
+<td>Task-specific business agents</td>
+<td>Connect agents to APIs, workflows, Dataverse, enterprise knowledge, actions, and approved MCP tools</td>
+</tr>
+<tr>
+<td>Copilot APIs</td>
+<td>Embed Microsoft 365 Copilot intelligence in applications</td>
+<td>Programmatically invoke Copilot capabilities through Graph-hosted REST APIs where available</td>
+</tr>
+</tbody>
+</table>
+<p>Microsoft documents Copilot APIs as REST endpoints under the Microsoft Graph namespace. They use the same authentication and authorization approach as other Graph APIs, and they inherit existing controls such as Conditional Access, sensitivity labels, and permission trimming. <a href="https://learn.microsoft.com/en-us/microsoft-365/copilot/extensibility/copilot-apis-overview">learn.microsoft</a></p>
+<h3>GitHub integration surfaces</h3>
+<table>
+<thead>
+<tr>
+<th>Surface</th>
+<th>Best used for</th>
+<th>Typical third-party patterns</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GitHub REST API</td>
+<td>Operational actions against GitHub resources</td>
+<td>Create issues, manage repositories, inspect pull requests, set statuses, administer teams</td>
+</tr>
+<tr>
+<td>GitHub GraphQL API</td>
+<td>Efficient relationship-rich queries</td>
+<td>Query repository, issue, PR, project, and user relationships in fewer round trips</td>
+</tr>
+<tr>
+<td>Webhooks</td>
+<td>Event-driven integration</td>
+<td>React to push, pull request, issue, deployment, check, workflow, discussion, or installation events</td>
+</tr>
+<tr>
+<td>GitHub Apps</td>
+<td>Durable server-to-server integrations</td>
+<td>Least-privilege installation access, short-lived tokens, scoped repository permissions, webhook subscriptions</td>
+</tr>
+<tr>
+<td>OAuth apps</td>
+<td>User-delegated third-party access</td>
+<td>Allow a user to authorize an external app to act within the scopes approved</td>
+</tr>
+<tr>
+<td>GitHub Actions</td>
+<td>CI/CD and operational automation</td>
+<td>Build, test, scan, package, deploy, call APIs, open tickets, update change records</td>
+</tr>
+<tr>
+<td>Checks API / deployment APIs</td>
+<td>Developer feedback and release governance</td>
+<td>Post test results, security findings, quality gates, deployment state, and change evidence into PRs</td>
+</tr>
+<tr>
+<td>GitHub Marketplace / integrations</td>
+<td>Packaged third-party engineering tools</td>
+<td>Security scanners, observability, infrastructure, planning, compliance, and release tools</td>
+</tr>
+<tr>
+<td>MCP servers</td>
+<td>Give GitHub Copilot controlled access to external tools and live context</td>
+<td>Query ITSM, inspect observability data, access a knowledge base, create a ticket, retrieve a schema</td>
+</tr>
+<tr>
+<td>GitHub Copilot CLI / IDE</td>
+<td>Developer-in-the-loop tool use</td>
+<td>Ask Copilot to invoke approved MCP tools while coding, troubleshooting, or reviewing changes</td>
+</tr>
+</tbody>
+</table>
+<p>GitHub now positions MCP as the primary extensibility mechanism for Copilot. It defines MCP as a protocol for extending GitHub Copilot through integrations with other systems; the older GitHub App-based Copilot Extensions model has been deprecated in favor of MCP servers. <a href="https://docs.github.com/en/copilot/concepts/context/mcp">docs.github</a></p>
+<h2>The third-party integration models</h2>
+<p>There are five core ways a third party can integrate. Choose the model based on whether the AI needs <strong>knowledge</strong>, <strong>real-time facts</strong>, <strong>actions</strong>, or <strong>workflow automation</strong>.</p>
+<table>
+<thead>
+<tr>
+<th>Integration model</th>
+<th>Data movement</th>
+<th>Primary use</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>API consumption</td>
+<td>Application calls a third-party API at request time</td>
+<td>Transactional read/write and system automation</td>
+<td>A Teams app retrieves a customer record from Salesforce</td>
+</tr>
+<tr>
+<td>Event-driven integration</td>
+<td>Source publishes webhook/event; consumer processes it</td>
+<td>Near-real-time state synchronization and workflow initiation</td>
+<td>A GitHub pull-request event creates or updates a ServiceNow change record</td>
+</tr>
+<tr>
+<td>Indexed knowledge connector</td>
+<td>Third-party content is copied/indexed into Microsoft Graph</td>
+<td>Enterprise search, retrieval, and Copilot grounding</td>
+<td>Index technical runbooks from GitHub, Confluence, or a document system</td>
+</tr>
+<tr>
+<td>Federated MCP connector</td>
+<td>Data is fetched live without copying it to Microsoft Graph</td>
+<td>Real-time facts and, where enabled, actions</td>
+<td>Ask Copilot for current incident status from an ITSM platform</td>
+</tr>
+<tr>
+<td>Agent/tool integration</td>
+<td>An agent invokes governed actions or workflows</td>
+<td>Multi-step task execution</td>
+<td>A Copilot Studio agent validates a request, creates a ticket, asks for approval, then updates a record</td>
+</tr>
+</tbody>
+</table>
+<p>The architectural decision is often simple:</p>
+<ul>
+<li>Use <strong>synced/indexed</strong> content when discovery, search quality, and repeated knowledge retrieval matter more than instantaneous freshness.</li>
+<li>Use <strong>federated/MCP</strong> access when data is highly dynamic, sensitive, too large to duplicate, or must remain in its authoritative source.</li>
+<li>Use <strong>API/workflow actions</strong> when the integration changes state.</li>
+<li>Use <strong>webhooks/events</strong> when systems must react to a change instead of polling.</li>
+</ul>
+<p>Microsoft's current connector model explicitly distinguishes synced connectors, which ingest and index external content into Microsoft Graph, from federated connectors, which use MCP to retrieve external data live without storing it in Graph. <a href="https://learn.microsoft.com/en-us/microsoft-365/copilot/extensibility/overview-copilot-connector">learn.microsoft</a></p>
+<h2>Microsoft 365 Copilot third parties</h2>
+<h3>1. Synced connectors: third-party knowledge into Graph</h3>
+<p>A synced Microsoft 365 Copilot connector ingests content from an external platform into a Microsoft Graph external connection. Each indexed item should include:</p>
+<ul>
+<li>Content or extracted text</li>
+<li>Metadata, such as title, URL, content type, author, timestamps, tags, and business identifiers</li>
+<li>An access control list that maps source-system entitlements to the Microsoft 365 user context</li>
+<li>Semantic labels that improve retrieval and Copilot understanding</li>
+</ul>
+<pre><code class="language-text">Third-party system
+   │
+   │ API / export / webhook / scheduled delta sync
+   ▼
+Connector service
+   │
+   ├─ Extract content and metadata
+   ├─ Translate source permissions to ACLs
+   ├─ Normalize schema and semantic labels
+   ├─ Detect adds / updates / deletes
+   └─ Handle throttling, retries, and observability
+   ▼
+Microsoft Graph external connection
+   ▼
+Graph index + semantic index
+   ▼
+Microsoft Search + Microsoft 365 Copilot + approved agents
+</code></pre>
+<p>Examples include GitHub Markdown documentation, Confluence knowledge, ServiceNow knowledge articles, policy repositories, PLM artifacts, CRM records, or controlled engineering documentation.</p>
+<p>The non-negotiable requirement is <strong>permission fidelity</strong>. If the connector indexes a source document but fails to model the source authorization correctly, Copilot can amplify an existing data-exposure problem. Microsoft's connector documentation states that indexed items include an ACL specifically to enforce permissions. <a href="https://learn.microsoft.com/en-us/microsoft-365/copilot/connectors/overview">learn.microsoft</a></p>
+<h3>2. Federated connectors: live third-party data via MCP</h3>
+<p>Federated connectors use MCP to call an external service at runtime.</p>
+<pre><code class="language-text">User asks Microsoft 365 Copilot:
+&quot;What is the live status of Release 4.2?&quot;
+           │
+           ▼
+Microsoft 365 Copilot / agent
+           │
+           ▼
+Approved federated MCP connector
+           │
+           ├─ Authenticate user or service
+           ├─ Evaluate tool policy
+           └─ Invoke external system
+                    │
+                    ▼
+        Third-party system of record
+        Jira / ServiceNow / Salesforce /
+        observability / ERP / data platform
+                    │
+                    ▼
+        Current response and citations
+                    │
+                    ▼
+      Copilot answer grounded in live data
+</code></pre>
+<p>This approach is strong when:</p>
+<ul>
+<li>The data changes rapidly.</li>
+<li>The authoritative system must retain control.</li>
+<li>Duplicating regulated, controlled, or sensitive records into a secondary index is undesirable.</li>
+<li>The use case requires not only reading but a carefully governed action, such as creating a ticket or updating a case.</li>
+</ul>
+<p>Microsoft states that federated connector content is returned in real time, is not synchronized into Microsoft Graph, and can support write, update, and delete actions through MCP-based connector capabilities. <a href="https://learn.microsoft.com/en-us/microsoft-365/copilot/connectors/federated-connectors-overview">learn.microsoft</a></p>
+<h3>3. Build versus buy</h3>
+<p>For Microsoft 365 Copilot connectors:</p>
+<ul>
+<li><strong>Use a Microsoft or partner prebuilt connector</strong> when it meets security, coverage, permission, lifecycle, and support requirements.</li>
+<li><strong>Build a custom synced connector</strong> when the source is proprietary, permission semantics are specialized, or domain metadata must be represented precisely.</li>
+<li><strong>Build a federated MCP connector</strong> when real-time data, external-system authority, and controlled actions are the priorities.</li>
+<li><strong>Use Copilot Studio</strong> for low-code agent experiences and Power Platform-native workflow orchestration.</li>
+<li><strong>Use Microsoft 365 Agents Toolkit / custom-engine agent approaches</strong> when you need professional-code agent logic, deeper custom orchestration, or a productized enterprise agent.</li>
+</ul>
+<p>Microsoft notes that custom synced connectors can be built with the Microsoft 365 Agents Toolkit, connector SDK, or Copilot connector APIs; they require application registration and administrator consent for appropriate Microsoft Graph permissions. <a href="https://learn.microsoft.com/en-us/microsoft-365/copilot/extensibility/overview-copilot-connector">learn.microsoft</a></p>
+<h2>GitHub Copilot third parties</h2>
+<h3>MCP is the primary AI-tool integration path</h3>
+<p>GitHub Copilot's MCP model lets a developer or agent invoke external tools and retrieve context from systems beyond the repository.</p>
+<pre><code class="language-text">Developer in VS Code / Visual Studio / GitHub Copilot Chat
+             │
+             ▼
+GitHub Copilot in Agent mode
+             │
+             ▼
+Approved MCP tool catalog
+ ┌───────────┼───────────────────────────────────┐
+ │           │                 │                 │
+ ▼           ▼                 ▼                 ▼
+ServiceNow   Jira              Datadog           Internal API
+create/read  query work items  retrieve traces   architecture catalog
+tickets      &amp; sprint state    and logs          / platform catalog
+</code></pre>
+<p>The MCP server exposes defined resources, prompts, and/or tools. A tool can return data, call an API, or take an action. The agent can then use returned information to plan or generate a code change.</p>
+<p>Example:</p>
+<blockquote>
+<p>"Investigate production errors for <code>orders-api</code>, identify the relevant error-handling path, propose a patch, add regression tests, and open a draft pull request."</p>
+</blockquote>
+<p>A governed implementation can allow GitHub Copilot to:</p>
+<ol>
+<li>Use an observability MCP server to retrieve traces and errors.</li>
+<li>Use GitHub repository context to identify affected code.</li>
+<li>Generate a patch and tests locally or in an approved agent environment.</li>
+<li>Run tests and static analysis.</li>
+<li>Create a draft PR.</li>
+<li>Require human review, automated quality gates, and branch protection before merge.</li>
+</ol>
+<p>GitHub documentation states that organizations can create MCP servers tailored to their needs and integrate them with Copilot Chat. <a href="https://docs.github.com/copilot/customizing-copilot/using-model-context-protocol/extending-copilot-chat-with-mcp">docs.github</a></p>
+<h3>GitHub App versus OAuth app</h3>
+<p>For third-party GitHub integration, the default enterprise recommendation is usually a <strong>GitHub App</strong>, not a broad OAuth app.</p>
+<table>
+<thead>
+<tr>
+<th>Choice</th>
+<th>Identity model</th>
+<th>Security posture</th>
+<th>Best fit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GitHub App</td>
+<td>App installation; fine-grained repository and organization permissions; short-lived installation tokens</td>
+<td>Stronger default for server-to-server integration</td>
+<td>CI/CD vendors, security tools, ITSM, deployment systems, compliance platforms</td>
+</tr>
+<tr>
+<td>OAuth app</td>
+<td>User authorizes scopes; normally acts in user context</td>
+<td>Useful but can create broad delegated scope</td>
+<td>User-facing SaaS integrations and personal workflow tools</td>
+</tr>
+<tr>
+<td>Personal access token</td>
+<td>Human or machine token, depending on type</td>
+<td>Avoid for durable enterprise service integration where possible</td>
+<td>Temporary development, tightly controlled automation, exceptional legacy scenarios</td>
+</tr>
+</tbody>
+</table>
+<p>Architecturally, use a GitHub App when a platform needs to receive GitHub webhooks and act across approved repositories with narrowly scoped permissions. Use OAuth when the external app genuinely needs to operate on behalf of an individual user.</p>
+<h3>Event-driven GitHub pattern</h3>
+<pre><code class="language-text">Pull request opened / updated
+           │
+           ▼
+GitHub webhook
+           │
+           ▼
+Integration gateway / event bus
+           │
+     ┌─────┼──────────────────────────────┐
+     ▼     ▼                              ▼
+SAST scan  Change-management system       Architecture checks
+           creates/updates change         validate standards,
+           record and evidence link       policies, scorecards
+     │     │                              │
+     └─────┴─────────────┬────────────────┘
+                         ▼
+         GitHub Check Run / PR status checks
+                         │
+                         ▼
+             Branch protection decision
+</code></pre>
+<p>This pattern is more reliable and auditable than having an LLM independently coordinate lifecycle state. Copilot can explain, synthesize, generate, and accelerate; API/event integrations remain the system of record for lifecycle transitions.</p>
+<h2>Cross-platform patterns</h2>
+<h3>GitHub knowledge into Microsoft 365 Copilot</h3>
+<p>This is the most common bridge between the productivity and engineering domains.</p>
+<pre><code class="language-text">GitHub repositories
+README │ ADRs │ runbooks │ API docs │ Markdown knowledge
+                │
+                ▼
+GitHub Cloud Knowledge connector
+                │
+                ▼
+Microsoft Graph index and semantic index
+                │
+                ▼
+Microsoft Search / Microsoft 365 Copilot / agents
+                │
+                ▼
+Teams, Outlook, SharePoint, Word, Copilot Chat
+</code></pre>
+<p>This supports use cases such as:</p>
+<ul>
+<li>A program manager asks in Teams for the latest architecture decision record.</li>
+<li>An operator asks Copilot to find approved deployment and rollback procedures.</li>
+<li>A solution architect searches across SharePoint standards and GitHub API documentation.</li>
+<li>An executive support team creates a program brief using both Microsoft 365 project artifacts and selected GitHub engineering knowledge.</li>
+</ul>
+<p>Microsoft describes the GitHub Cloud Knowledge connector as enabling repository Markdown and text files to be indexed into Microsoft 365 Copilot and Microsoft Search. <a href="https://learn.microsoft.com/en-us/microsoft-365/copilot/connectors/github-cloud-knowledge-overview">learn.microsoft</a></p>
+<h3>Microsoft 365 work into GitHub delivery</h3>
+<p>The inverse direction typically uses Teams apps, Power Automate, GitHub Apps, or middleware—rather than GitHub Copilot directly.</p>
+<p>Examples:</p>
+<ul>
+<li>An approved Teams/Power Automate request creates a GitHub issue from a standardized intake form.</li>
+<li>A GitHub release or deployment sends an adaptive-card notification to a Teams channel.</li>
+<li>A pull-request approval workflow triggers a ServiceNow change-control step, with status mirrored back into GitHub.</li>
+<li>Architecture decisions recorded in SharePoint or a controlled knowledge base are referenced in GitHub issue templates or engineering standards checks.</li>
+<li>Security or compliance approvals in Microsoft 365 initiate promotion gates in GitHub Actions.</li>
+</ul>
+<p>A clean operating model preserves source-of-truth boundaries:</p>
+<table>
+<thead>
+<tr>
+<th>Domain object</th>
+<th>Recommended system of record</th>
+<th>Integration role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Business communications and collaboration</td>
+<td>Teams / Exchange</td>
+<td>Notify, discuss, approve, summarize</td>
+</tr>
+<tr>
+<td>Office documents and broad enterprise knowledge</td>
+<td>SharePoint / OneDrive</td>
+<td>Govern, retain, publish, retrieve</td>
+</tr>
+<tr>
+<td>Source code, pull requests, developer evidence</td>
+<td>GitHub</td>
+<td>Build, review, test, merge, release</td>
+</tr>
+<tr>
+<td>Work planning and portfolio record</td>
+<td>Jira, Azure DevOps, GitHub Issues, or another chosen platform</td>
+<td>Plan, trace, report; avoid duplicate ownership</td>
+</tr>
+<tr>
+<td>Service and change records</td>
+<td>ServiceNow or chosen ITSM</td>
+<td>Control operational risk and authorization</td>
+</tr>
+<tr>
+<td>Customer record</td>
+<td>CRM</td>
+<td>Maintain account, opportunity, case, or contact authority</td>
+</tr>
+<tr>
+<td>Enterprise integration state</td>
+<td>Event bus / integration platform / API gateway</td>
+<td>Route, transform, audit, replay, govern</td>
+</tr>
+</tbody>
+</table>
+<h2>Security architecture</h2>
+<p>For a regulated enterprise—particularly one handling CUI, export-controlled content, or safety-critical engineering—the integration design should begin with trust boundaries, not prompts.</p>
+<h3>Identity and authorization</h3>
+<ul>
+<li>Federate user identity through Entra ID where possible using OpenID Connect or SAML.</li>
+<li>Automate joiner-mover-leaver lifecycle with SCIM.</li>
+<li>Prefer delegated, user-context authorization for user-requested retrieval where entitlement must be evaluated dynamically.</li>
+<li>Prefer managed application identities, workload identities, certificates, and short-lived tokens for service-to-service workloads.</li>
+<li>Use least-privilege scopes; separate read/search permissions from write/action permissions.</li>
+<li>Maintain distinct application registrations and credentials across development, test, staging, and production.</li>
+<li>Avoid generic shared accounts and long-lived static tokens.</li>
+</ul>
+<h3>Data and content controls</h3>
+<ul>
+<li>Classify data before indexing it into Copilot-accessible stores.</li>
+<li>Map third-party entitlements precisely into connector ACLs.</li>
+<li>Decide explicitly whether content is copied, cached, indexed, or retrieved live.</li>
+<li>Establish an allowed-data policy for each integration: public, internal, confidential, regulated, export-controlled, CUI, or prohibited.</li>
+<li>Ensure deletions, permission changes, and legal holds propagate correctly to indexes, caches, downstream stores, and AI retrieval layers.</li>
+<li>Configure retention and audit requirements for prompts, responses, actions, and source citations.</li>
+</ul>
+<h3>Agent and MCP controls</h3>
+<ul>
+<li>Treat each MCP server as a production integration endpoint, not as a convenience plugin.</li>
+<li>Establish a centrally managed MCP catalog with owner, purpose, data classification, action permissions, authentication method, logs, lifecycle state, and approval date.</li>
+<li>Separate <strong>read-only tools</strong> from <strong>write-capable tools</strong>.</li>
+<li>Require user confirmation or a workflow approval for consequential actions: create, modify, delete, deploy, approve, or transmit.</li>
+<li>Bind actions to verified identity and scoped authorization; do not rely on a natural-language request alone.</li>
+<li>Protect against prompt injection from external content by separating retrieved content from system instructions, validating parameters, allowlisting tools, and enforcing action policy outside the model.</li>
+<li>Log tool calls, parameters, identity, decision outcome, response references, and error conditions into an auditable telemetry pipeline.</li>
+</ul>
+<h2>Integration decision framework</h2>
+<p>Use this architecture decision sequence for every third-party integration:</p>
+<ol>
+<li>
+<p><strong>What is the system of record?</strong>
+   Do not create a second authoritative copy merely to make it "AI accessible."</p>
+</li>
+<li>
+<p><strong>Is the use case retrieval, recommendation, action, or orchestration?</strong>
+   Retrieval generally fits search, connectors, or MCP. Actions require APIs, workflows, authorization, approval, and audit.</p>
+</li>
+<li>
+<p><strong>Does the data need to be indexed or retrieved live?</strong>
+   Use indexing for durable knowledge and broad discovery. Use live federation for freshness, source control, and transaction-like context.</p>
+</li>
+<li>
+<p><strong>Whose permissions should apply?</strong>
+   User-delegated, service-delegated, application-only, or a hybrid model each create different risk and operational implications.</p>
+</li>
+<li>
+<p><strong>What is the blast radius of a wrong response or wrong action?</strong>
+   Read-only retrieval is lower risk than ticket creation; ticket creation is lower risk than production deployment or record deletion.</p>
+</li>
+<li>
+<p><strong>Where does policy enforcement occur?</strong>
+   Enforce policy in the API gateway, integration service, workflow, identity platform, and target system—not only in agent instructions.</p>
+</li>
+<li>
+<p><strong>What evidence is required?</strong>
+   Record prompts, source citations, tool decisions, approvals, resulting transaction IDs, test outcomes, and lifecycle traceability.</p>
+</li>
+</ol>
+<h2>Recommended target state</h2>
+<p>For an enterprise integration architecture, establish a <strong>Copilot Integration Enablement Layer</strong> rather than allowing point-to-point AI connections.</p>
+<pre><code class="language-text">                           ┌────────────────────────────┐
+                           │ AI / Copilot experiences    │
+                           │ M365 Copilot │ GitHub Copilot│
+                           │ Copilot Studio │ custom apps │
+                           └──────────────┬─────────────┘
+                                          │
+                  ┌───────────────────────▼───────────────────────┐
+                  │ Copilot Integration Enablement Layer           │
+                  │ MCP gateway / catalog │ API gateway            │
+                  │ Connector lifecycle │ Agent policy enforcement │
+                  │ Workflow / approval │ Audit / telemetry        │
+                  │ Schema registry │ secrets │ service identities  │
+                  └───────────────┬────────────────────┬──────────┘
+                                  │                    │
+                       ┌──────────▼──────────┐ ┌──────▼───────────┐
+                       │ Knowledge plane      │ │ Transaction plane │
+                       │ Search / Graph index │ │ APIs / workflows  │
+                       │ Synced connectors    │ │ Events / queues   │
+                       └──────────┬──────────┘ └──────┬───────────┘
+                                  │                    │
+                ┌─────────────────▼────────────────────▼─────────────────┐
+                │ Enterprise systems of record and third-party platforms  │
+                │ GitHub │ ITSM │ CRM │ ERP │ PLM │ Data │ Observability  │
+                └────────────────────────────────────────────────────────┘
+</code></pre>
+<p>This gives you a disciplined separation:</p>
+<ul>
+<li><strong>Knowledge plane</strong>: curated information made retrievable to people and AI.</li>
+<li><strong>Transaction plane</strong>: controlled APIs and workflows that can alter system state.</li>
+<li><strong>Control plane</strong>: identity, access, policy, secrets, observability, audit, and lifecycle governance.</li>
+</ul>
+<p>For your architecture work, the most important design principle is: <strong>make AI a governed consumer and orchestrator of enterprise integrations, not a bypass around integration, authorization, and control architecture.</strong></p></article>
+  <footer class="docfoot">
+    Rendered from <code>Learning\tech-deep-dive\m365-digital-work-platform\intake\mindmap.md</code>. The Obsidian vault is the source of truth. Study material only. Citations <span class="cite">S#</span> link to the Microsoft source ledger.
+    <div class="prevnext"><a href="day-plan.html">&larr; Previous</a><span></span></div>
+  </footer>
+</main>
+<script type="module">
+import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+const dark=(document.documentElement.getAttribute("data-theme")||"").endsWith("dark");
+mermaid.initialize({startOnLoad:true,theme:dark?"dark":"default",securityLevel:"strict"});
+</script>
+</body>
+</html>
