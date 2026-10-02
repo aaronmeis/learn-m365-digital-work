@@ -606,6 +606,46 @@
 <td>Physical view</td>
 <td>nblm-gap [<a class="cite" href="https://learn.microsoft.com/en-us/office365/servicedescriptions/office-365-platform-service-description/office-365-us-government/office-365-us-government" target="_blank" rel="noopener" title="Office 365 US Government service description">S27</a>]</td>
 </tr>
+<tr>
+<td>DLP</td>
+<td>Data Loss Prevention. Policies that detect sensitive information and can block or protect it from leaving the tenant.</td>
+<td>Data protection</td>
+<td>200</td>
+<td>yes</td>
+<td>Sensitivity label, Oversharing</td>
+<td>Integration view</td>
+<td>[<a class="cite" href="https://learn.microsoft.com/en-us/purview/dlp-learn-about-dlp" target="_blank" rel="noopener" title="Learn about data loss prevention">S28</a>]</td>
+</tr>
+<tr>
+<td>Sensitivity label</td>
+<td>A label on an item that states how sensitive it is and can trigger protection such as encryption. It is not the same control as the item's ACL.</td>
+<td>Data protection</td>
+<td>200</td>
+<td>yes</td>
+<td>DLP, ACL</td>
+<td>Integration view</td>
+<td>[<a class="cite" href="https://learn.microsoft.com/en-us/purview/sensitivity-labels" target="_blank" rel="noopener" title="Learn about sensitivity labels">S29</a>]</td>
+</tr>
+<tr>
+<td>Admin consent</td>
+<td>An administrator grants an application permission for the whole tenant, so users do not each consent. A connector app that cannot get this stays unable to call Graph.</td>
+<td>Identity</td>
+<td>200</td>
+<td>no</td>
+<td>Entra ID, Microsoft Graph</td>
+<td>Physical view</td>
+<td>[<a class="cite" href="https://learn.microsoft.com/en-us/entra/identity/enterprise-apps/grant-admin-consent" target="_blank" rel="noopener" title="Grant tenant-wide admin consent to an application">S30</a>]</td>
+</tr>
+<tr>
+<td>Throttling</td>
+<td>Microsoft Graph limits how fast an app may call it. Past the limit, Graph returns HTTP 429 and the caller has to back off.</td>
+<td>Integration</td>
+<td>200</td>
+<td>no</td>
+<td>Microsoft Graph, Synced connector</td>
+<td>Physical view</td>
+<td>[<a class="cite" href="https://learn.microsoft.com/en-us/graph/throttling" target="_blank" rel="noopener" title="Microsoft Graph throttling guidance">S31</a>]</td>
+</tr>
 </tbody>
 </table></article>
   <footer class="docfoot">

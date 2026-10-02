@@ -255,7 +255,7 @@ function renderDeck(){
     ?`<iframe class="wide-player" src="${ytSrc(DEEP.youtube)}" title="Digital-work platform deep dive cut" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" loading="lazy" style="border:0"></iframe>`
     :`<video class="wide-player" controls preload="metadata" src="${esc(DEEP.file)}"></video>`;
   let h=`<h2 class="vh">Deck and deep-dive cut</h2>
-  <p class="lead">The NotebookLM detailed deck (15 slides) and the narrated 8.5-minute cut built from it. Each slide shows its narration line and the question card the cut asks before it. Slides outlined in amber carry claims the source ledger does not support; the caption says what is wrong.</p>
+  <p class="lead">The NotebookLM detailed deck (15 slides) and the narrated 8.5-minute cut built from it. Each slide shows its narration line and the question card the cut asks before it. The slides were not checked line by line against the ledger, so none are marked. Where a slide and a ledger row disagree, the ledger wins.</p>
   ${video}
   ${DEEP.youtube?`<p class="obj" style="margin-top:.4rem"><a href="https://www.youtube.com/watch?v=${DEEP.youtube}" target="_blank" rel="noopener">Open the deep-dive cut on YouTube ↗</a></p>`:""}
   <div class="note" style="margin-top:1rem"><b>Opening line.</b> ${esc(C.open||"")}<br><b>Recap.</b> ${esc(C.recap||"")}</div>
