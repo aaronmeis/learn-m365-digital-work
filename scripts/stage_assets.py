@@ -10,6 +10,7 @@ from PIL import Image
 SITE = Path(__file__).resolve().parent.parent
 OUT = Path(r"C:\output\obsidian\notebooklm\tdd-m365-digital-work-platform")
 NBLM = OUT / "NEXUS _ tdd-m365-digital-work-platform _ 2026-09-28 _ tech-deep-dive"
+BATCH = OUT / "shorts-batch2"
 PACK = Path(r"C:\obsidian\personal_research_2026\Learning\tech-deep-dive\m365-digital-work-platform")
 FORCE = "--force" in sys.argv
 
@@ -26,6 +27,26 @@ SHORTS = [
      ["oversharing", "label", "dlp", "acl", "purview"]),
     ("06-sync-overshare", "How Copilot Syncing Causes Data Oversharing", "How a bad sync overshares", "Block 7 · failure modes", "Connectors",
      ["sync", "acl", "oversharing", "permission"]),
+    ("07-two-copilots", "07-two-copilots", "Two Copilots, two licenses", "Block 1 · scope", "Architecture",
+     ["license", "github copilot", "microsoft 365 copilot", "entra"]),
+    ("08-acl-map", "08-acl-map", "The ACL map cannot be sloppy", "Block 3 · logical", "Connectors",
+     ["acl", "externalitem", "permission", "sync"]),
+    ("09-github-app", "09-github-app", "GitHub App, not a PAT", "Block 4 · physical", "Identity",
+     ["github app", "pat", "token", "installation"]),
+    ("10-checks-api", "10-checks-api", "The model does not own the merge", "Block 3 · logical", "Delivery",
+     ["checks", "webhook", "branch protection", "pull request"]),
+    ("11-one-record", "11-one-record", "Do not copy the system of record", "Block 2 · conceptual", "Architecture",
+     ["sharepoint", "github", "system of record", "copy"]),
+    ("12-mcp-standard", "12-mcp-standard", "MCP is the shared standard", "Block 5 · integration", "Connectors",
+     ["mcp", "graph", "github", "extensibility"]),
+    ("13-three-planes", "13-three-planes", "Three planes, one boundary", "Block 2 · conceptual", "Architecture",
+     ["knowledge", "transaction", "control", "enablement"]),
+    ("14-write-gate", "14-write-gate", "A write needs an approval", "Block 7 · failure modes", "AI path",
+     ["mcp", "write", "approval", "workflow"]),
+    ("15-prompt-injection", "15-prompt-injection", "Retrieved text is data", "Block 7 · failure modes", "AI path",
+     ["prompt injection", "grounding", "allowlist", "tool"]),
+    ("16-verify-cloud", "16-verify-cloud", "Verify the cloud before you commit", "Block 4 · physical", "Cloud",
+     ["gcc", "gcc high", "dod", "tenant"]),
 ]
 
 # Unlisted uploads, 2026-10-02. Empty string falls back to the local MP4.
@@ -37,6 +58,9 @@ YOUTUBE = {
     "04-federated-protect": "gGJvC3IbF70",
     "05-oversharing": "rLK27JyJLL8",
     "06-sync-overshare": "6bAqImgw-2s",
+    "07-two-copilots": "yndinYHFMWI",
+    "08-acl-map": "tzm_OiIio4k",
+    "09-github-app": "ItgoluU-oiY",
 }
 
 
@@ -78,7 +102,10 @@ def main():
     items = []
     for name, src_title, title, tag, pillar, keywords in SHORTS:
         mp4 = SITE / "media" / "shorts" / f"{name}.mp4"
-        copy(NBLM / f"{src_title}.mp4", mp4)
+        src = NBLM / f"{src_title}.mp4"
+        if not src.exists():
+            src = BATCH / f"{name}.mp4"
+        copy(src, mp4)
         poster = SITE / "media" / "posters" / f"{name}.webp"
         if FORCE or not poster.exists():
             poster.parent.mkdir(parents=True, exist_ok=True)

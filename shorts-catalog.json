@@ -5,8 +5,8 @@
     "file": "media/deep-dive-cut.mp4",
     "youtube": "EWcgztIW-Z8"
   },
-  "total": 6,
-  "ready": 6,
+  "total": 16,
+  "ready": 16,
   "items": [
     {
       "id": "01-boundary",
@@ -117,6 +117,186 @@
       "poster": "media/posters/06-sync-overshare.webp",
       "file": "",
       "youtube": "6bAqImgw-2s",
+      "status": "ready"
+    },
+    {
+      "id": "07-two-copilots",
+      "name": "07-two-copilots",
+      "title": "Two Copilots, two licenses",
+      "tag": "Block 1 \u00b7 scope",
+      "pillar": "Architecture",
+      "keywords": [
+        "license",
+        "github copilot",
+        "microsoft 365 copilot",
+        "entra"
+      ],
+      "duration": 68,
+      "poster": "media/posters/07-two-copilots.webp",
+      "file": "",
+      "youtube": "yndinYHFMWI",
+      "status": "ready"
+    },
+    {
+      "id": "08-acl-map",
+      "name": "08-acl-map",
+      "title": "The ACL map cannot be sloppy",
+      "tag": "Block 3 \u00b7 logical",
+      "pillar": "Connectors",
+      "keywords": [
+        "acl",
+        "externalitem",
+        "permission",
+        "sync"
+      ],
+      "duration": 76,
+      "poster": "media/posters/08-acl-map.webp",
+      "file": "",
+      "youtube": "tzm_OiIio4k",
+      "status": "ready"
+    },
+    {
+      "id": "09-github-app",
+      "name": "09-github-app",
+      "title": "GitHub App, not a PAT",
+      "tag": "Block 4 \u00b7 physical",
+      "pillar": "Identity",
+      "keywords": [
+        "github app",
+        "pat",
+        "token",
+        "installation"
+      ],
+      "duration": 69,
+      "poster": "media/posters/09-github-app.webp",
+      "file": "",
+      "youtube": "ItgoluU-oiY",
+      "status": "ready"
+    },
+    {
+      "id": "10-checks-api",
+      "name": "10-checks-api",
+      "title": "The model does not own the merge",
+      "tag": "Block 3 \u00b7 logical",
+      "pillar": "Delivery",
+      "keywords": [
+        "checks",
+        "webhook",
+        "branch protection",
+        "pull request"
+      ],
+      "duration": 71,
+      "poster": "media/posters/10-checks-api.webp",
+      "file": "media/shorts/10-checks-api.mp4",
+      "youtube": "",
+      "status": "ready"
+    },
+    {
+      "id": "11-one-record",
+      "name": "11-one-record",
+      "title": "Do not copy the system of record",
+      "tag": "Block 2 \u00b7 conceptual",
+      "pillar": "Architecture",
+      "keywords": [
+        "sharepoint",
+        "github",
+        "system of record",
+        "copy"
+      ],
+      "duration": 78,
+      "poster": "media/posters/11-one-record.webp",
+      "file": "media/shorts/11-one-record.mp4",
+      "youtube": "",
+      "status": "ready"
+    },
+    {
+      "id": "12-mcp-standard",
+      "name": "12-mcp-standard",
+      "title": "MCP is the shared standard",
+      "tag": "Block 5 \u00b7 integration",
+      "pillar": "Connectors",
+      "keywords": [
+        "mcp",
+        "graph",
+        "github",
+        "extensibility"
+      ],
+      "duration": 71,
+      "poster": "media/posters/12-mcp-standard.webp",
+      "file": "media/shorts/12-mcp-standard.mp4",
+      "youtube": "",
+      "status": "ready"
+    },
+    {
+      "id": "13-three-planes",
+      "name": "13-three-planes",
+      "title": "Three planes, one boundary",
+      "tag": "Block 2 \u00b7 conceptual",
+      "pillar": "Architecture",
+      "keywords": [
+        "knowledge",
+        "transaction",
+        "control",
+        "enablement"
+      ],
+      "duration": 85,
+      "poster": "media/posters/13-three-planes.webp",
+      "file": "media/shorts/13-three-planes.mp4",
+      "youtube": "",
+      "status": "ready"
+    },
+    {
+      "id": "14-write-gate",
+      "name": "14-write-gate",
+      "title": "A write needs an approval",
+      "tag": "Block 7 \u00b7 failure modes",
+      "pillar": "AI path",
+      "keywords": [
+        "mcp",
+        "write",
+        "approval",
+        "workflow"
+      ],
+      "duration": 72,
+      "poster": "media/posters/14-write-gate.webp",
+      "file": "media/shorts/14-write-gate.mp4",
+      "youtube": "",
+      "status": "ready"
+    },
+    {
+      "id": "15-prompt-injection",
+      "name": "15-prompt-injection",
+      "title": "Retrieved text is data",
+      "tag": "Block 7 \u00b7 failure modes",
+      "pillar": "AI path",
+      "keywords": [
+        "prompt injection",
+        "grounding",
+        "allowlist",
+        "tool"
+      ],
+      "duration": 74,
+      "poster": "media/posters/15-prompt-injection.webp",
+      "file": "media/shorts/15-prompt-injection.mp4",
+      "youtube": "",
+      "status": "ready"
+    },
+    {
+      "id": "16-verify-cloud",
+      "name": "16-verify-cloud",
+      "title": "Verify the cloud before you commit",
+      "tag": "Block 4 \u00b7 physical",
+      "pillar": "Cloud",
+      "keywords": [
+        "gcc",
+        "gcc high",
+        "dod",
+        "tenant"
+      ],
+      "duration": 72,
+      "poster": "media/posters/16-verify-cloud.webp",
+      "file": "media/shorts/16-verify-cloud.mp4",
+      "youtube": "",
       "status": "ready"
     }
   ]

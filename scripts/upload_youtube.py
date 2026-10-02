@@ -32,6 +32,16 @@ ITEMS = [
     ("04-federated-protect", "How federated connectors protect data", ROOT / "media" / "shorts" / "04-federated-protect.mp4"),
     ("05-oversharing", "How Copilot stops data oversharing", ROOT / "media" / "shorts" / "05-oversharing.mp4"),
     ("06-sync-overshare", "How a bad sync overshares", ROOT / "media" / "shorts" / "06-sync-overshare.mp4"),
+    ("07-two-copilots", "Two Copilots, two licenses", ROOT / "media" / "shorts" / "07-two-copilots.mp4"),
+    ("08-acl-map", "The ACL map cannot be sloppy", ROOT / "media" / "shorts" / "08-acl-map.mp4"),
+    ("09-github-app", "GitHub App, not a PAT", ROOT / "media" / "shorts" / "09-github-app.mp4"),
+    ("10-checks-api", "The model does not own the merge", ROOT / "media" / "shorts" / "10-checks-api.mp4"),
+    ("11-one-record", "Do not copy the system of record", ROOT / "media" / "shorts" / "11-one-record.mp4"),
+    ("12-mcp-standard", "MCP is the shared standard", ROOT / "media" / "shorts" / "12-mcp-standard.mp4"),
+    ("13-three-planes", "Three planes, one boundary", ROOT / "media" / "shorts" / "13-three-planes.mp4"),
+    ("14-write-gate", "A write needs an approval", ROOT / "media" / "shorts" / "14-write-gate.mp4"),
+    ("15-prompt-injection", "Retrieved text is data", ROOT / "media" / "shorts" / "15-prompt-injection.mp4"),
+    ("16-verify-cloud", "Verify the cloud before you commit", ROOT / "media" / "shorts" / "16-verify-cloud.mp4"),
 ]
 
 
