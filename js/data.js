@@ -3107,6 +3107,16 @@ DATA.glossary = [
     "see_also": "Grounding, System of record",
     "where": "Copilot deep dive",
     "source": "[S36] [S11]"
+  },
+  {
+    "category": "Study",
+    "term": "AI prompts",
+    "rung": 100,
+    "essential": false,
+    "definition": "Copyable architect prompts on this site for Microsoft 365 and Microsoft Copilot. Each prompt has blanks for org-specific values, a redaction reminder, and an S# chip that opens a short source summary and a link. Fill the blanks with synthetic values.",
+    "see_also": "Microsoft Copilot, Source ledger",
+    "where": "AI prompts",
+    "source": "[S10] [S57]"
   }
 ];
 

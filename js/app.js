@@ -409,20 +409,109 @@ function renderGlossary(){
   });
 }
 
-/* ---- Prompts ---- */
+/* ---- AI prompts ---- */
+function srcNote(n){
+  const notes=window.SOURCE_NOTES||{};
+  if(notes[n]) return notes[n];
+  const s=SRC[n];
+  return s?(s.b||s.t||""):"";
+}
+function citedNums(t){
+  const o=[];
+  (String(t).match(/\[(S\d+(?:\s*,\s*S\d+)*)\]/g)||[]).forEach(m=>{(m.match(/S(\d+)/g)||[]).forEach(x=>{
+    const n=+x.slice(1);
+    if(SRC[n]&&!o.includes(n)) o.push(n);
+  });});
+  return o;
+}
+function promptSources(p){
+  const o=(p.s||[]).filter(n=>SRC[n]);
+  citedNums(p.p).forEach(n=>{if(!o.includes(n)) o.push(n);});
+  return o;
+}
+function srcChip(n,id){
+  const s=SRC[n]; if(!s) return "";
+  const note=srcNote(n);
+  return `<span class="schip-wrap"><button type="button" class="schip" aria-expanded="false" aria-controls="${id}" aria-label="Source S${n}: ${esc(s.t)}. ${esc(note)} Open the summary.">S${n}</button><span class="stip" id="${id}" role="tooltip" hidden><b>S${n} · ${esc(s.t)}</b><span class="stip-sum">${esc(note)}</span><a href="${esc(s.u)}" target="_blank" rel="noopener">Open source ↗</a></span></span>`;
+}
+function promptBodyHtml(t,pi){
+  let k=0;
+  return esc(t).replace(/\[(S\d+(?:\s*,\s*S\d+)*)\]/g,(m,inner)=>"["+inner.replace(/S(\d+)/g,(x,n)=>{
+    k+=1;
+    return srcChip(+n,`pb-${pi}-${k}`)||x;
+  })+"]");
+}
+function bindSourceChips(root){
+  const close=except=>$$(".schip[aria-expanded=true]",root).forEach(c=>{if(c!==except){c.setAttribute("aria-expanded","false");const tip=c.nextElementSibling;if(tip) tip.hidden=true;}});
+  $$(".schip",root).forEach(c=>{
+    const tip=c.nextElementSibling, w=c.parentElement;
+    if(!tip) return;
+    const open=()=>{close(c);c.setAttribute("aria-expanded","true");tip.hidden=false;};
+    const shut=()=>{c.setAttribute("aria-expanded","false");tip.hidden=true;};
+    c.onclick=e=>{e.preventDefault();c.getAttribute("aria-expanded")==="true"?shut():open();};
+    w.addEventListener("mouseenter",open);
+    w.addEventListener("mouseleave",()=>{if(document.activeElement!==c) shut();});
+    w.addEventListener("focusout",e=>{if(!w.contains(e.relatedTarget)) shut();});
+    c.addEventListener("keydown",e=>{if(e.key==="Escape"){shut();e.stopPropagation();}});
+  });
+}
+function aiPromptText(p,withSrc){
+  const nums=promptSources(p);
+  let t=(window.PROMPT_WARN||"")+"\n\n"+p.p+"\n\n"+(window.PROMPT_RULE||"");
+  if(withSrc&&nums.length) t+="\n\nSources to ground your answer:\n"+nums.map(n=>`S${n}: ${SRC[n].t}. ${srcNote(n)} ${SRC[n].u}`).join("\n");
+  return t;
+}
 function renderPrompts(){
   const el=$("#v-prompts");
+  const P=window.PROMPTS||[], CATS=window.PROMPT_CATS||[];
   const pl=(window.LIBRARY||[]).filter(p=>p.section==="Prompts");
-  let h=`<h2 class="vh">Prompt library</h2>
-  <p class="lead">Nine study prompts. Public documentation only. No tenant names, secrets, or customer data.</p>
-  <div class="note"><b>Data hygiene.</b> Paste a synthetic design. Cite Microsoft Learn or GitHub Docs. If the page does not say it, the answer is UNVERIFIED.</div>
-  <div class="mc-grid">`;
-  DATA.prompts.forEach((p,i)=>{
-    h+=`<article class="mc prompt-card"><div class="mc-k">${String(i+1).padStart(2,"0")} · ${esc(p.model)}</div><h3>${esc(p.cat)}</h3><p>${esc(p.desc)}</p><p class="mc-s">${p.items.map(esc).join(" · ")}</p><pre>${esc(p.flagship)}</pre><button type="button" class="copybtn" data-c="${encodeURIComponent(p.flagship)}">Copy</button></article>`;
+  const f=LS.get(KEY+"pf",-1), q0=LS.get(KEY+"pq",""), ws=LS.get(KEY+"pwsrc",false);
+  el.innerHTML=`<h2 class="vh">AI prompts</h2>
+  <p class="lead">${P.length} architect prompts for Microsoft 365 and Microsoft Copilot. Each one uses Role, Context, Task, and Output, with [placeholders] for values from your org. Tap or hover an S# chip for the short summary and the link.</p>
+  <div class="note danger" role="note"><b>Before you paste anything.</b> ${esc(window.PROMPT_WARN||"")} This reminder is added to every prompt you copy.</div>
+  <div class="pfilter">
+    <label for="pq" class="pf-lab">Search prompts</label>
+    <input id="pq" class="search" type="search" placeholder="e.g. federated, GPT-5, GCC High, ACL" value="${esc(q0)}">
+    <div class="pf-groups" role="group" aria-label="Prompt groups"><button type="button" class="b ${f<0?"on":""}" aria-pressed="${f<0}" data-pf="-1">All (${P.length})</button>${CATS.map((c,k)=>`<button type="button" class="b ${f===k?"on":""}" aria-pressed="${f===k}" data-pf="${k}">${esc(c)} (${P.filter(p=>p.c===k).length})</button>`).join("")}</div>
+    <label class="tgl"><input type="checkbox" id="pwsrc" ${ws?"checked":""}> Include source summaries when copying</label>
+  </div>
+  <p class="pcount" id="pcount" role="status"></p>
+  <div id="plist"></div>
+  <h3 class="libhead">NotebookLM prompt notes</h3>
+  <div class="libgrid">${pl.map(p=>`<a class="libcard" href="library/${p.slug}.html"><b>${esc(p.title)}</b><span>${esc(p.desc)}</span></a>`).join("")}</div>`;
+  const paint=()=>{
+    const q=(LS.get(KEY+"pq","")||"").toLowerCase(), ff=LS.get(KEY+"pf",-1);
+    const list=P.map((p,i)=>[p,i]).filter(([p])=>(ff<0||p.c===ff)&&(!q||(p.t+" "+p.p+" "+(CATS[p.c]||"")).toLowerCase().includes(q)));
+    $("#pcount").textContent=`${list.length} of ${P.length} shown`;
+    $("#plist").innerHTML=list.map(([p,i])=>promptCard(p,i)).join("")||`<div class="note">No prompts match. Try another word, or pick All.</div>`;
+    bindSourceChips($("#plist"));
+    $$("[data-pcopy]",$("#plist")).forEach(b=>b.onclick=()=>{
+      const p=P[+b.dataset.pcopy];
+      const box=b.parentElement.querySelector(".incsrc");
+      const txt=aiPromptText(p,!!(box&&box.checked));
+      const st=$("#pcs"+b.dataset.pcopy);
+      const ok=()=>{st.textContent=box&&box.checked?"Copied, with the redaction reminder and the source summaries.":"Copied, with the redaction reminder.";setTimeout(()=>st.textContent="",2500);};
+      const fail=()=>{st.textContent="Copy is blocked in this browser. Select the prompt and press Ctrl+C. The redaction reminder is not in that selection.";};
+      try{const pr=navigator.clipboard&&navigator.clipboard.writeText(txt);if(pr&&pr.then) pr.then(ok,fail); else fail();}catch(e){fail();}
+    });
+  };
+  $$("[data-pf]",el).forEach(b=>b.onclick=()=>{
+    LS.set(KEY+"pf",+b.dataset.pf);
+    $$("[data-pf]",el).forEach(x=>{const on=x===b;x.classList.toggle("on",on);x.setAttribute("aria-pressed",String(on));});
+    paint();
   });
-  h+=`</div><h3 style="margin:1.8rem 0 .6rem;font-size:1rem">NotebookLM prompt notes</h3><div class="libgrid">${pl.map(p=>`<a class="libcard" href="library/${p.slug}.html"><b>${esc(p.title)}</b><span>${esc(p.desc)}</span></a>`).join("")}</div>`;
-  el.innerHTML=h;
-  $$(".copybtn",el).forEach(b=>b.onclick=()=>{try{navigator.clipboard.writeText(decodeURIComponent(b.dataset.c));b.textContent="Copied";b.classList.add("copied");setTimeout(()=>{b.textContent="Copy";b.classList.remove("copied");},1200);}catch(e){}});
+  $("#pq").oninput=e=>{LS.set(KEY+"pq",e.target.value);paint();};
+  $("#pwsrc").onchange=e=>{LS.set(KEY+"pwsrc",e.target.checked);$$(".incsrc",el).forEach(c=>{c.checked=e.target.checked;});};
+  paint();
+}
+function promptCard(p,i){
+  const CATS=window.PROMPT_CATS||[];
+  const nums=promptSources(p);
+  const ws=LS.get(KEY+"pwsrc",false);
+  const shown=p.p+"\n\n"+(window.PROMPT_RULE||"");
+  return `<article class="aip" aria-labelledby="aiph${i}"><div class="aip-main"><span class="mc-k">${esc(CATS[p.c]||"")}</span><h3 id="aiph${i}">${esc(p.t)}</h3><div class="pbody">${promptBodyHtml(shown,i)}</div>
+    <div class="copyrow"><button type="button" class="b on" data-pcopy="${i}">Copy prompt</button><label class="incsrc-lab"><input type="checkbox" class="incsrc" ${ws?"checked":""}> Include source summaries</label><span class="pcs" id="pcs${i}" role="status"></span></div></div>
+    <aside class="aip-src" aria-label="Sources cited"><h4>Sources cited</h4>${nums.map((n,k)=>`<div class="psrow">${srcChip(n,`ps-${i}-${k}`)}<span class="psnote"><b>${esc((SRC[n]||{}).t||"")}</b> ${esc(srcNote(n))} <a href="${esc((SRC[n]||{}).u||"#")}" target="_blank" rel="noopener">Open source ↗</a></span></div>`).join("")}</aside></article>`;
 }
 
 /* ---- Failure modes (practice checklist) ---- */

@@ -376,3 +376,40 @@ a.nav-item:hover{text-decoration:none}
 [data-theme$="-light"] #v-prompts .mc-k,
 [data-theme$="-light"] #v-backlog .mc-k,
 [data-theme$="-light"] #v-copilot .pn{background:#F3EE6E;color:#000000}
+
+/* AI prompts: filters, source chips, copy row. House yellow and black. */
+#v-prompts .pfilter{margin:.8rem 0 1rem}
+#v-prompts .pf-lab{display:block;font-size:.78rem;font-weight:700;margin-bottom:.25rem}
+#v-prompts .pfilter .search{width:100%;max-width:28rem;margin:.2rem 0 .7rem}
+#v-prompts .pf-groups{display:flex;flex-wrap:wrap;gap:.4rem;margin:0 0 .7rem}
+#v-prompts .pf-groups .b.on{background:#F3EE6E;color:#000000;border-color:#F3EE6E}
+#v-prompts .tgl,#v-prompts .incsrc-lab{display:flex;align-items:center;gap:.4rem;font-size:.82rem;min-height:32px}
+#v-prompts .pcount{color:#8A8A8A;font-size:.82rem;margin:.2rem 0 .7rem}
+#v-prompts .aip{display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:1rem;background:#000000;color:#FFFFFF;border:1px solid #8A8A8A;border-radius:12px;padding:1rem;margin:0 0 .9rem}
+#v-prompts .aip h3{font-size:1.05rem;margin:.45rem 0 .55rem;color:#FFFFFF}
+#v-prompts .pbody{white-space:pre-wrap;font-family:ui-monospace,Consolas,monospace;font-size:.8rem;line-height:1.5;background:#111111;color:#FFFFFF;border:1px solid #8A8A8A;border-radius:8px;padding:.75rem;margin:0}
+#v-prompts .schip-wrap{position:relative;display:inline-block}
+#v-prompts .schip{display:inline;font:inherit;font-weight:700;font-size:.78rem;color:#000000;background:#F3EE6E;border:1px solid #F3EE6E;border-radius:4px;padding:0 .32rem;cursor:pointer;min-height:24px}
+#v-prompts .schip:hover,#v-prompts .schip:focus-visible,#v-prompts .schip[aria-expanded="true"]{outline:2px solid #FFFFFF;outline-offset:1px}
+#v-prompts .stip{position:absolute;z-index:30;left:0;top:calc(100% + 6px);width:min(320px,80vw);background:#000000;color:#FFFFFF;border:1px solid #F3EE6E;border-radius:9px;padding:.6rem .7rem;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;font-size:.8rem;line-height:1.45;white-space:normal;box-shadow:0 8px 24px rgba(0,0,0,.45)}
+#v-prompts .stip b{display:block;margin-bottom:.25rem}
+#v-prompts .stip-sum{display:block}
+#v-prompts .stip a,#v-prompts .psnote a{display:inline-block;margin-top:.35rem;color:#F3EE6E}
+#v-prompts .copyrow{display:flex;flex-wrap:wrap;align-items:center;gap:.7rem;margin-top:.7rem}
+#v-prompts .copyrow .b.on{background:#F3EE6E;color:#000000;border-color:#F3EE6E}
+#v-prompts .pcs{font-size:.8rem;color:#8A8A8A}
+#v-prompts .aip-src{border-left:1px solid #8A8A8A;padding-left:.9rem;font-size:.8rem;color:#FFFFFF}
+#v-prompts .aip-src h4{font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;margin:0 0 .5rem;color:#F3EE6E}
+#v-prompts .psrow{display:grid;grid-template-columns:auto 1fr;gap:.45rem;align-items:start;margin:.55rem 0}
+#v-prompts .psnote{line-height:1.45}
+#v-prompts .psnote b{display:block}
+#v-prompts .libhead{margin:1.6rem 0 .6rem;font-size:1rem}
+@media(max-width:860px){#v-prompts .aip{grid-template-columns:1fr}#v-prompts .aip-src{border-left:0;border-top:1px solid #8A8A8A;padding:.7rem 0 0}}
+[data-theme$="-light"] #v-prompts .aip{background:#FFFFFF;color:#000000;border-color:#000000}
+[data-theme$="-light"] #v-prompts .aip h3,[data-theme$="-light"] #v-prompts .psnote{color:#000000}
+[data-theme$="-light"] #v-prompts .pbody{background:#FFFFFF;color:#000000;border-color:#000000}
+[data-theme$="-light"] #v-prompts .stip{background:#FFFFFF;color:#000000;border-color:#000000}
+[data-theme$="-light"] #v-prompts .stip a,[data-theme$="-light"] #v-prompts .psnote a{color:#000000}
+[data-theme$="-light"] #v-prompts .aip-src{border-color:#000000}
+[data-theme$="-light"] #v-prompts .aip-src h4{color:#000000}
+[data-theme$="-light"] #v-prompts .pf-groups .b.on,[data-theme$="-light"] #v-prompts .copyrow .b.on{background:#F3EE6E;color:#000000;border-color:#000000}

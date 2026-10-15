@@ -15,7 +15,7 @@ const APP_URL="https://aaronmeis.github.io/learn-m365-digital-work/";
 /* ---------- Views and groups ---------- */
 const VIEWS = {
   today:"Today", copilot:"Microsoft Copilot deep dive", curriculum:"Curriculum", views:"Architecture views", shorts:"Shorts", deck:"Deck and deep-dive cut", library:"Library",
-  flash:"Flashcards", quiz:"Quiz", failures:"Failure modes", prompts:"Prompts",
+  flash:"Flashcards", quiz:"Quiz", failures:"Failure modes", prompts:"AI prompts",
   cheat:"Decision rules", map:"Progress map", glossary:"Glossary", ea:"EA mapping", refs:"Source ledger", backlog:"Backlog", dashboard:"Overview"
 };
 const GROUPS = {
@@ -553,7 +553,7 @@ function renderToday(){
       <p class="lead">${chDone(ch)?"Today's challenge is done. Anything more is a bonus.":"Three rounds, about three minutes. Keep the streak going."}</p></div>
     <div class="streak ${st?"on":""}" title="Days in a row with the daily challenge completed"><b>${st}</b><span>day streak</span></div>
   </div>
-  <div class="note whats-new"><b>What's new · 15 Oct 2026.</b> Architecture views deep-link. The Copilot deep dive dates the October 2026 Chat default to the release notes (GPT-5) and lists the selector models. Open questions moved to the <a href="#/backlog">Backlog</a>. Nine study prompts are on <a href="#/prompts">Prompts</a>.</div>
+  <div class="note whats-new"><b>What's new · 15 Oct 2026.</b> Architecture views deep-link. The Copilot deep dive dates the October 2026 Chat default to the release notes (GPT-5) and lists the selector models. <a href="#/prompts">AI prompts</a> are nine copyable architect prompts with source summaries. Open questions are on the <a href="#/backlog">Backlog</a>.</div>
   ${challengeHTML()}
   <div class="today-grid">
     ${cs?h`<a class="hero-card" href="#/shorts/${encodeURIComponent(cs.id)}">
@@ -656,7 +656,7 @@ function buildPaletteIndex(){
     .concat((DATA.copilot&&DATA.copilot.blocks||[]).map(b=>({kind:"Copilot",label:b.n+" · "+b.title,sub:"Microsoft Copilot deep dive",go:()=>{location.hash="#/copilot/"+b.id;}})))
     .concat((DATA.copilot&&DATA.copilot.modelMap?DATA.copilot.modelMap.rows:[]).map(r=>({kind:"Model",label:r[0],sub:r[1],go:()=>{location.hash="#/copilot/models";}})))
     .concat((DATA.copilot&&DATA.copilot.prompts||[]).map(p=>({kind:"Prompt",label:p.title,sub:"Copilot deep dive",go:()=>{location.hash="#/copilot/checks";}})))
-    .concat((DATA.prompts||[]).map(p=>({kind:"Prompt",label:p.cat,sub:"Prompt library",go:()=>go("prompts")})))
+    .concat((window.PROMPTS||[]).map(p=>({kind:"Prompt",label:p.t,sub:"AI prompts · "+((window.PROMPT_CATS||[])[p.c]||""),kw:p.p.slice(0,500),go:()=>{LS.set(KEY+"pq","");LS.set(KEY+"pf",p.c);go("prompts");if(typeof renderPrompts==="function")renderPrompts();}})))
     .concat((DATA.backlog||[]).map(b=>({kind:"Backlog",label:b.area,sub:b.t,go:()=>{location.hash=b.where;}})));
 }
 function openPalette(){
@@ -667,7 +667,7 @@ function openPalette(){
 function closePalette(){ $("#palette").hidden=true; if(lastFocus&&lastFocus.focus) lastFocus.focus({preventScroll:true}); }
 function filterPalette(){
   const q=norm($("#paletteInput").value.trim());
-  palItems=(q?palIndex.filter(x=>norm(x.label).includes(q)||norm(x.sub).includes(q)).sort((a,b)=>norm(a.label).indexOf(q)-norm(b.label).indexOf(q)):palIndex.filter(x=>x.kind==="View")).slice(0,40);
+  palItems=(q?palIndex.filter(x=>norm(x.label+" "+(x.sub||"")+" "+(x.kw||"")).includes(q)).sort((a,b)=>norm(a.label).indexOf(q)-norm(b.label).indexOf(q)):palIndex.filter(x=>x.kind==="View")).slice(0,40);
   palSel=0; drawPalette();
 }
 function drawPalette(){
