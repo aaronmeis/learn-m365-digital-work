@@ -553,7 +553,7 @@ function renderToday(){
       <p class="lead">${chDone(ch)?"Today's challenge is done. Anything more is a bonus.":"Three rounds, about three minutes. Keep the streak going."}</p></div>
     <div class="streak ${st?"on":""}" title="Days in a row with the daily challenge completed"><b>${st}</b><span>day streak</span></div>
   </div>
-  <div class="note whats-new"><b>What's new · 15 Oct 2026.</b> Architecture views deep-link. The Copilot deep dive shows the October 2026 model cards and a six-step prompt walk. Open questions moved to the <a href="#/backlog">Backlog</a>. Nine study prompts are on <a href="#/prompts">Prompts</a>.</div>
+  <div class="note whats-new"><b>What's new · 15 Oct 2026.</b> Architecture views deep-link. The Copilot deep dive dates the October 2026 Chat default to the release notes (GPT-5) and lists the selector models. Open questions moved to the <a href="#/backlog">Backlog</a>. Nine study prompts are on <a href="#/prompts">Prompts</a>.</div>
   ${challengeHTML()}
   <div class="today-grid">
     ${cs?h`<a class="hero-card" href="#/shorts/${encodeURIComponent(cs.id)}">
