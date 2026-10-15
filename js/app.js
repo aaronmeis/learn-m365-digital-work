@@ -483,5 +483,69 @@ function initTheme(){
 
 function defaultMode(){try{return window.matchMedia("(prefers-color-scheme: light)").matches?"light":"dark";}catch(e){return "dark";}}
 
+/* ---- Microsoft Copilot deep dive ---- */
+function renderCopilot(){
+  const el=$("#v-copilot"); if(!el||!DATA.copilot) return;
+  const C=DATA.copilot;
+  const paras=arr=>(arr||[]).map(t=>`<p>${ec(t)}</p>`).join("");
+  let h=`<span class="badge">COPILOT DEEP DIVE · ${esc(C.asOf)}</span>
+  <h1 style="margin-top:.9rem">Microsoft Copilot deep dive</h1>
+  <p class="lead">What it is, how a prompt walks the stack, who picks the model, and where the trust boundary stops. Every claim has an S# chip. Government-cloud parity stays UNVERIFIED unless a government service description says otherwise. Learn pages were read ${esc(C.asOf)}. Model menus change; this note records the control, not a frozen SKU list.</p>
+  <div class="alias-card" id="cop-aliases">
+    <h2>Rename and aliases</h2>
+    <p>Use the current name in new writing. Keep the old name as an alias so older notes and license screens still match.</p>
+    <table class="tbl"><thead><tr><th>Say this</th><th>Alias</th><th>What the source says</th></tr></thead><tbody>
+    ${C.aliases.map(a=>`<tr><td><b>${esc(a.now)}</b></td><td>${esc(a.was)}</td><td>${ec(a.note)}</td></tr>`).join("")}
+    </tbody></table>
+  </div>
+  <nav class="cop-jump" aria-label="Deep dive blocks">${C.blocks.map(b=>`<a href="#/copilot/${esc(b.id)}">${esc(b.n)} ${esc(b.title)}</a>`).join("")}</nav>`;
+  C.blocks.forEach(b=>{
+    h+=`<section class="card cop-block" id="cop-${esc(b.id)}"><h2>${esc(b.n)} · ${esc(b.title)}</h2>${paras(b.paras)}`;
+    if(b.reveals) h+=b.reveals.map(r=>`<details class="why-matters"><summary>${esc(r.q)}</summary><p>${ec(r.a)}</p></details>`).join("");
+    if(b.id==="stack"){
+      h+=`<div class="stepper" id="copStepper"><div class="stepper-nav" role="tablist">${C.steps.map((s,i)=>`<button type="button" class="b ${i===0?"on":""}" role="tab" aria-selected="${i===0}" data-step="${i}">${i+1} ${esc(s.t)}</button>`).join("")}</div><div class="stepper-panel" id="copStepPanel">${ec(C.steps[0].d)}</div></div>`;
+    }
+    if(b.id==="family"){
+      h+=`<table class="tbl"><thead><tr>${C.family.cols.map(c=>`<th>${esc(c)}</th>`).join("")}</tr></thead><tbody>${C.family.rows.map(r=>`<tr>${r.map(c=>`<td>${ec(c)}</td>`).join("")}</tr>`).join("")}</tbody></table>`;
+    }
+    if(b.id==="start"){
+      const qs=DATA.quiz.filter(q=>q.week===6);
+      h+=`<h3>Five-question self-check</h3><p>Answer here, then open the same items in the Quiz.</p>`;
+      qs.forEach((q,qi)=>{
+        h+=`<div class="qcard" data-cqi="${qi}"><div class="qq">${esc(q.question)}</div><div class="qopts">${q.options.map((o,oi)=>`<label data-o="${oi}"><input type="radio" name="cq${qi}" style="margin-right:8px">${esc(o)}</label>`).join("")}</div><div class="qexp"><b>Answer:</b> ${ec(q.answer)}<br><br><b>Why / source:</b> ${ec(q.explanation)}</div></div>`;
+      });
+      h+=`<div class="btnrow"><button type="button" class="b" id="copToQuiz">Practice these in the Quiz</button></div>`;
+    }
+    if(b.id==="checks"){
+      C.prompts.forEach(p=>{
+        h+=`<details class="promptbox"><summary>${esc(p.title)}</summary><pre>${esc(p.text)}</pre><button type="button" class="copybtn" data-c="${encodeURIComponent(p.text)}">Copy</button></details>`;
+      });
+      h+=`<h3>Still open</h3><ul class="openq">${C.open.map(t=>`<li><b>UNVERIFIED.</b> ${esc(t)}</li>`).join("")}</ul>`;
+    }
+    h+=`</section>`;
+  });
+  el.innerHTML=h;
+  $$("[data-step]",el).forEach(btn=>btn.onclick=()=>{
+    const i=+btn.dataset.step;
+    $$("[data-step]",el).forEach(x=>{const on=x===btn; x.classList.toggle("on",on); x.setAttribute("aria-selected",on?"true":"false");});
+    $("#copStepPanel").innerHTML=ec(C.steps[i].d);
+  });
+  $$(".qcard",el).forEach(card=>{
+    const q=DATA.quiz.filter(x=>x.week===6)[+card.dataset.cqi];
+    $$(".qopts label",card).forEach(l=>l.onclick=()=>{
+      $$(".qopts label",card).forEach(x=>x.classList.remove("correct","wrong"));
+      const ok=$$(".qopts label",card).find(x=>q.options[+x.dataset.o]===q.answer);
+      if(l!==ok) l.classList.add("wrong"); if(ok) ok.classList.add("correct");
+      $(".qexp",card).classList.add("show");
+    });
+  });
+  $$(".copybtn",el).forEach(b=>b.onclick=()=>{try{navigator.clipboard.writeText(decodeURIComponent(b.dataset.c));b.textContent="Copied";b.classList.add("copied");setTimeout(()=>{b.textContent="Copy";b.classList.remove("copied");},1200);}catch(e){}});
+  const toQ=$("#copToQuiz"); if(toQ) toQ.onclick=()=>{LS.set(KEY+"quizSec",6); renderQuiz(); go("quiz");};
+}
+function focusCopilot(sub){
+  const id=sub&&document.getElementById("cop-"+sub);
+  if(id) id.scrollIntoView({block:"start"});
+}
+
 /* ---- Init ---- */
-initTheme();renderDashboard();renderCurriculum();renderViews();renderMap();renderFlash();renderDeck();renderQuiz();renderGlossary();renderPrompts();renderCounsel();renderCheat();renderEA();renderLibrary();renderReferences();
+initTheme();renderDashboard();renderCurriculum();renderViews();renderMap();renderFlash();renderDeck();renderQuiz();renderGlossary();renderPrompts();renderCounsel();renderCheat();renderEA();renderLibrary();renderReferences();renderCopilot();
