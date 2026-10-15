@@ -142,8 +142,20 @@ function bindChallenge(root){
 /* ---------- Routing ---------- */
 let currentView = null;
 function parseHash(){
-  const m=(location.hash||"").match(/^#\/([\w-]+)(?:\/(.+))?$/);
-  return m?{v:m[1],sub:m[2]?decodeURIComponent(m[2]):null}:null;
+  const raw=location.hash||"";
+  let m=raw.match(/^#\/([\w-]+)(?:\/(.*))?$/);
+  if(!m){
+    const leg=raw.match(/^#(views|architecture)(?:\/(.*))?$/);
+    if(!leg) return null;
+    m=["",leg[1],leg[2]];
+  }
+  let v=m[1], sub=m[2]?decodeURIComponent(m[2]):null;
+  if(v==="architecture") v="views";
+  if(v==="views"){
+    const canon="#/views"+(sub?"/"+sub:"");
+    if(raw!==canon) history.replaceState(null,"",canon);
+  }
+  return {v,sub};
 }
 function show(v,sub){
   if(!VIEWS[v]||!document.getElementById("v-"+v)) v="today";
@@ -163,10 +175,24 @@ function show(v,sub){
   pauseHiddenMedia();
   if(v==="today") renderToday();
   if(v==="shorts"){ if(sub) selectShortById(sub,false); renderShorts(); }
+  if(v==="views" && typeof knownViewTab==="function"){
+    const prev=LS.get(KEY+"viewTab","conceptual");
+    let tab=knownViewTab(sub);
+    if(!tab){
+      tab=knownViewTab(prev)?prev:"conceptual";
+      const canon="#/views/"+tab;
+      if(location.hash!==canon) history.replaceState(null,"",canon);
+    }
+    LS.set(KEY+"viewTab", tab);
+    renderViews();
+    if(!changed && prev!==tab){ const main=$("#main"); if(main) main.scrollTop=0; window.scrollTo(0,0); }
+  }
   if(changed){
     const main=$("#main"); if(main) main.scrollTop=0;
     window.scrollTo(0,0);
   }
+  const cur=document.querySelector("#nav .nav-item.active");
+  if(cur && cur.scrollIntoView) cur.scrollIntoView({block:"nearest"});
   if(v==="copilot" && typeof focusCopilot==="function") focusCopilot(sub);
 }
 window.go = function(v){
@@ -527,7 +553,7 @@ function renderToday(){
       <p class="lead">${chDone(ch)?"Today's challenge is done. Anything more is a bonus.":"Three rounds, about three minutes. Keep the streak going."}</p></div>
     <div class="streak ${st?"on":""}" title="Days in a row with the daily challenge completed"><b>${st}</b><span>day streak</span></div>
   </div>
-  <div class="note whats-new"><b>What's new · 15 Oct 2026.</b> Microsoft Copilot deep dive, checked against Learn the same day: the rename, three processor types, Anthropic defaults and the apps setting, usage-based Cowork and Copilot Code, and the federated write confirmation card. <a href="#/copilot">Open the deep dive</a> · <a href="#/copilot/models">Models</a></div>
+  <div class="note whats-new"><b>What's new · 15 Oct 2026.</b> Architecture views now deep-link, including the Copilot <a href="#/views/prompt-path">prompt path</a>, <a href="#/views/identity">identity and access</a>, <a href="#/views/connectors">connectors</a>, and <a href="#/views/agents">agents</a>. The sidebar item stays clickable when the window is short. The Microsoft Copilot deep dive is unchanged: <a href="#/copilot">open it</a> · <a href="#/copilot/models">models</a>.</div>
   ${challengeHTML()}
   <div class="today-grid">
     ${cs?h`<a class="hero-card" href="#/shorts/${encodeURIComponent(cs.id)}">
@@ -626,6 +652,7 @@ function buildPaletteIndex(){
     .concat(DATA.checklist.map((c,i)=>({kind:"Failure",label:c.title,sub:c.view,go:()=>{LS.set(KEY+"cl-open:"+i,true);LS.set(KEY+"fmView","all");renderCounsel();go("failures");}})))
     .concat((window.LIBRARY||[]).map(p=>({kind:"Note",label:p.title,sub:p.section,go:()=>{location.href="library/"+p.slug+".html";}})))
     .concat(SOURCES.map(s=>({kind:"Source",label:"S"+s.n+" · "+s.t,sub:s.type,go:()=>{window.open(s.u,"_blank","noopener");}})))
+    .concat((window.VIEW_TABS||[]).map(([id,label])=>({kind:"View",label:label,sub:"Architecture views",go:()=>{location.hash="#/views/"+id;}})))
     .concat((DATA.copilot&&DATA.copilot.blocks||[]).map(b=>({kind:"Copilot",label:b.n+" · "+b.title,sub:"Microsoft Copilot deep dive",go:()=>{location.hash="#/copilot/"+b.id;}})))
     .concat((DATA.copilot&&DATA.copilot.prompts||[]).map(p=>({kind:"Prompt",label:p.title,sub:"Copilot deep dive",go:()=>{location.hash="#/copilot/checks";}})));
 }

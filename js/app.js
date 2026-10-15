@@ -18,13 +18,9 @@ const LS={
 const KEY="lm365dw:";
 
 function go(v){
-  $$("#nav .nav-item").forEach(el=>el.classList.toggle("active",el.dataset.v===v));
-  $$("section.view").forEach(el=>el.classList.toggle("active",el.id==="v-"+v));
-  LS.set(KEY+"view",v);
-  if(location.hash!=="#"+v) history.replaceState(null,"","#"+v);
-  window.scrollTo(0,0); const mc=$(".main-content"); if(mc) mc.scrollTop=0;
+  const target="#/"+String(v||"today").replace(/^#\/?/,"");
+  if(location.hash!==target) location.hash=target;
 }
-$$("#nav .nav-item").forEach(el=>el.onclick=()=>go(el.dataset.v));
 
 function lib(slug,label){return `<a href="library/${slug}.html">${esc(label||"Open full note")} ↗</a>`;}
 
@@ -70,7 +66,7 @@ function renderDashboard(){
   <div class="note"><b>Mission.</b> By the end you can draw the conceptual, logical, and physical views from memory; say when to sync, when to federate, and when to call an API; trace the AI data path and name the control that stops oversharing; and defend that Copilot is a consumer of the integration layer, not a bypass around it. ${lib("mission","Mission note")} · ${lib("day-plan","Timed day plan")}</div>
   <div class="grid">
     <div class="card"><h3>Curriculum</h3><p style="color:var(--text-secondary);font-size:.86rem">Eight timed blocks with action steps, artifact previews, and "why this matters" notes.</p><div class="btnrow" style="margin:.8rem 0 0"><button class="b" onclick="go('curriculum')">Open curriculum →</button></div></div>
-    <div class="card"><h3>Architecture views</h3><p style="color:var(--text-secondary);font-size:.86rem">Conceptual, logical, physical, integration and AI, plus the government cloud matrix, with diagrams.</p><div class="btnrow" style="margin:.8rem 0 0"><button class="b" onclick="go('views')">Open views →</button></div></div>
+    <div class="card"><h3>Architecture views</h3><p style="color:var(--text-secondary);font-size:.86rem">Conceptual, logical, and physical, plus the Copilot prompt path, identity, connectors, and where agents sit. Each view has its own link.</p><div class="btnrow" style="margin:.8rem 0 0"><button class="b" onclick="go('views')">Open views →</button></div></div>
     <div class="card"><h3>Progress map</h3><p style="color:var(--text-secondary);font-size:.86rem">The 100 / 200 / 300 ladder across five lanes. Self-rate each rung.</p><div class="btnrow" style="margin:.8rem 0 0"><button class="b" onclick="go('map')">Open map →</button></div></div>
     <div class="card"><h3>Flashcards and quiz</h3><p style="color:var(--text-secondary);font-size:.86rem">${DATA.glossary.length} spaced-repetition cards and the ${DATA.quiz.length}-question design-review quiz bank.</p><div class="btnrow" style="margin:.8rem 0 0"><button class="b" onclick="go('flash')">Flashcards →</button><button class="b" onclick="go('quiz')">Quiz →</button></div></div>
     <div class="card"><h3>Shorts and media</h3><p style="color:var(--text-secondary);font-size:.86rem">${(window.SHORTS&&SHORTS.total)||0} vertical NotebookLM explainers, the 8.5-minute narrated deep-dive cut, and the audio overview.</p><div class="btnrow" style="margin:.8rem 0 0"><button class="b" onclick="go('shorts')">Open media →</button><button class="b" onclick="go('deck')">Slide deck →</button></div></div>
@@ -120,6 +116,24 @@ function renderCurriculum(){
 }
 
 /* ---- Architecture views ---- */
+const VIEW_TABS=[
+  ["conceptual","Conceptual"],
+  ["logical","Logical"],
+  ["physical","Physical"],
+  ["integration","Integration & AI"],
+  ["govcloud","Government clouds"],
+  ["prompt-path","Prompt path"],
+  ["identity","Identity & access"],
+  ["connectors","Connectors"],
+  ["agents","Agents & Studio"]
+];
+window.VIEW_TABS=VIEW_TABS;
+function knownViewTab(sub){
+  if(!sub) return null;
+  const id=String(sub).split("/")[0];
+  return VIEW_TABS.some(t=>t[0]===id)?id:null;
+}
+window.knownViewTab=knownViewTab;
 function cell(c){
   const s=String(c);
   if(s.startsWith("GAP:")) return `<td class="gap">${ec(s.slice(4))}</td>`;
@@ -127,21 +141,63 @@ function cell(c){
   return `<td>${ec(s)}</td>`;
 }
 function tableHTML(t){return `<h3 style="margin:1.2rem 0 .3rem;font-size:1rem">${esc(t.h)}</h3><table class="tbl"><thead><tr>${t.cols.map(c=>`<th>${esc(c)}</th>`).join("")}</tr></thead><tbody>${t.rows.map(r=>`<tr>${r.map(cell).join("")}</tr>`).join("")}</tbody></table>`;}
+function archDiagram(kind){
+  const box=(x,y,w,h,t,sub)=>`<g><rect class="abox" x="${x}" y="${y}" width="${w}" height="${h}" rx="8"/><text class="at" x="${x+w/2}" y="${y+(sub?24:h/2+5)}" text-anchor="middle">${t}</text>${sub?`<text class="asub" x="${x+w/2}" y="${y+42}" text-anchor="middle">${sub}</text>`:""}</g>`;
+  const arrow=(x1,y1,x2)=>`<line class="aarr" x1="${x1}" y1="${y1}" x2="${x2}" y2="${y1}" marker-end="url(#ah)"/>`;
+  const defs=`<defs><marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="ahead" d="M1 1L8 5L1 9"/></marker></defs>`;
+  let body="", cap="", label="", vb="0 0 760 150";
+  if(kind==="prompt"){
+    label="Prompt path from the user through Graph grounding and the model, back to the app";
+    const steps=[["User","in the app"],["App","M365 app"],["Grounding","Microsoft Graph"],["LLM","grounded prompt"],["Response","back to the app"]];
+    body=steps.map((s,i)=>box(16+i*148,36,136,64,s[0],s[1])).join("")+steps.slice(0,-1).map((_,i)=>arrow(152+i*148,68,164+i*148)).join("");
+    cap="Logical path from the architecture article. A write stays in the source system. Copilot is not the integration bus.";
+  } else if(kind==="identity"){
+    label="Identity and access: the Microsoft 365 boundary, the user's permissions, and the controls around them";
+    vb="0 0 760 210";
+    body=`<rect class="abound" x="12" y="16" width="736" height="178" rx="12"/><text class="asub" x="28" y="36">MICROSOFT 365 SERVICE BOUNDARY</text>`
+      +box(250,48,260,58,"User permissions","not the whole tenant")
+      +box(24,124,170,52,"Entra","CA and MFA")
+      +box(206,124,170,52,"RSS","not a boundary")
+      +box(388,124,170,52,"SAM","oversharing")
+      +box(570,124,160,52,"Purview","labels and DLP");
+    cap="Physical controls named on the architecture page. RSS does not change SharePoint permissions.";
+  } else if(kind==="connectors"){
+    label="Connector fork: synced content lands in Graph; federated content stays in the source";
+    vb="0 0 760 200";
+    body=box(300,16,160,52,"Source system","system of record")
+      +`<line class="aarr" x1="340" y1="68" x2="180" y2="108" marker-end="url(#ah)"/><line class="aarr" x1="420" y1="68" x2="580" y2="108" marker-end="url(#ah)"/>`
+      +box(70,112,230,64,"Synced","Graph externalItem + ACL")
+      +box(460,112,230,64,"Federated","MCP, no Graph copy");
+    cap="Logical fork. Neither path makes Copilot the owner of the source record.";
+  } else if(kind==="agents"){
+    label="Declarative agents stay on Copilot's orchestrator inside Microsoft 365. A custom engine can leave that host.";
+    vb="0 0 760 200";
+    body=`<rect class="abound" x="16" y="16" width="440" height="168" rx="12"/><text class="asub" x="32" y="36">MICROSOFT 365 BOUNDARY</text>`
+      +box(70,58,330,64,"Declarative agent","Copilot orchestrator and models")
+      +box(490,58,240,64,"Custom engine","own model and host")
+      +`<text class="asub" x="236" y="160" text-anchor="middle">Copilot Studio can build either. It is not the integration bus.</text>`;
+    cap="Conceptual placement. Actions still land in the other system of record.";
+  } else return "";
+  return `<figure class="arch-fig"><svg class="arch-svg" viewBox="${vb}" role="img" aria-label="${esc(label)}">${defs}${body}</svg><figcaption>${esc(cap)}</figcaption></figure>`;
+}
 function renderViews(){
   const el=$("#v-views");
-  const tabs=[["conceptual","Conceptual"],["logical","Logical"],["physical","Physical"],["integration","Integration & AI"],["govcloud","Government clouds"]];
-  const tab=LS.get(KEY+"viewTab","conceptual");
+  let tab=LS.get(KEY+"viewTab","conceptual");
+  if(!knownViewTab(tab)) tab="conceptual";
+  const ALT={conceptual:"Conceptual",logical:"Logical",physical:"Physical",integration:"Integration",govcloud:"Physical"};
   const V=DATA.views[tab];
+  if(!V){el.innerHTML=`<h2 class="vh">Architecture views</h2><p class="lead">That view is not in this pack.</p>`;return;}
   let h=`<h2 class="vh">Architecture views</h2>
-  <p class="lead">The four views built during blocks 2-5, at their own altitude. Click any diagram to enlarge. The full notes (with the Mermaid sources and every table) are in the Library.</p>
-  <div class="ea-subnav">${tabs.map(([k,l])=>`<button class="ea-tab-btn ${tab===k?"active":""}" data-vt="${k}">${l}</button>`).join("")}</div>
-  <div class="note"><b>Altitude rule.</b> ${ec(V.rule)} ${lib(V.lib,"Full view note")}</div>`;
+  <p class="lead">Each tab is its own link, so a view can be opened directly. Conceptual, logical, and physical stay at their own altitude. The Copilot views name the prompt path, identity, connectors, and where agents sit. Copilot is not the integration bus. Click a library diagram to enlarge.</p>
+  <nav class="ea-subnav" aria-label="Architecture views">${VIEW_TABS.map(([k,l])=>`<a class="ea-tab-btn ${tab===k?"active":""}" role="tab" aria-selected="${tab===k}" href="#/views/${k}">${esc(l)}</a>`).join("")}</nav>
+  <div class="note"><span class="alt-k">${esc(V.altitude||ALT[tab]||"View")}</span> ${ec(V.rule)} ${V.lib?lib(V.lib,"Full view note"):""}</div>`;
   if(tab==="govcloud") h+=`<div class="note good"><b>Verify in the tenant.</b> ${ec("Commercial connector docs are not a promise about GCC, GCC High, or DoD. Confirm federated MCP and the synced connector you named before you commit the design.")}</div>`;
-  V.img.forEach(f=>h+=`<img class="diagram" src="assets/diagrams/${f}" alt="${esc(f)}" loading="lazy">`);
-  V.tables.forEach(t=>h+=tableHTML(t));
+  if(V.diagram) h+=archDiagram(V.diagram);
+  (V.img||[]).forEach(f=>h+=`<img class="diagram" src="assets/diagrams/${f}" alt="${esc(f)}" loading="lazy">`);
+  (V.tables||[]).forEach(t=>h+=tableHTML(t));
+  if(V.bus) h+=`<div class="note"><b>Pack rule.</b> ${ec("Copilot is not the integration bus. The architecture article walks a prompt through grounding and a model, then back to the app. It does not make Copilot the system that owns HR, ITSM, or GitHub state [S11] [S4].")}</div>`;
   if(tab==="integration") h+=`<div class="note"><b>ACL note.</b> ${ec("On a synced connector, mapping source entitlements onto the Graph externalItem ACL is the step that cannot be sloppy. A wide map makes restricted source data searchable across the tenant.")}</div>`;
   el.innerHTML=h;
-  $$("[data-vt]",el).forEach(b=>b.onclick=()=>{LS.set(KEY+"viewTab",b.dataset.vt);renderViews();});
 }
 
 /* ---- Progress map ---- */

@@ -539,6 +539,26 @@ const SOURCES = [
     "trust": "high",
     "b": "USL vs Copilot Credits",
     "ledger": "54"
+  },
+  {
+    "n": 55,
+    "g": "Microsoft Learn",
+    "t": "Restricted SharePoint Search",
+    "u": "https://learn.microsoft.com/en-us/sharepoint/restricted-sharepoint-search",
+    "type": "docs",
+    "trust": "high",
+    "b": "RSS allow list, not a security boundary, retirement",
+    "ledger": "55"
+  },
+  {
+    "n": 56,
+    "g": "Microsoft Learn",
+    "t": "Semantic indexing for Microsoft Copilot",
+    "u": "https://learn.microsoft.com/en-us/microsoftsearch/semantic-index-for-copilot",
+    "type": "docs",
+    "trust": "high",
+    "b": "semantic index does not change permissions",
+    "ledger": "56"
   }
 ];
 
@@ -1973,10 +1993,10 @@ const DATA = {
             ],
             [
               "Synced and federated connectors",
-              "Documented on Microsoft Learn [S3] [S4]",
-              "UNVERIFIED",
-              "UNVERIFIED",
-              "UNVERIFIED"
+              "Synced indexes into Graph. Federated fetches live and does not index into Microsoft 365 [S3] [S4] [S2]",
+              "Build overview lists synced availability as Global, GCC, GCC High, and DoD. Federated availability varies by connector. Confirm the connector you named [S2]",
+              "Same statement as GCC. A named connector is still UNVERIFIED until that environment's service description says so [S2]",
+              "Same statement as GCC. A named connector is still UNVERIFIED until that environment's service description says so [S2]"
             ],
             [
               "GitHub Copilot and GitHub Apps",
@@ -1992,6 +2012,129 @@ const DATA = {
               "UNVERIFIED",
               "UNVERIFIED"
             ]
+          ]
+        }
+      ]
+    },
+    "prompt-path": {
+      "lib": "view-04-integration-ai",
+      "altitude": "Logical",
+      "diagram": "prompt",
+      "img": [],
+      "bus": true,
+      "rule": "Logical means the payload, not the SKU. A prompt is grounded, sent to a model, and returned to the app. It does not become the path that owns another system's records.",
+      "tables": [
+        {
+          "h": "Prompt walk",
+          "cols": ["Step", "What moves", "What it is not"],
+          "rows": [
+            ["User in an app", "A person enters a prompt in a Microsoft 365 app such as Word or PowerPoint [S11]", "Not a direct call from Copilot into a line-of-business system"],
+            ["Grounding", "Copilot preprocesses the prompt and accesses Microsoft Graph in the user's tenant. Grounding can include text from input files or other content Copilot discovers. Data used to generate the response is encrypted in transit [S11]", "Not a copy of the whole tenant"],
+            ["Model", "Copilot sends the grounded prompt to the LLM. The LLM generates a response for the user's task [S11]", "Not the system of record"],
+            ["After the model", "Post-processing runs more Graph grounding, plus responsible AI, security, compliance, and privacy checks [S36]", "Not a raw model call with the safety step skipped"],
+            ["Response", "Copilot returns the response to the app and the user [S11]", "Not a write to an external system"]
+          ]
+        },
+        {
+          "h": "What stays off this path",
+          "cols": ["Need", "Where it belongs", "Source"],
+          "rows": [
+            ["Durable external knowledge people will search again", "Synced connector. The item is indexed into Microsoft Graph with content, metadata, and an ACL", "[S3] [S15]"],
+            ["Live, sensitive, or fast-changing facts", "Federated connector. The source system stays the system of record and nothing is indexed into Microsoft 365", "[S3] [S4]"],
+            ["A create, update, or delete", "The source system. On a federated connector the write section is still headed Coming soon, and nothing is sent until the user answers the confirmation card", "[S4]"],
+            ["Optional web grounding", "A separate Bing query with user and tenant identifiers removed. Not the same hop as Graph grounding", "[S41]"]
+          ]
+        }
+      ]
+    },
+    "identity": {
+      "lib": "view-03-physical",
+      "altitude": "Physical",
+      "diagram": "identity",
+      "img": [],
+      "bus": true,
+      "rule": "Physical means the named control. Being inside the Microsoft 365 service boundary does not give Copilot the whole tenant. Access follows the signed-in user.",
+      "tables": [
+        {
+          "h": "Boundary and permissions",
+          "cols": ["Control", "What the page says", "Altitude"],
+          "rows": [
+            ["Service boundary", "The tenant sits inside the Microsoft 365 service boundary. Operating there does not grant tenant-wide visibility. Data access stays scoped to the signed-in user's permissions [S11]", "Conceptual"],
+            ["User permissions", "Copilot only accesses data the signed-in user is authorized to access, for example through existing Microsoft 365 role-based access controls. It does not access data the user cannot open [S11]", "Logical"],
+            ["Semantic index", "Indexing data does not change access permissions, and it does not change how users should share [S56]", "Logical"],
+            ["Entra Conditional Access and MFA", "Copilot honors Conditional Access policies and multifactor authentication, including device compliance when you configure it. It uses the same MFA already set for the tenant [S11] [S19]", "Physical"],
+            ["Restricted SharePoint Search", "A SharePoint admin allow list, 100 sites maximum, for organization-wide search and, as a temporary measure, Copilot chat and agentic experiences. Off by default. It is not a security boundary and does not change site permissions. Users can still use files they own or previously accessed. New enablement is blocked starting 31 July 2026 [S55]", "Physical"],
+            ["SharePoint Advanced Management and Purview", "The architecture page names Restricted SharePoint Search, SharePoint Advanced Management, and Microsoft Purview as the services that help control access. The RSS page says to use SAM to remediate oversharing, then turn RSS off [S11] [S55] [S46]", "Physical"]
+          ]
+        },
+        {
+          "h": "Still open",
+          "cols": ["Item", "Status"],
+          "rows": [
+            ["RSS or SAM in a named GCC, GCC High, or DoD tenant", "UNVERIFIED. These pages are commercial guidance, not a government service description [S55] [S27]"],
+            ["Restricted Content Discovery as a replacement for RSS", "The RSS page points at it for content discoverability. This view does not restate RCD's rules beyond that pointer [S55]"]
+          ]
+        }
+      ]
+    },
+    "connectors": {
+      "lib": "view-02-logical",
+      "altitude": "Logical",
+      "diagram": "connectors",
+      "img": [],
+      "bus": true,
+      "rule": "Logical fork. Synced copies into Microsoft Graph. Federated does not. Pick the fork from the data, not from the product name.",
+      "tables": [
+        {
+          "h": "Three ways the connectors overview splits the work",
+          "cols": ["", "Synced, tenant", "Synced, self-serve", "Federated"],
+          "rows": [
+            ["Data", "Indexed into Microsoft 365", "Indexed into Microsoft 365", "Fetched live [S3]"],
+            ["Access", "Organization-level", "User-level", "User-level [S3]"],
+            ["Setup", "Admin configures", "Admin enables, users authenticate", "Admin enables, users authenticate [S3]"],
+            ["Use when", "Broad indexing", "Personally relevant content", "Sensitive, dynamic, or live sources [S3]"],
+            ["Custom connector", "Yes", "No", "No, on this overview [S3]"]
+          ]
+        },
+        {
+          "h": "Where the bytes sit",
+          "cols": ["Pattern", "Physical fact", "Source"],
+          "rows": [
+            ["Synced", "Content, metadata such as title and URL, and an ACL are ingested into Microsoft Graph. Search and Copilot show an item only to someone who can access it in the source. The index is kept in sync", "[S3] [S15]"],
+            ["Synced schema", "The build overview says the synced schema is externalItem, semantic indexing is supported, and auth is a Microsoft Entra ID app registration", "[S2] [S18]"],
+            ["Federated", "MCP fetch at query time. No indexing into Microsoft 365. The source enforces permissions. OAuth 2.0", "[S3] [S4] [S2]"],
+            ["Write", "The federated write section is still headed Coming soon. Nothing is sent until the user picks Allow once, Allow for conversation, Always allow, or Cancel. Read tools do not ask. The connectors overview also still says federated connectors are read-only and that write actions start in early October 2026. Teach the card, and do not collapse those sentences", "[S4] [S3]"],
+            ["Government clouds", "The build overview says Copilot connectors are available in commercial, GCC, GCC High, and DoD, lists synced availability as Global, GCC, GCCH, and DoD, and says federated availability varies by connector. Confirm the connector you named", "[S2]"]
+          ]
+        }
+      ]
+    },
+    "agents": {
+      "lib": "view-01-conceptual",
+      "altitude": "Conceptual",
+      "diagram": "agents",
+      "img": [],
+      "bus": true,
+      "rule": "Conceptual placement against the Microsoft 365 boundary. A declarative agent stays on Copilot's orchestrator. A custom engine brings its own. Neither one is the integration bus.",
+      "tables": [
+        {
+          "h": "Where the agent runs",
+          "cols": ["", "Declarative agent", "Custom engine agent"],
+          "rows": [
+            ["Orchestrator and models", "Copilot's. No extra host [S38]", "Yours. You pick the model and the orchestration [S38]"],
+            ["Hosting", "In Microsoft 365 [S38]", "In Microsoft 365 with Copilot Studio, or outside, typically Azure. You own compliance for that engine [S38]"],
+            ["Channels", "Microsoft 365 apps such as Teams, Word, Excel, and Outlook [S38]", "Microsoft 365 and external apps [S38]"],
+            ["Proactive triggers", "Not supported. The user starts the interaction [S38]", "Supported [S38]"],
+            ["Knowledge and actions", "Instructions, Microsoft 365 knowledge, Copilot connectors, and API actions [S38] [S3]", "Your own integrations. The other system remains the system of record [S38] [S4]"]
+          ]
+        },
+        {
+          "h": "Copilot Studio",
+          "cols": ["Placement", "What to say"],
+          "rows": [
+            ["Build tool", "The agents article names Copilot Studio as a way to build a declarative agent, and as one host for a custom engine alongside an external host such as Azure [S38]"],
+            ["Not GitHub Copilot", "GitHub Copilot is documented as its own product. Do not treat a Microsoft Copilot architecture as a GitHub Copilot architecture [S12]"],
+            ["Not the bus", "An action can call an API or a connector tool. The record changes in the source system, under that system's permissions, not because the prompt said so [S38] [S4]"]
           ]
         }
       ]
@@ -2819,9 +2962,19 @@ DATA.glossary = [
     "rung": 200,
     "essential": false,
     "definition": "SharePoint controls the Copilot overview cites for reducing oversharing and cleaning inactive sites, so Copilot has a smaller, better-governed set of sources. Restricted content discovery can keep a site out of organization-wide search and Copilot while you review it.",
-    "see_also": "Oversharing, Grounding",
-    "where": "Copilot deep dive",
+    "see_also": "Oversharing, Grounding, Restricted SharePoint Search",
+    "where": "Copilot deep dive, Identity architecture view",
     "source": "[S10] [S46]"
+  },
+  {
+    "category": "Data protection",
+    "term": "Restricted SharePoint Search",
+    "rung": 200,
+    "essential": true,
+    "definition": "A SharePoint admin allow list of at most 100 sites. It limits organization-wide search and, as a temporary measure, Copilot chat and agentic experiences. It is off by default. It is not a security boundary and does not change SharePoint permissions. Users can still open files they own or previously accessed. New enablement is blocked starting 31 July 2026. SharePoint Advanced Management is the cleanup path the same page points to.",
+    "see_also": "SharePoint Advanced Management, Permission fidelity",
+    "where": "Identity architecture view",
+    "source": "[S55] [S11]"
   },
   {
     "category": "Data protection",

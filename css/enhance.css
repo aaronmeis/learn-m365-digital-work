@@ -21,8 +21,11 @@ a.nav-item:hover{text-decoration:none}
 .nav-group .nav-item{padding:.5rem 1rem;font-size:.86rem}
 .nav-search{margin:.4rem .75rem .8rem;display:flex;align-items:center;justify-content:space-between;gap:.5rem;background:var(--card-bg);border:1px solid var(--border-color);color:var(--text-dim);border-radius:8px;padding:.5rem .7rem;font:inherit;font-size:.78rem;cursor:pointer}
 .nav-search:hover{border-color:var(--accent-color);color:var(--text-primary)}
-.sidebar{overflow:hidden}
-.sidebar .nav-links{min-height:0}
+.sidebar{overflow:hidden;min-height:0;height:100%}
+.sidebar-header-box,.nav-search{flex:0 0 auto}
+.sidebar .nav-links{min-height:0;flex:1 1 auto;overflow-y:auto;position:relative;z-index:1}
+.sidebar-foot{flex:0 0 auto;background:var(--sidebar-bg);position:relative;z-index:2;padding:.7rem 1.1rem .85rem}
+.nav-disclaimer{margin:0;line-height:1.45}
 .data-row{display:flex;gap:.8rem;margin-bottom:.7rem}
 .linkbtn{background:none;border:none;color:var(--accent-color);font:inherit;font-size:.74rem;cursor:pointer;padding:0}
 .linkbtn:hover{text-decoration:underline}
@@ -275,3 +278,69 @@ a.nav-item:hover{text-decoration:none}
 .ch-sum a.b{display:inline-flex;align-items:center}
 .ch-sum a.b:hover{text-decoration:none}
 @media (max-width:1100px){.ch-rounds{grid-template-columns:1fr}}
+
+/* Architecture views: Learn house style. Black, white, signal yellow, mid-gray.
+   Scoped so Primer, Geist, and Catppuccin accents do not paint this page. */
+#v-views{
+  --accent-color:#F3EE6E;
+  --text-primary:#FFFFFF;
+  --text-secondary:#FFFFFF;
+  --text-dim:#8A8A8A;
+  --border-color:#2a2a2a;
+  --card-bg:#141414;
+  --card-bg2:#0f0f0f;
+  --hover-bg:rgba(243,238,110,.16);
+  background:#000000;
+  color:#FFFFFF;
+  border:1px solid #2a2a2a;
+  border-radius:16px;
+  padding:1.15rem 1.25rem 1.4rem;
+  font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+[data-theme$="-light"] #v-views{
+  --accent-color:#000000;
+  --text-primary:#000000;
+  --text-secondary:#000000;
+  --text-dim:#8A8A8A;
+  --border-color:#e2e2e2;
+  --card-bg:#FFFFFF;
+  --card-bg2:#f7f7f7;
+  --hover-bg:rgba(243,238,110,.45);
+  background:#FFFFFF;
+  color:#000000;
+  border-color:#e2e2e2;
+}
+#v-views h2,#v-views h3,#v-views .vh{color:var(--text-primary);background:none;-webkit-text-fill-color:currentColor}
+#v-views .lead,#v-views .note,#v-views td,#v-views figcaption{color:var(--text-primary)}
+#v-views .lead{color:#8A8A8A}
+[data-theme$="-light"] #v-views .lead{color:#8A8A8A}
+#v-views a{color:#F3EE6E}
+[data-theme$="-light"] #v-views a{color:#000000;text-decoration-color:#F3EE6E;text-decoration-thickness:2px}
+#v-views a:hover{color:#000000;background:#F3EE6E;text-decoration:none}
+#v-views .ea-subnav{border-bottom-color:#2a2a2a}
+[data-theme$="-light"] #v-views .ea-subnav{border-bottom-color:#e2e2e2}
+#v-views .ea-tab-btn{
+  background:transparent;color:var(--text-primary);border:1px solid var(--border-color);
+  text-decoration:none;border-radius:999px;box-shadow:none;
+}
+#v-views .ea-tab-btn:hover,
+#v-views .ea-tab-btn.active,
+#v-views .ea-tab-btn[aria-selected="true"]{
+  background:#F3EE6E;color:#000000;border-color:#F3EE6E;box-shadow:none;
+}
+#v-views .note{border-left-color:#F3EE6E;background:var(--card-bg2)}
+#v-views .note.good{border-left-color:#F3EE6E}
+#v-views .tbl th{color:#000000;background:#F3EE6E;border-color:#F3EE6E}
+#v-views .tbl td{border-color:var(--border-color);background:var(--card-bg)}
+#v-views .cite{color:#000000;background:#F3EE6E;border:1px solid #F3EE6E}
+#v-views .cite:hover{color:#F3EE6E;background:#000000}
+#v-views .arch-fig{margin:.2rem 0 1rem}
+#v-views .arch-svg{width:100%;height:auto;display:block;background:var(--card-bg2);border:1px solid var(--border-color);border-radius:12px}
+#v-views .arch-svg .abox{fill:var(--card-bg);stroke:#F3EE6E;stroke-width:1.4}
+#v-views .arch-svg .abound{fill:none;stroke:#8A8A8A;stroke-width:1.2;stroke-dasharray:5 4}
+#v-views .arch-svg .at{fill:var(--text-primary);font-size:13px;font-weight:700;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+#v-views .arch-svg .asub{fill:#8A8A8A;font-size:11px;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+#v-views .arch-svg .aarr{stroke:#F3EE6E;stroke-width:1.6}
+#v-views .arch-svg .ahead{fill:none;stroke:#F3EE6E;stroke-width:1.6}
+#v-views figcaption{font-size:.8rem;color:#8A8A8A;margin-top:.35rem}
+#v-views .alt-k{display:inline-block;background:#F3EE6E;color:#000000;font-size:.68rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;border-radius:4px;padding:.08rem .4rem;margin-right:.35rem}
