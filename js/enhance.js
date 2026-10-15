@@ -553,7 +553,7 @@ function renderToday(){
       <p class="lead">${chDone(ch)?"Today's challenge is done. Anything more is a bonus.":"Three rounds, about three minutes. Keep the streak going."}</p></div>
     <div class="streak ${st?"on":""}" title="Days in a row with the daily challenge completed"><b>${st}</b><span>day streak</span></div>
   </div>
-  <div class="note whats-new"><b>What's new · 15 Oct 2026.</b> Architecture views now deep-link, including the Copilot <a href="#/views/prompt-path">prompt path</a>, <a href="#/views/identity">identity and access</a>, <a href="#/views/connectors">connectors</a>, and <a href="#/views/agents">agents</a>. The sidebar item stays clickable when the window is short. The Microsoft Copilot deep dive is unchanged: <a href="#/copilot">open it</a> · <a href="#/copilot/models">models</a>.</div>
+  <div class="note whats-new"><b>What's new · 15 Oct 2026.</b> Architecture views now deep-link, including the Copilot <a href="#/views/prompt-path">prompt path</a>, <a href="#/views/identity">identity and access</a>, <a href="#/views/connectors">connectors</a>, and <a href="#/views/agents">agents</a>. The sidebar item stays clickable when the window is short. The <a href="#/copilot/models">Copilot deep dive</a> now names the models Microsoft Learn lists as of October 2026.</div>
   ${challengeHTML()}
   <div class="today-grid">
     ${cs?h`<a class="hero-card" href="#/shorts/${encodeURIComponent(cs.id)}">
@@ -654,6 +654,7 @@ function buildPaletteIndex(){
     .concat(SOURCES.map(s=>({kind:"Source",label:"S"+s.n+" · "+s.t,sub:s.type,go:()=>{window.open(s.u,"_blank","noopener");}})))
     .concat((window.VIEW_TABS||[]).map(([id,label])=>({kind:"View",label:label,sub:"Architecture views",go:()=>{location.hash="#/views/"+id;}})))
     .concat((DATA.copilot&&DATA.copilot.blocks||[]).map(b=>({kind:"Copilot",label:b.n+" · "+b.title,sub:"Microsoft Copilot deep dive",go:()=>{location.hash="#/copilot/"+b.id;}})))
+    .concat((DATA.copilot&&DATA.copilot.modelMap?DATA.copilot.modelMap.rows:[]).map(r=>({kind:"Model",label:r[0],sub:r[1],go:()=>{location.hash="#/copilot/models";}})))
     .concat((DATA.copilot&&DATA.copilot.prompts||[]).map(p=>({kind:"Prompt",label:p.title,sub:"Copilot deep dive",go:()=>{location.hash="#/copilot/checks";}})));
 }
 function openPalette(){

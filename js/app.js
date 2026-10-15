@@ -414,7 +414,7 @@ function renderPrompts(){
   const el=$("#v-prompts");
   const pl=(window.LIBRARY||[]).filter(p=>p.section==="Prompts");
   let h=`<h2 class="vh">Prompt library</h2>
-  <p class="lead">Study prompts for any LLM, plus the NotebookLM prompts that generated this pack's reports and media.</p>
+  <p class="lead">Study prompts that stay on public documentation. No tenant names, secrets, or customer data. The NotebookLM prompts that generated this pack's reports and media are below.</p>
   <div class="note danger"><b>Data hygiene.</b> No tenant names, secrets, credentials, or customer data in any model. Use synthetic designs and public Microsoft documentation.</div>`;
   DATA.prompts.forEach(p=>{
     h+=`<div class="promptcat"><h3>${esc(p.cat)} <span class="pill">${esc(p.model)}</span></h3>
@@ -546,7 +546,7 @@ function renderCopilot(){
   const paras=arr=>(arr||[]).map(t=>`<p>${ec(t)}</p>`).join("");
   let h=`<span class="badge">COPILOT DEEP DIVE · ${esc(C.asOf)}</span>
   <h1 style="margin-top:.9rem">Microsoft Copilot deep dive</h1>
-  <p class="lead">What it is, how a prompt walks the stack, who picks the model, and where the trust boundary stops. Every claim has an S# chip. Government-cloud parity stays UNVERIFIED unless a government service description says otherwise. Learn pages were read ${esc(C.asOf)}. Model menus change; this note records the control, not a frozen SKU list.</p>
+  <p class="lead">What it is, how a prompt walks the stack, which models Learn names as of October 2026, and where the trust boundary stops. Every claim has an S# chip. Government-cloud parity stays UNVERIFIED unless a government service description says otherwise. Learn pages were read ${esc(C.asOf)}.</p>
   <div class="alias-card" id="cop-aliases">
     <h2>Rename and aliases</h2>
     <p>Use the current name in new writing. Keep the old name as an alias so older notes and license screens still match.</p>
@@ -558,6 +558,9 @@ function renderCopilot(){
   C.blocks.forEach(b=>{
     h+=`<section class="card cop-block" id="cop-${esc(b.id)}"><h2>${esc(b.n)} · ${esc(b.title)}</h2>${paras(b.paras)}`;
     if(b.reveals) h+=b.reveals.map(r=>`<details class="why-matters"><summary>${esc(r.q)}</summary><p>${ec(r.a)}</p></details>`).join("");
+    if(b.id==="models"&&C.modelMap){
+      h+=`<table class="tbl"><thead><tr>${C.modelMap.cols.map(c=>`<th>${esc(c)}</th>`).join("")}</tr></thead><tbody>${C.modelMap.rows.map(r=>`<tr>${r.map(c=>`<td>${ec(c)}</td>`).join("")}</tr>`).join("")}</tbody></table>`;
+    }
     if(b.id==="stack"){
       h+=`<div class="stepper" id="copStepper"><div class="stepper-nav" role="tablist">${C.steps.map((s,i)=>`<button type="button" class="b ${i===0?"on":""}" role="tab" aria-selected="${i===0}" data-step="${i}">${i+1} ${esc(s.t)}</button>`).join("")}</div><div class="stepper-panel" id="copStepPanel">${ec(C.steps[0].d)}</div></div>`;
     }
