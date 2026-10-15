@@ -1,7 +1,8 @@
-"""Upload the deep-dive cut and six shorts as unlisted YouTube videos.
+"""Upload the deep-dive cut and NotebookLM shorts as unlisted YouTube videos.
 
 Reuses the Learn AI Law YouTube token already on this machine. Writes IDs to
-youtube-ids.json (gitignored). Does not print the token.
+youtube-ids.json (gitignored). Does not print the token. Skips keys that
+already have an ID. Stops on uploadLimitExceeded.
 """
 import json
 import os
@@ -42,6 +43,16 @@ ITEMS = [
     ("14-write-gate", "A write needs an approval", ROOT / "media" / "shorts" / "14-write-gate.mp4"),
     ("15-prompt-injection", "Retrieved text is data", ROOT / "media" / "shorts" / "15-prompt-injection.mp4"),
     ("16-verify-cloud", "Verify the cloud before you commit", ROOT / "media" / "shorts" / "16-verify-cloud.mp4"),
+    ("17-permission-trim", "Permission trimming is the floor", ROOT / "media" / "shorts" / "17-permission-trim.mp4"),
+    ("18-grounding", "Grounding is retrieval into the answer", ROOT / "media" / "shorts" / "18-grounding.mp4"),
+    ("19-dlp-labels", "DLP and labels sit on the AI path", ROOT / "media" / "shorts" / "19-dlp-labels.mp4"),
+    ("20-admin-consent", "Admin consent is the Graph gate", ROOT / "media" / "shorts" / "20-admin-consent.mp4"),
+    ("21-graph-throttle", "Design for Graph throttling", ROOT / "media" / "shorts" / "21-graph-throttle.mp4"),
+    ("22-sites-selected", "Sites.Selected beats tenant-wide grants", ROOT / "media" / "shorts" / "22-sites-selected.mp4"),
+    ("23-servicenow-live", "Incidents stay in ServiceNow", ROOT / "media" / "shorts" / "23-servicenow-live.mp4"),
+    ("24-tenant-vs-selfserve", "Tenant config versus self-serve connectors", ROOT / "media" / "shorts" / "24-tenant-vs-selfserve.mp4"),
+    ("25-extensions-to-mcp", "Extensions gave way to MCP", ROOT / "media" / "shorts" / "25-extensions-to-mcp.mp4"),
+    ("26-enablement-layer", "Copilot consumes the enablement layer", ROOT / "media" / "shorts" / "26-enablement-layer.mp4"),
 ]
 
 

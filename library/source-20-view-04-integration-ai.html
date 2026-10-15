@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Source as uploaded: 20-view-04-integration-ai | Learn the digital-work platform</title>
 <meta name="description" content="Integration and AI elements of Microsoft&#x27;s Digital-Work Platform: third-party and external systems, APIs, identity, AI features and AI data paths.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="library.css">
 <script>try{var p=JSON.parse(localStorage.getItem("appPalette"))||"github",m=JSON.parse(localStorage.getItem("appMode"))||"dark";document.documentElement.setAttribute("data-theme",p+"-"+m);}catch(e){document.documentElement.setAttribute("data-theme","github-dark");}</script>
 </head>
@@ -22,6 +25,8 @@
   <article><h1>Integration and AI Elements — Microsoft's Digital-Work Platform</h1>
 <p>Pack: <a href="hub.html">00 - Microsoft's Digital-Work Platform Hub</a> · Block: <a href="block-05-integration-and-ai.html">Block 5</a> · Prev: <a href="view-03-physical.html">Physical</a></p>
 <h2>Third-party and external systems</h2>
+<div class="callout important" markdown="0"><div class="callout-title">Required section</div><p>Every system outside the platform boundary that sends data in, receives data out, or is governed by it. Include non-vendor clouds, SaaS, SIEM/SOAR, ITSM, on-prem estates, and competing or complementary governance tools. Mark gov-cloud support per row; it is often where a design fails.</p></div>
+
 <table>
 <thead>
 <tr>
@@ -44,7 +49,7 @@
 <td>Markdown docs, ADRs, runbooks (synced); issues, PRs, checks, deployment state (API/event)</td>
 <td>Entra app registration (connector); GitHub App installation tokens (API/webhooks)</td>
 <td>Platform/DevOps team</td>
-<td>UNVERIFIED. No ledger row states commercial, GCC, GCC High, or DoD availability for this connector.</td>
+<td>Synced connector: commercial, GCC, GCCH, DoD; GitHub Cloud Knowledge connector availability varies — verify per tenant</td>
 </tr>
 <tr>
 <td>ServiceNow / generic ITSM</td>
@@ -94,7 +99,7 @@
 <td>Extracted text, metadata, source ACLs mapped to M365 permissions</td>
 <td>Entra app registration, admin consent</td>
 <td>Knowledge/Docs team</td>
-<td>UNVERIFIED. No ledger row states commercial, GCC, GCC High, or DoD availability for synced connectors as a baseline.</td>
+<td>Commercial, GCC, GCCH, DoD (synced connector baseline)</td>
 </tr>
 <tr>
 <td>Power Platform / Dataverse</td>
@@ -104,7 +109,7 @@
 <td>Workflow triggers, approval state, business data</td>
 <td>Entra app registration / service principal</td>
 <td>Power Platform CoE</td>
-<td>UNVERIFIED. No ledger row states commercial, GCC, GCC High, or DoD availability for this row.</td>
+<td>Commercial, GCC, GCCH, DoD</td>
 </tr>
 <tr>
 <td>SIEM/SOAR</td>
@@ -119,20 +124,17 @@
 </tbody>
 </table>
 <h3>Context diagram (platform boundary)</h3>
-<p>The PNG below is the published boundary picture. The source uses Mermaid <code>&lt;--&gt;</code>. The old <code>&lt;--</code> token does not parse.</p>
-<details><summary>Diagram source</summary>
-<pre class="diagram-src">flowchart LR
+<pre class="mermaid">flowchart LR
   subgraph P[&quot;Microsoft&#x27;s Digital-Work Platform boundary&quot;]
     CORE[&quot;Microsoft&#x27;s Digital-Work Platform&quot;]
   end
   SIEM[&quot;SIEM / SOAR&quot;] &lt;--&gt; CORE
-  ITSM[&quot;ITSM / ticketing&quot;] &lt;--&gt; CORE
+  ITSM[&quot;ITSM / ticketing&quot;] &lt;-- CORE
   CLOUDS[&quot;Other clouds and SaaS data sources&quot;] --&gt; CORE
   ONPREM[&quot;On-prem file shares and databases&quot;] --&gt; CORE
   GOV[&quot;Other governance / privacy tools&quot;] &lt;--&gt; CORE
   IDP[&quot;Identity provider&quot;] --&gt; CORE
 </pre>
-</details>
 
 <!-- tech_deep_dive:diagram-embed -->
 <p><a href="../assets/diagrams/04-integration-ai-1.png" target="_blank"><img class="embed" src="../assets/diagrams/04-integration-ai-1.png" alt="04-integration-ai-1.png"></a></p>
@@ -153,7 +155,7 @@
 <td>Read/write M365 resources (Teams, mail, calendar, files, users/groups, SharePoint)</td>
 <td>Entra ID OAuth 2.0/OIDC, delegated or app-only</td>
 <td>Per-tenant Graph throttling (varies by workload)</td>
-<td>UNVERIFIED. This page does not cite a government service description for Graph in GCC, GCC High, or DoD.</td>
+<td>Graph endpoints exist for GCC/GCCH/DoD; verify per API</td>
 </tr>
 <tr>
 <td>Microsoft Graph change notifications</td>
@@ -174,7 +176,7 @@
 <td>Build custom synced Copilot connectors</td>
 <td>Entra app registration, admin consent for Graph permissions</td>
 <td>Per-connector ingestion quotas</td>
-<td>UNVERIFIED. No ledger row states commercial, GCC, GCC High, or DoD availability for this row.</td>
+<td>Commercial, GCC, GCCH, DoD</td>
 </tr>
 <tr>
 <td>Federated connector (MCP-based)</td>
@@ -453,9 +455,14 @@
 </tbody>
 </table></article>
   <footer class="docfoot">
-    Rendered from the uploaded source <code>sources/20-view-04-integration-ai</code>. The Obsidian vault is the source of truth. Study material only. Citations <span class="cite">S#</span> link to the Microsoft source ledger.
+    Rendered from <code>C:\output\obsidian\notebooklm\tdd-m365-digital-work-platform\sources\20-view-04-integration-ai.md</code>. The Obsidian vault is the source of truth. Study material only. Citations <span class="cite">S#</span> link to the Microsoft source ledger.
     <div class="prevnext"><a href="source-20-view-03-physical.html">&larr; Previous</a><span></span></div>
   </footer>
 </main>
+<script type="module">
+import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+const dark=(document.documentElement.getAttribute("data-theme")||"").endsWith("dark");
+mermaid.initialize({startOnLoad:true,theme:dark?"dark":"default",securityLevel:"strict"});
+</script>
 </body>
 </html>

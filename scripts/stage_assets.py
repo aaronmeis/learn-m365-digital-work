@@ -10,7 +10,7 @@ from PIL import Image
 SITE = Path(__file__).resolve().parent.parent
 OUT = Path(r"C:\output\obsidian\notebooklm\tdd-m365-digital-work-platform")
 NBLM = OUT / "NEXUS _ tdd-m365-digital-work-platform _ 2026-09-28 _ tech-deep-dive"
-BATCH = OUT / "shorts-batch2"
+BATCHES = [OUT / "shorts-batch2", OUT / "shorts-batch3"]
 PACK = Path(r"C:\obsidian\personal_research_2026\Learning\tech-deep-dive\m365-digital-work-platform")
 FORCE = "--force" in sys.argv
 
@@ -47,9 +47,29 @@ SHORTS = [
      ["prompt injection", "grounding", "allowlist", "tool"]),
     ("16-verify-cloud", "16-verify-cloud", "Verify the cloud before you commit", "Block 4 · physical", "Cloud",
      ["gcc", "gcc high", "dod", "tenant"]),
+    ("17-permission-trim", "17-permission-trim", "Permission trimming is the floor", "Block 5 · AI", "AI path",
+     ["permission trimming", "grounding", "acl", "signed-in user"]),
+    ("18-grounding", "18-grounding", "Grounding is retrieval into the answer", "Block 5 · AI", "AI path",
+     ["grounding", "graph", "index", "citation"]),
+    ("19-dlp-labels", "19-dlp-labels", "DLP and labels sit on the AI path", "Block 7 · failure modes", "AI path",
+     ["dlp", "sensitivity label", "purview", "oversharing"]),
+    ("20-admin-consent", "20-admin-consent", "Admin consent is the Graph gate", "Block 4 · physical", "Identity",
+     ["admin consent", "entra", "graph", "app registration"]),
+    ("21-graph-throttle", "21-graph-throttle", "Design for Graph throttling", "Block 4 · physical", "Delivery",
+     ["throttling", "graph", "429", "sync"]),
+    ("22-sites-selected", "22-sites-selected", "Sites.Selected beats tenant-wide grants", "Block 3 · logical", "Identity",
+     ["Sites.Selected", "sharepoint", "least privilege", "graph"]),
+    ("23-servicenow-live", "23-servicenow-live", "Incidents stay in ServiceNow", "Block 5 · integration", "Connectors",
+     ["servicenow", "itsm", "federated", "system of record"]),
+    ("24-tenant-vs-selfserve", "24-tenant-vs-selfserve", "Tenant config versus self-serve connectors", "Block 3 · logical", "Connectors",
+     ["tenant", "self-serve", "connector", "consent"]),
+    ("25-extensions-to-mcp", "25-extensions-to-mcp", "Extensions gave way to MCP", "Block 5 · integration", "Connectors",
+     ["mcp", "copilot extensions", "github", "migration"]),
+    ("26-enablement-layer", "26-enablement-layer", "Copilot consumes the enablement layer", "Block 2 · conceptual", "Architecture",
+     ["enablement layer", "boundary", "consumer", "planes"]),
 ]
 
-# Unlisted uploads, 2026-10-02. Empty string falls back to the local MP4.
+# Seed unlisted IDs. youtube-ids.json (gitignored) overlays after each upload run.
 YOUTUBE = {
     "deep-dive-cut": "EWcgztIW-Z8",
     "01-boundary": "LkzxRQAXn7I",
@@ -61,7 +81,30 @@ YOUTUBE = {
     "07-two-copilots": "yndinYHFMWI",
     "08-acl-map": "tzm_OiIio4k",
     "09-github-app": "ItgoluU-oiY",
+    "10-checks-api": "nEMzlPfgR20",
+    "11-one-record": "QcAQTeremns",
+    "12-mcp-standard": "1wZugDq6l-4",
+    "13-three-planes": "7Ljpzzmiogk",
+    "14-write-gate": "6Ve9nMrIzLc",
+    "15-prompt-injection": "3f7xuY-buyE",
+    "16-verify-cloud": "HlcbCSedfiw",
+    "17-permission-trim": "qm4zhXLDSWI",
+    "18-grounding": "RCOmYFqnK1k",
+    "19-dlp-labels": "6IwjS4Lk2ME",
+    "20-admin-consent": "X-kQS0Zd0Lo",
+    "21-graph-throttle": "EfmhHE63rBQ",
+    "22-sites-selected": "19rYT11JqHc",
+    "23-servicenow-live": "SCAny4d2tds",
+    "24-tenant-vs-selfserve": "XM3FOfIB_Vo",
+    "25-extensions-to-mcp": "IkycNBAefdA",
+    "26-enablement-layer": "1C0me6PPtzI",
 }
+_ids_path = SITE / "youtube-ids.json"
+if _ids_path.exists():
+    try:
+        YOUTUBE.update({k: v for k, v in json.loads(_ids_path.read_text(encoding="utf-8")).items() if v})
+    except json.JSONDecodeError:
+        pass
 
 
 def duration(path: Path) -> float:
@@ -104,7 +147,13 @@ def main():
         mp4 = SITE / "media" / "shorts" / f"{name}.mp4"
         src = NBLM / f"{src_title}.mp4"
         if not src.exists():
-            src = BATCH / f"{name}.mp4"
+            for batch in BATCHES:
+                candidate = batch / f"{name}.mp4"
+                if candidate.exists():
+                    src = candidate
+                    break
+        if not src.exists():
+            raise FileNotFoundError(f"missing short source for {name}")
         copy(src, mp4)
         poster = SITE / "media" / "posters" / f"{name}.webp"
         if FORCE or not poster.exists():

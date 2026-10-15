@@ -254,7 +254,7 @@ def render_shorts_plan(text):
     dd = site.get("deep_dive", {})
     if dd.get("youtube"):
         h += f'<p>Long form: <a href="https://www.youtube.com/watch?v={dd["youtube"]}" target="_blank" rel="noopener">deep-dive cut on YouTube</a>.</p>'
-    return {"description": "The six planned shorts with their one-job prompts, and the published videos."}, h
+    return {"description": "Planned one-job NotebookLM short prompts, and the published catalog."}, h
 
 
 def render_json_record(text):
