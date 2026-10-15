@@ -1,10 +1,10 @@
 /* Offline support for the study console (pattern from learn-ai-law).
    Pages, scripts and data: network first, cache as fallback.
    Images: cache first. Video and audio are never cached. */
-const CACHE = "learn-m365-digital-work-v5";
+const CACHE = "learn-m365-digital-work-v10";
 const SHELL = [
   "./", "index.html", "css/base.css", "css/enhance.css",
-  "js/data.js", "js/app.js", "js/enhance.js",
+  "js/data.js", "js/prompts.js", "js/app.js", "js/enhance.js",
   "shorts-catalog.js", "library/manifest.js", "library/library.css",
   "manifest.webmanifest", "assets/hero.jpg", "assets/icons/icon-192.png"
 ];

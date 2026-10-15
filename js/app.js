@@ -18,13 +18,9 @@ const LS={
 const KEY="lm365dw:";
 
 function go(v){
-  $$("#nav .nav-item").forEach(el=>el.classList.toggle("active",el.dataset.v===v));
-  $$("section.view").forEach(el=>el.classList.toggle("active",el.id==="v-"+v));
-  LS.set(KEY+"view",v);
-  if(location.hash!=="#"+v) history.replaceState(null,"","#"+v);
-  window.scrollTo(0,0); const mc=$(".main-content"); if(mc) mc.scrollTop=0;
+  const target="#/"+String(v||"today").replace(/^#\/?/,"");
+  if(location.hash!==target) location.hash=target;
 }
-$$("#nav .nav-item").forEach(el=>el.onclick=()=>go(el.dataset.v));
 
 function lib(slug,label){return `<a href="library/${slug}.html">${esc(label||"Open full note")} ↗</a>`;}
 
@@ -70,7 +66,7 @@ function renderDashboard(){
   <div class="note"><b>Mission.</b> By the end you can draw the conceptual, logical, and physical views from memory; say when to sync, when to federate, and when to call an API; trace the AI data path and name the control that stops oversharing; and defend that Copilot is a consumer of the integration layer, not a bypass around it. ${lib("mission","Mission note")} · ${lib("day-plan","Timed day plan")}</div>
   <div class="grid">
     <div class="card"><h3>Curriculum</h3><p style="color:var(--text-secondary);font-size:.86rem">Eight timed blocks with action steps, artifact previews, and "why this matters" notes.</p><div class="btnrow" style="margin:.8rem 0 0"><button class="b" onclick="go('curriculum')">Open curriculum →</button></div></div>
-    <div class="card"><h3>Architecture views</h3><p style="color:var(--text-secondary);font-size:.86rem">Conceptual, logical, physical, integration and AI, plus the government cloud matrix, with diagrams.</p><div class="btnrow" style="margin:.8rem 0 0"><button class="b" onclick="go('views')">Open views →</button></div></div>
+    <div class="card"><h3>Architecture views</h3><p style="color:var(--text-secondary);font-size:.86rem">Conceptual, logical, and physical, plus the Copilot prompt path, identity, connectors, and where agents sit. Each view has its own link.</p><div class="btnrow" style="margin:.8rem 0 0"><button class="b" onclick="go('views')">Open views →</button></div></div>
     <div class="card"><h3>Progress map</h3><p style="color:var(--text-secondary);font-size:.86rem">The 100 / 200 / 300 ladder across five lanes. Self-rate each rung.</p><div class="btnrow" style="margin:.8rem 0 0"><button class="b" onclick="go('map')">Open map →</button></div></div>
     <div class="card"><h3>Flashcards and quiz</h3><p style="color:var(--text-secondary);font-size:.86rem">${DATA.glossary.length} spaced-repetition cards and the ${DATA.quiz.length}-question design-review quiz bank.</p><div class="btnrow" style="margin:.8rem 0 0"><button class="b" onclick="go('flash')">Flashcards →</button><button class="b" onclick="go('quiz')">Quiz →</button></div></div>
     <div class="card"><h3>Shorts and media</h3><p style="color:var(--text-secondary);font-size:.86rem">${(window.SHORTS&&SHORTS.total)||0} vertical NotebookLM explainers, the 8.5-minute narrated deep-dive cut, and the audio overview.</p><div class="btnrow" style="margin:.8rem 0 0"><button class="b" onclick="go('shorts')">Open media →</button><button class="b" onclick="go('deck')">Slide deck →</button></div></div>
@@ -120,6 +116,24 @@ function renderCurriculum(){
 }
 
 /* ---- Architecture views ---- */
+const VIEW_TABS=[
+  ["conceptual","Conceptual"],
+  ["logical","Logical"],
+  ["physical","Physical"],
+  ["integration","Integration & AI"],
+  ["govcloud","Government clouds"],
+  ["prompt-path","Prompt path"],
+  ["identity","Identity & access"],
+  ["connectors","Connectors"],
+  ["agents","Agents & Studio"]
+];
+window.VIEW_TABS=VIEW_TABS;
+function knownViewTab(sub){
+  if(!sub) return null;
+  const id=String(sub).split("/")[0];
+  return VIEW_TABS.some(t=>t[0]===id)?id:null;
+}
+window.knownViewTab=knownViewTab;
 function cell(c){
   const s=String(c);
   if(s.startsWith("GAP:")) return `<td class="gap">${ec(s.slice(4))}</td>`;
@@ -127,21 +141,68 @@ function cell(c){
   return `<td>${ec(s)}</td>`;
 }
 function tableHTML(t){return `<h3 style="margin:1.2rem 0 .3rem;font-size:1rem">${esc(t.h)}</h3><table class="tbl"><thead><tr>${t.cols.map(c=>`<th>${esc(c)}</th>`).join("")}</tr></thead><tbody>${t.rows.map(r=>`<tr>${r.map(cell).join("")}</tr>`).join("")}</tbody></table>`;}
+function archDiagram(kind){
+  const box=(x,y,w,h,t,sub)=>`<g><rect class="abox" x="${x}" y="${y}" width="${w}" height="${h}" rx="8"/><text class="at" x="${x+w/2}" y="${y+(sub?24:h/2+5)}" text-anchor="middle">${t}</text>${sub?`<text class="asub" x="${x+w/2}" y="${y+42}" text-anchor="middle">${sub}</text>`:""}</g>`;
+  const arrow=(x1,y1,x2)=>`<line class="aarr" x1="${x1}" y1="${y1}" x2="${x2}" y2="${y1}" marker-end="url(#ah)"/>`;
+  const defs=`<defs><marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="ahead" d="M1 1L8 5L1 9"/></marker></defs>`;
+  let body="", cap="", label="", vb="0 0 760 150";
+  if(kind==="prompt"){
+    label="Prompt path from the user through Graph grounding and the model, back to the app";
+    const steps=[["User","in the app"],["App","M365 app"],["Grounding","Microsoft Graph"],["LLM","grounded prompt"],["Response","back to the app"]];
+    body=steps.map((s,i)=>box(16+i*148,36,136,64,s[0],s[1])).join("")+steps.slice(0,-1).map((_,i)=>arrow(152+i*148,68,164+i*148)).join("");
+    cap="Logical path from the architecture article. A write stays in the source system. Copilot is not the integration bus.";
+  } else if(kind==="walk"){
+    label="Four hops from the Copilot architecture article: prompt, grounding, the model, response";
+    const steps=[["Prompt","in the app"],["Grounding","Graph, in transit"],["LLM","grounded prompt"],["Response","back to the app"]];
+    body=steps.map((s,i)=>box(16+i*186,36,170,64,s[0],s[1])).join("")+steps.slice(0,-1).map((_,i)=>arrow(186+i*186,68,202+i*186)).join("");
+    cap="Architecture article order, read 15 Oct 2026. Post-processing and optional web search are on other pages.";
+  } else if(kind==="identity"){
+    label="Identity and access: the Microsoft 365 boundary, the user's permissions, and the controls around them";
+    vb="0 0 760 210";
+    body=`<rect class="abound" x="12" y="16" width="736" height="178" rx="12"/><text class="asub" x="28" y="36">MICROSOFT 365 SERVICE BOUNDARY</text>`
+      +box(250,48,260,58,"User permissions","not the whole tenant")
+      +box(24,124,170,52,"Entra","CA and MFA")
+      +box(206,124,170,52,"RSS","not a boundary")
+      +box(388,124,170,52,"SAM","oversharing")
+      +box(570,124,160,52,"Purview","labels and DLP");
+    cap="Physical controls named on the architecture page. RSS does not change SharePoint permissions.";
+  } else if(kind==="connectors"){
+    label="Connector fork: synced content lands in Graph; federated content stays in the source";
+    vb="0 0 760 200";
+    body=box(300,16,160,52,"Source system","system of record")
+      +`<line class="aarr" x1="340" y1="68" x2="180" y2="108" marker-end="url(#ah)"/><line class="aarr" x1="420" y1="68" x2="580" y2="108" marker-end="url(#ah)"/>`
+      +box(70,112,230,64,"Synced","Graph externalItem + ACL")
+      +box(460,112,230,64,"Federated","MCP, no Graph copy");
+    cap="Logical fork. Neither path makes Copilot the owner of the source record.";
+  } else if(kind==="agents"){
+    label="Declarative agents stay on Copilot's orchestrator inside Microsoft 365. A custom engine can leave that host.";
+    vb="0 0 760 200";
+    body=`<rect class="abound" x="16" y="16" width="440" height="168" rx="12"/><text class="asub" x="32" y="36">MICROSOFT 365 BOUNDARY</text>`
+      +box(70,58,330,64,"Declarative agent","Copilot orchestrator and models")
+      +box(490,58,240,64,"Custom engine","own model and host")
+      +`<text class="asub" x="236" y="160" text-anchor="middle">Copilot Studio can build either. It is not the integration bus.</text>`;
+    cap="Conceptual placement. Actions still land in the other system of record.";
+  } else return "";
+  return `<figure class="arch-fig"><svg class="arch-svg" viewBox="${vb}" role="img" aria-label="${esc(label)}">${defs}${body}</svg><figcaption>${esc(cap)}</figcaption></figure>`;
+}
 function renderViews(){
   const el=$("#v-views");
-  const tabs=[["conceptual","Conceptual"],["logical","Logical"],["physical","Physical"],["integration","Integration & AI"],["govcloud","Government clouds"]];
-  const tab=LS.get(KEY+"viewTab","conceptual");
+  let tab=LS.get(KEY+"viewTab","conceptual");
+  if(!knownViewTab(tab)) tab="conceptual";
+  const ALT={conceptual:"Conceptual",logical:"Logical",physical:"Physical",integration:"Integration",govcloud:"Physical"};
   const V=DATA.views[tab];
+  if(!V){el.innerHTML=`<h2 class="vh">Architecture views</h2><p class="lead">That view is not in this pack.</p>`;return;}
   let h=`<h2 class="vh">Architecture views</h2>
-  <p class="lead">The four views built during blocks 2-5, at their own altitude. Click any diagram to enlarge. The full notes (with the Mermaid sources and every table) are in the Library.</p>
-  <div class="ea-subnav">${tabs.map(([k,l])=>`<button class="ea-tab-btn ${tab===k?"active":""}" data-vt="${k}">${l}</button>`).join("")}</div>
-  <div class="note"><b>Altitude rule.</b> ${ec(V.rule)} ${lib(V.lib,"Full view note")}</div>`;
+  <p class="lead">Each tab is its own link, so a view can be opened directly. Conceptual, logical, and physical stay at their own altitude. The Copilot views name the prompt path, identity, connectors, and where agents sit. Copilot is not the integration bus. Click a library diagram to enlarge.</p>
+  <nav class="ea-subnav" aria-label="Architecture views">${VIEW_TABS.map(([k,l])=>`<a class="ea-tab-btn ${tab===k?"active":""}" role="tab" aria-selected="${tab===k}" href="#/views/${k}">${esc(l)}</a>`).join("")}</nav>
+  <div class="note"><span class="alt-k">${esc(V.altitude||ALT[tab]||"View")}</span> ${ec(V.rule)} ${V.lib?lib(V.lib,"Full view note"):""}</div>`;
   if(tab==="govcloud") h+=`<div class="note good"><b>Verify in the tenant.</b> ${ec("Commercial connector docs are not a promise about GCC, GCC High, or DoD. Confirm federated MCP and the synced connector you named before you commit the design.")}</div>`;
-  V.img.forEach(f=>h+=`<img class="diagram" src="assets/diagrams/${f}" alt="${esc(f)}" loading="lazy">`);
-  V.tables.forEach(t=>h+=tableHTML(t));
+  if(V.diagram) h+=archDiagram(V.diagram);
+  (V.img||[]).forEach(f=>h+=`<img class="diagram" src="assets/diagrams/${f}" alt="${esc(f)}" loading="lazy">`);
+  (V.tables||[]).forEach(t=>h+=tableHTML(t));
+  if(V.bus) h+=`<div class="note"><b>Pack rule.</b> ${ec("Copilot is not the integration bus. The architecture article walks a prompt through grounding and a model, then back to the app. It does not make Copilot the system that owns HR, ITSM, or GitHub state [S11] [S4].")}</div>`;
   if(tab==="integration") h+=`<div class="note"><b>ACL note.</b> ${ec("On a synced connector, mapping source entitlements onto the Graph externalItem ACL is the step that cannot be sloppy. A wide map makes restricted source data searchable across the tenant.")}</div>`;
   el.innerHTML=h;
-  $$("[data-vt]",el).forEach(b=>b.onclick=()=>{LS.set(KEY+"viewTab",b.dataset.vt);renderViews();});
 }
 
 /* ---- Progress map ---- */
@@ -353,22 +414,109 @@ function renderGlossary(){
   });
 }
 
-/* ---- Prompts ---- */
+/* ---- AI prompts ---- */
+function srcNote(n){
+  const notes=window.SOURCE_NOTES||{};
+  if(notes[n]) return notes[n];
+  const s=SRC[n];
+  return s?(s.b||s.t||""):"";
+}
+function citedNums(t){
+  const o=[];
+  (String(t).match(/\[(S\d+(?:\s*,\s*S\d+)*)\]/g)||[]).forEach(m=>{(m.match(/S(\d+)/g)||[]).forEach(x=>{
+    const n=+x.slice(1);
+    if(SRC[n]&&!o.includes(n)) o.push(n);
+  });});
+  return o;
+}
+function promptSources(p){
+  const o=(p.s||[]).filter(n=>SRC[n]);
+  citedNums(p.p).forEach(n=>{if(!o.includes(n)) o.push(n);});
+  return o;
+}
+function srcChip(n,id){
+  const s=SRC[n]; if(!s) return "";
+  const note=srcNote(n);
+  return `<span class="schip-wrap"><button type="button" class="schip" aria-expanded="false" aria-controls="${id}" aria-label="Source S${n}: ${esc(s.t)}. ${esc(note)} Open the summary.">S${n}</button><span class="stip" id="${id}" role="tooltip" hidden><b>S${n} · ${esc(s.t)}</b><span class="stip-sum">${esc(note)}</span><a href="${esc(s.u)}" target="_blank" rel="noopener">Open source ↗</a></span></span>`;
+}
+function promptBodyHtml(t,pi){
+  let k=0;
+  return esc(t).replace(/\[(S\d+(?:\s*,\s*S\d+)*)\]/g,(m,inner)=>"["+inner.replace(/S(\d+)/g,(x,n)=>{
+    k+=1;
+    return srcChip(+n,`pb-${pi}-${k}`)||x;
+  })+"]");
+}
+function bindSourceChips(root){
+  const close=except=>$$(".schip[aria-expanded=true]",root).forEach(c=>{if(c!==except){c.setAttribute("aria-expanded","false");const tip=c.nextElementSibling;if(tip) tip.hidden=true;}});
+  $$(".schip",root).forEach(c=>{
+    const tip=c.nextElementSibling, w=c.parentElement;
+    if(!tip) return;
+    const open=()=>{close(c);c.setAttribute("aria-expanded","true");tip.hidden=false;};
+    const shut=()=>{c.setAttribute("aria-expanded","false");tip.hidden=true;};
+    c.onclick=e=>{e.preventDefault();c.getAttribute("aria-expanded")==="true"?shut():open();};
+    w.addEventListener("mouseenter",open);
+    w.addEventListener("mouseleave",()=>{if(document.activeElement!==c) shut();});
+    w.addEventListener("focusout",e=>{if(!w.contains(e.relatedTarget)) shut();});
+    c.addEventListener("keydown",e=>{if(e.key==="Escape"){shut();e.stopPropagation();}});
+  });
+}
+function aiPromptText(p,withSrc){
+  const nums=promptSources(p);
+  let t=(window.PROMPT_WARN||"")+"\n\n"+p.p+"\n\n"+(window.PROMPT_RULE||"");
+  if(withSrc&&nums.length) t+="\n\nSources to ground your answer:\n"+nums.map(n=>`S${n}: ${SRC[n].t}. ${srcNote(n)} ${SRC[n].u}`).join("\n");
+  return t;
+}
 function renderPrompts(){
   const el=$("#v-prompts");
+  const P=window.PROMPTS||[], CATS=window.PROMPT_CATS||[];
   const pl=(window.LIBRARY||[]).filter(p=>p.section==="Prompts");
-  let h=`<h2 class="vh">Prompt library</h2>
-  <p class="lead">Study prompts for any LLM, plus the NotebookLM prompts that generated this pack's reports and media.</p>
-  <div class="note danger"><b>Data hygiene.</b> No tenant names, secrets, credentials, or customer data in any model. Use synthetic designs and public Microsoft documentation.</div>`;
-  DATA.prompts.forEach(p=>{
-    h+=`<div class="promptcat"><h3>${esc(p.cat)} <span class="pill">${esc(p.model)}</span></h3>
-      <div class="obj" style="margin:.15rem 0 .4rem">${esc(p.desc)}</div>
-      <div style="font-size:.8rem;color:var(--text-dim);margin-bottom:.4rem">Variants: ${p.items.map(esc).join(" · ")}</div>
-      <details class="promptbox"><summary>Flagship prompt</summary><pre>${esc(p.flagship)}</pre><button class="copybtn" data-c="${encodeURIComponent(p.flagship)}">Copy</button></details></div>`;
+  const f=LS.get(KEY+"pf",-1), q0=LS.get(KEY+"pq",""), ws=LS.get(KEY+"pwsrc",false);
+  el.innerHTML=`<h2 class="vh">AI prompts</h2>
+  <p class="lead">${P.length} architect prompts for Microsoft 365 and Microsoft Copilot. Each one uses Role, Context, Task, and Output, with [placeholders] for values from your org. Tap or hover an S# chip for the short summary and the link.</p>
+  <div class="note danger" role="note"><b>Before you paste anything.</b> ${esc(window.PROMPT_WARN||"")} This reminder is added to every prompt you copy.</div>
+  <div class="pfilter">
+    <label for="pq" class="pf-lab">Search prompts</label>
+    <input id="pq" class="search" type="search" placeholder="e.g. federated, GPT-5, GCC High, ACL" value="${esc(q0)}">
+    <div class="pf-groups" role="group" aria-label="Prompt groups"><button type="button" class="b ${f<0?"on":""}" aria-pressed="${f<0}" data-pf="-1">All (${P.length})</button>${CATS.map((c,k)=>`<button type="button" class="b ${f===k?"on":""}" aria-pressed="${f===k}" data-pf="${k}">${esc(c)} (${P.filter(p=>p.c===k).length})</button>`).join("")}</div>
+    <label class="tgl"><input type="checkbox" id="pwsrc" ${ws?"checked":""}> Include source summaries when copying</label>
+  </div>
+  <p class="pcount" id="pcount" role="status"></p>
+  <div id="plist"></div>
+  <h3 class="libhead">NotebookLM prompt notes</h3>
+  <div class="libgrid">${pl.map(p=>`<a class="libcard" href="library/${p.slug}.html"><b>${esc(p.title)}</b><span>${esc(p.desc)}</span></a>`).join("")}</div>`;
+  const paint=()=>{
+    const q=(LS.get(KEY+"pq","")||"").toLowerCase(), ff=LS.get(KEY+"pf",-1);
+    const list=P.map((p,i)=>[p,i]).filter(([p])=>(ff<0||p.c===ff)&&(!q||(p.t+" "+p.p+" "+(CATS[p.c]||"")).toLowerCase().includes(q)));
+    $("#pcount").textContent=`${list.length} of ${P.length} shown`;
+    $("#plist").innerHTML=list.map(([p,i])=>promptCard(p,i)).join("")||`<div class="note">No prompts match. Try another word, or pick All.</div>`;
+    bindSourceChips($("#plist"));
+    $$("[data-pcopy]",$("#plist")).forEach(b=>b.onclick=()=>{
+      const p=P[+b.dataset.pcopy];
+      const box=b.parentElement.querySelector(".incsrc");
+      const txt=aiPromptText(p,!!(box&&box.checked));
+      const st=$("#pcs"+b.dataset.pcopy);
+      const ok=()=>{st.textContent=box&&box.checked?"Copied, with the redaction reminder and the source summaries.":"Copied, with the redaction reminder.";setTimeout(()=>st.textContent="",2500);};
+      const fail=()=>{st.textContent="Copy is blocked in this browser. Select the prompt and press Ctrl+C. The redaction reminder is not in that selection.";};
+      try{const pr=navigator.clipboard&&navigator.clipboard.writeText(txt);if(pr&&pr.then) pr.then(ok,fail); else fail();}catch(e){fail();}
+    });
+  };
+  $$("[data-pf]",el).forEach(b=>b.onclick=()=>{
+    LS.set(KEY+"pf",+b.dataset.pf);
+    $$("[data-pf]",el).forEach(x=>{const on=x===b;x.classList.toggle("on",on);x.setAttribute("aria-pressed",String(on));});
+    paint();
   });
-  h+=`<h3 style="margin:1.8rem 0 .6rem;font-size:1rem">NotebookLM prompt notes</h3><div class="libgrid">${pl.map(p=>`<a class="libcard" href="library/${p.slug}.html"><b>${esc(p.title)}</b><span>${esc(p.desc)}</span></a>`).join("")}</div>`;
-  el.innerHTML=h;
-  $$(".copybtn",el).forEach(b=>b.onclick=()=>{try{navigator.clipboard.writeText(decodeURIComponent(b.dataset.c));b.textContent="Copied";b.classList.add("copied");setTimeout(()=>{b.textContent="Copy";b.classList.remove("copied");},1200);}catch(e){}});
+  $("#pq").oninput=e=>{LS.set(KEY+"pq",e.target.value);paint();};
+  $("#pwsrc").onchange=e=>{LS.set(KEY+"pwsrc",e.target.checked);$$(".incsrc",el).forEach(c=>{c.checked=e.target.checked;});};
+  paint();
+}
+function promptCard(p,i){
+  const CATS=window.PROMPT_CATS||[];
+  const nums=promptSources(p);
+  const ws=LS.get(KEY+"pwsrc",false);
+  const shown=p.p+"\n\n"+(window.PROMPT_RULE||"");
+  return `<article class="aip" aria-labelledby="aiph${i}"><div class="aip-main"><span class="mc-k">${esc(CATS[p.c]||"")}</span><h3 id="aiph${i}">${esc(p.t)}</h3><div class="pbody">${promptBodyHtml(shown,i)}</div>
+    <div class="copyrow"><button type="button" class="b on" data-pcopy="${i}">Copy prompt</button><label class="incsrc-lab"><input type="checkbox" class="incsrc" ${ws?"checked":""}> Include source summaries</label><span class="pcs" id="pcs${i}" role="status"></span></div></div>
+    <aside class="aip-src" aria-label="Sources cited"><h4>Sources cited</h4>${nums.map((n,k)=>`<div class="psrow">${srcChip(n,`ps-${i}-${k}`)}<span class="psnote"><b>${esc((SRC[n]||{}).t||"")}</b> ${esc(srcNote(n))} <a href="${esc((SRC[n]||{}).u||"#")}" target="_blank" rel="noopener">Open source ↗</a></span></div>`).join("")}</aside></article>`;
 }
 
 /* ---- Failure modes (practice checklist) ---- */
@@ -487,10 +635,9 @@ function defaultMode(){try{return window.matchMedia("(prefers-color-scheme: ligh
 function renderCopilot(){
   const el=$("#v-copilot"); if(!el||!DATA.copilot) return;
   const C=DATA.copilot;
-  const paras=arr=>(arr||[]).map(t=>`<p>${ec(t)}</p>`).join("");
   let h=`<span class="badge">COPILOT DEEP DIVE · ${esc(C.asOf)}</span>
   <h1 style="margin-top:.9rem">Microsoft Copilot deep dive</h1>
-  <p class="lead">What it is, how a prompt walks the stack, who picks the model, and where the trust boundary stops. Every claim has an S# chip. Government-cloud parity stays UNVERIFIED unless a government service description says otherwise. Learn pages were read ${esc(C.asOf)}. Model menus change; this note records the control, not a frozen SKU list.</p>
+  <p class="lead">What it is, how a prompt walks the stack, which models Learn names as of October 2026, and where the trust boundary stops. Every claim has an S# chip. Government-cloud parity stays UNVERIFIED unless a government service description says otherwise. Learn pages were read ${esc(C.asOf)}.</p>
   <div class="alias-card" id="cop-aliases">
     <h2>Rename and aliases</h2>
     <p>Use the current name in new writing. Keep the old name as an alias so older notes and license screens still match.</p>
@@ -500,10 +647,29 @@ function renderCopilot(){
   </div>
   <nav class="cop-jump" aria-label="Deep dive blocks">${C.blocks.map(b=>`<a href="#/copilot/${esc(b.id)}">${esc(b.n)} ${esc(b.title)}</a>`).join("")}</nav>`;
   C.blocks.forEach(b=>{
-    h+=`<section class="card cop-block" id="cop-${esc(b.id)}"><h2>${esc(b.n)} · ${esc(b.title)}</h2>${paras(b.paras)}`;
+    const paras=b.paras||[];
+    const head=b.id==="models"?paras.slice(0,1):paras;
+    const tail=b.id==="models"?paras.slice(1):[];
+    h+=`<section class="card cop-block" id="cop-${esc(b.id)}"><h2>${esc(b.n)} · ${esc(b.title)}</h2>${head.map(t=>`<p>${ec(t)}</p>`).join("")}`;
     if(b.reveals) h+=b.reveals.map(r=>`<details class="why-matters"><summary>${esc(r.q)}</summary><p>${ec(r.a)}</p></details>`).join("");
+    if(b.id==="models"&&C.modelBands){
+      C.modelBands.forEach(band=>{
+        h+=`<div class="band">${esc(band.k)}</div>`;
+        h+=`<div class="mc-grid">${band.cards.map(c=>`<article class="mc"><div class="mc-k">${esc(c.k)}</div><ul>${c.lines.map(line=>`<li>${ec(line)}</li>`).join("")}</ul><div class="mc-s">${ec(c.s)}</div></article>`).join("")}</div>`;
+      });
+      if(C.processors){
+        h+=`<div class="band">Processor type</div>`;
+        h+=`<div class="mc-grid">${C.processors.map(c=>`<article class="mc"><div class="mc-k">${esc(c.k)}</div><p>${ec(c.t)}</p></article>`).join("")}</div>`;
+      }
+      h+=tail.map(t=>`<p>${ec(t)}</p>`).join("");
+    }
+    if(b.lanes) h+=`<div class="mc-grid mc-2">${b.lanes.map(c=>`<article class="mc"><div class="mc-k">${esc(c.k)}</div><ul>${(c.lines||[c.t]).map(line=>`<li>${ec(line)}</li>`).join("")}</ul></article>`).join("")}</div>`;
+    if(b.cards) h+=`<div class="mc-grid">${b.cards.map(c=>`<article class="mc"><div class="mc-k">${esc(c.k)}</div><p>${ec(c.t)}</p></article>`).join("")}</div>`;
+    if(b.tables) h+=b.tables.map(tableHTML).join("");
     if(b.id==="stack"){
-      h+=`<div class="stepper" id="copStepper"><div class="stepper-nav" role="tablist">${C.steps.map((s,i)=>`<button type="button" class="b ${i===0?"on":""}" role="tab" aria-selected="${i===0}" data-step="${i}">${i+1} ${esc(s.t)}</button>`).join("")}</div><div class="stepper-panel" id="copStepPanel">${ec(C.steps[0].d)}</div></div>`;
+      h+=archDiagram("walk");
+      h+=`<div class="mc-grid">${C.steps.map((s,i)=>`<article class="mc"><div class="mc-k">${i+1} · ${esc(s.t)}</div><ul>${s.lines.map(line=>`<li>${ec(line)}</li>`).join("")}</ul><div class="mc-s">${ec(s.s)}</div></article>`).join("")}</div>`;
+      if(C.stackAlso) h+=`<div class="mc-grid">${C.stackAlso.map(c=>`<article class="mc"><div class="mc-k">${esc(c.k)}</div><p>${ec(c.t)}</p></article>`).join("")}</div>`;
     }
     if(b.id==="family"){
       h+=`<table class="tbl"><thead><tr>${C.family.cols.map(c=>`<th>${esc(c)}</th>`).join("")}</tr></thead><tbody>${C.family.rows.map(r=>`<tr>${r.map(c=>`<td>${ec(c)}</td>`).join("")}</tr>`).join("")}</tbody></table>`;
@@ -520,16 +686,10 @@ function renderCopilot(){
       C.prompts.forEach(p=>{
         h+=`<details class="promptbox"><summary>${esc(p.title)}</summary><pre>${esc(p.text)}</pre><button type="button" class="copybtn" data-c="${encodeURIComponent(p.text)}">Copy</button></details>`;
       });
-      h+=`<h3>Still open</h3><ul class="openq">${C.open.map(t=>`<li><b>UNVERIFIED.</b> ${esc(t)}</li>`).join("")}</ul>`;
     }
     h+=`</section>`;
   });
   el.innerHTML=h;
-  $$("[data-step]",el).forEach(btn=>btn.onclick=()=>{
-    const i=+btn.dataset.step;
-    $$("[data-step]",el).forEach(x=>{const on=x===btn; x.classList.toggle("on",on); x.setAttribute("aria-selected",on?"true":"false");});
-    $("#copStepPanel").innerHTML=ec(C.steps[i].d);
-  });
   $$(".qcard",el).forEach(card=>{
     const q=DATA.quiz.filter(x=>x.week===6)[+card.dataset.cqi];
     $$(".qopts label",card).forEach(l=>l.onclick=()=>{
@@ -547,5 +707,14 @@ function focusCopilot(sub){
   if(id) id.scrollIntoView({block:"start"});
 }
 
+function renderBacklog(){
+  const el=$("#v-backlog"); if(!el||!DATA.backlog) return;
+  let h=`<span class="badge">BACKLOG · 15 Oct 2026</span>
+  <h1 style="margin-top:.9rem">Backlog</h1>
+  <p class="lead">Open questions to pick up next time. Each one is UNVERIFIED until a page says otherwise. Architecture views keep their own open rows on the page.</p>
+  <div class="mc-grid">${DATA.backlog.map(item=>`<article class="mc"><div class="mc-k">${esc(item.area)}</div><p>${ec(item.t)}</p><p class="mc-s"><a href="${esc(item.where)}">Open the section</a></p></article>`).join("")}</div>`;
+  el.innerHTML=h;
+}
+
 /* ---- Init ---- */
-initTheme();renderDashboard();renderCurriculum();renderViews();renderMap();renderFlash();renderDeck();renderQuiz();renderGlossary();renderPrompts();renderCounsel();renderCheat();renderEA();renderLibrary();renderReferences();renderCopilot();
+initTheme();renderDashboard();renderCurriculum();renderViews();renderMap();renderFlash();renderDeck();renderQuiz();renderGlossary();renderPrompts();renderCounsel();renderCheat();renderEA();renderLibrary();renderReferences();renderCopilot();renderBacklog();

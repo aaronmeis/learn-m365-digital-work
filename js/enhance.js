@@ -15,13 +15,13 @@ const APP_URL="https://aaronmeis.github.io/learn-m365-digital-work/";
 /* ---------- Views and groups ---------- */
 const VIEWS = {
   today:"Today", copilot:"Microsoft Copilot deep dive", curriculum:"Curriculum", views:"Architecture views", shorts:"Shorts", deck:"Deck and deep-dive cut", library:"Library",
-  flash:"Flashcards", quiz:"Quiz", failures:"Failure modes", prompts:"Prompts",
-  cheat:"Decision rules", map:"Progress map", glossary:"Glossary", ea:"EA mapping", refs:"Source ledger", dashboard:"Overview"
+  flash:"Flashcards", quiz:"Quiz", failures:"Failure modes", prompts:"AI prompts",
+  cheat:"Decision rules", map:"Progress map", glossary:"Glossary", ea:"EA mapping", refs:"Source ledger", backlog:"Backlog", dashboard:"Overview"
 };
 const GROUPS = {
   learn:["copilot","curriculum","views","shorts","deck","library"],
   practice:["flash","quiz","failures","prompts"],
-  reference:["cheat","map","glossary","ea","refs","dashboard"]
+  reference:["cheat","map","glossary","ea","refs","backlog","dashboard"]
 };
 const GROUP_OF = {};
 Object.keys(GROUPS).forEach(g=>GROUPS[g].forEach(v=>GROUP_OF[v]=g));
@@ -142,8 +142,20 @@ function bindChallenge(root){
 /* ---------- Routing ---------- */
 let currentView = null;
 function parseHash(){
-  const m=(location.hash||"").match(/^#\/([\w-]+)(?:\/(.+))?$/);
-  return m?{v:m[1],sub:m[2]?decodeURIComponent(m[2]):null}:null;
+  const raw=location.hash||"";
+  let m=raw.match(/^#\/([\w-]+)(?:\/(.*))?$/);
+  if(!m){
+    const leg=raw.match(/^#(views|architecture)(?:\/(.*))?$/);
+    if(!leg) return null;
+    m=["",leg[1],leg[2]];
+  }
+  let v=m[1], sub=m[2]?decodeURIComponent(m[2]):null;
+  if(v==="architecture") v="views";
+  if(v==="views"){
+    const canon="#/views"+(sub?"/"+sub:"");
+    if(raw!==canon) history.replaceState(null,"",canon);
+  }
+  return {v,sub};
 }
 function show(v,sub){
   if(!VIEWS[v]||!document.getElementById("v-"+v)) v="today";
@@ -163,10 +175,24 @@ function show(v,sub){
   pauseHiddenMedia();
   if(v==="today") renderToday();
   if(v==="shorts"){ if(sub) selectShortById(sub,false); renderShorts(); }
+  if(v==="views" && typeof knownViewTab==="function"){
+    const prev=LS.get(KEY+"viewTab","conceptual");
+    let tab=knownViewTab(sub);
+    if(!tab){
+      tab=knownViewTab(prev)?prev:"conceptual";
+      const canon="#/views/"+tab;
+      if(location.hash!==canon) history.replaceState(null,"",canon);
+    }
+    LS.set(KEY+"viewTab", tab);
+    renderViews();
+    if(!changed && prev!==tab){ const main=$("#main"); if(main) main.scrollTop=0; window.scrollTo(0,0); }
+  }
   if(changed){
     const main=$("#main"); if(main) main.scrollTop=0;
     window.scrollTo(0,0);
   }
+  const cur=document.querySelector("#nav .nav-item.active");
+  if(cur && cur.scrollIntoView) cur.scrollIntoView({block:"nearest"});
   if(v==="copilot" && typeof focusCopilot==="function") focusCopilot(sub);
 }
 window.go = function(v){
@@ -527,7 +553,7 @@ function renderToday(){
       <p class="lead">${chDone(ch)?"Today's challenge is done. Anything more is a bonus.":"Three rounds, about three minutes. Keep the streak going."}</p></div>
     <div class="streak ${st?"on":""}" title="Days in a row with the daily challenge completed"><b>${st}</b><span>day streak</span></div>
   </div>
-  <div class="note whats-new"><b>What's new · 15 Oct 2026.</b> Microsoft Copilot deep dive, checked against Learn the same day: the rename, three processor types, Anthropic defaults and the apps setting, usage-based Cowork and Copilot Code, and the federated write confirmation card. <a href="#/copilot">Open the deep dive</a> · <a href="#/copilot/models">Models</a></div>
+  <div class="note whats-new"><b>What's new · 15 Oct 2026.</b> Architecture views deep-link. The Copilot prompt walk is the architecture article's four hops, and the model cards split default, selector, and admin-controlled. <a href="#/prompts">AI prompts</a> are nine copyable architect prompts. Open questions are on the <a href="#/backlog">Backlog</a>.</div>
   ${challengeHTML()}
   <div class="today-grid">
     ${cs?h`<a class="hero-card" href="#/shorts/${encodeURIComponent(cs.id)}">
@@ -626,8 +652,12 @@ function buildPaletteIndex(){
     .concat(DATA.checklist.map((c,i)=>({kind:"Failure",label:c.title,sub:c.view,go:()=>{LS.set(KEY+"cl-open:"+i,true);LS.set(KEY+"fmView","all");renderCounsel();go("failures");}})))
     .concat((window.LIBRARY||[]).map(p=>({kind:"Note",label:p.title,sub:p.section,go:()=>{location.href="library/"+p.slug+".html";}})))
     .concat(SOURCES.map(s=>({kind:"Source",label:"S"+s.n+" · "+s.t,sub:s.type,go:()=>{window.open(s.u,"_blank","noopener");}})))
+    .concat((window.VIEW_TABS||[]).map(([id,label])=>({kind:"View",label:label,sub:"Architecture views",go:()=>{location.hash="#/views/"+id;}})))
     .concat((DATA.copilot&&DATA.copilot.blocks||[]).map(b=>({kind:"Copilot",label:b.n+" · "+b.title,sub:"Microsoft Copilot deep dive",go:()=>{location.hash="#/copilot/"+b.id;}})))
-    .concat((DATA.copilot&&DATA.copilot.prompts||[]).map(p=>({kind:"Prompt",label:p.title,sub:"Copilot deep dive",go:()=>{location.hash="#/copilot/checks";}})));
+    .concat((DATA.copilot&&DATA.copilot.modelBands||[]).flatMap(b=>b.cards.map(c=>({kind:"Model",label:c.k,sub:b.k+" · "+c.lines[0],go:()=>{location.hash="#/copilot/models";}}))))
+    .concat((DATA.copilot&&DATA.copilot.prompts||[]).map(p=>({kind:"Prompt",label:p.title,sub:"Copilot deep dive",go:()=>{location.hash="#/copilot/checks";}})))
+    .concat((window.PROMPTS||[]).map(p=>({kind:"Prompt",label:p.t,sub:"AI prompts · "+((window.PROMPT_CATS||[])[p.c]||""),kw:p.p.slice(0,500),go:()=>{LS.set(KEY+"pq","");LS.set(KEY+"pf",p.c);go("prompts");if(typeof renderPrompts==="function")renderPrompts();}})))
+    .concat((DATA.backlog||[]).map(b=>({kind:"Backlog",label:b.area,sub:b.t,go:()=>{location.hash=b.where;}})));
 }
 function openPalette(){
   closeSheet(); if(!palIndex.length) buildPaletteIndex();
@@ -637,7 +667,7 @@ function openPalette(){
 function closePalette(){ $("#palette").hidden=true; if(lastFocus&&lastFocus.focus) lastFocus.focus({preventScroll:true}); }
 function filterPalette(){
   const q=norm($("#paletteInput").value.trim());
-  palItems=(q?palIndex.filter(x=>norm(x.label).includes(q)||norm(x.sub).includes(q)).sort((a,b)=>norm(a.label).indexOf(q)-norm(b.label).indexOf(q)):palIndex.filter(x=>x.kind==="View")).slice(0,40);
+  palItems=(q?palIndex.filter(x=>norm(x.label+" "+(x.sub||"")+" "+(x.kw||"")).includes(q)).sort((a,b)=>norm(a.label).indexOf(q)-norm(b.label).indexOf(q)):palIndex.filter(x=>x.kind==="View")).slice(0,40);
   palSel=0; drawPalette();
 }
 function drawPalette(){
