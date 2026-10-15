@@ -553,7 +553,7 @@ function renderToday(){
       <p class="lead">${chDone(ch)?"Today's challenge is done. Anything more is a bonus.":"Three rounds, about three minutes. Keep the streak going."}</p></div>
     <div class="streak ${st?"on":""}" title="Days in a row with the daily challenge completed"><b>${st}</b><span>day streak</span></div>
   </div>
-  <div class="note whats-new"><b>What's new · 15 Oct 2026.</b> Architecture views deep-link. The Copilot deep dive dates the October 2026 Chat default to the release notes (GPT-5) and lists the selector models. <a href="#/prompts">AI prompts</a> are nine copyable architect prompts with source summaries. Open questions are on the <a href="#/backlog">Backlog</a>.</div>
+  <div class="note whats-new"><b>What's new · 15 Oct 2026.</b> Architecture views deep-link. The Copilot prompt walk is the architecture article's four hops, and the model cards split default, selector, and admin-controlled. <a href="#/prompts">AI prompts</a> are nine copyable architect prompts. Open questions are on the <a href="#/backlog">Backlog</a>.</div>
   ${challengeHTML()}
   <div class="today-grid">
     ${cs?h`<a class="hero-card" href="#/shorts/${encodeURIComponent(cs.id)}">
@@ -654,7 +654,7 @@ function buildPaletteIndex(){
     .concat(SOURCES.map(s=>({kind:"Source",label:"S"+s.n+" · "+s.t,sub:s.type,go:()=>{window.open(s.u,"_blank","noopener");}})))
     .concat((window.VIEW_TABS||[]).map(([id,label])=>({kind:"View",label:label,sub:"Architecture views",go:()=>{location.hash="#/views/"+id;}})))
     .concat((DATA.copilot&&DATA.copilot.blocks||[]).map(b=>({kind:"Copilot",label:b.n+" · "+b.title,sub:"Microsoft Copilot deep dive",go:()=>{location.hash="#/copilot/"+b.id;}})))
-    .concat((DATA.copilot&&DATA.copilot.modelMap?DATA.copilot.modelMap.rows:[]).map(r=>({kind:"Model",label:r[0],sub:r[1],go:()=>{location.hash="#/copilot/models";}})))
+    .concat((DATA.copilot&&DATA.copilot.modelBands||[]).flatMap(b=>b.cards.map(c=>({kind:"Model",label:c.k,sub:b.k+" · "+c.lines[0],go:()=>{location.hash="#/copilot/models";}}))))
     .concat((DATA.copilot&&DATA.copilot.prompts||[]).map(p=>({kind:"Prompt",label:p.title,sub:"Copilot deep dive",go:()=>{location.hash="#/copilot/checks";}})))
     .concat((window.PROMPTS||[]).map(p=>({kind:"Prompt",label:p.t,sub:"AI prompts · "+((window.PROMPT_CATS||[])[p.c]||""),kw:p.p.slice(0,500),go:()=>{LS.set(KEY+"pq","");LS.set(KEY+"pf",p.c);go("prompts");if(typeof renderPrompts==="function")renderPrompts();}})))
     .concat((DATA.backlog||[]).map(b=>({kind:"Backlog",label:b.area,sub:b.t,go:()=>{location.hash=b.where;}})));

@@ -151,6 +151,11 @@ function archDiagram(kind){
     const steps=[["User","in the app"],["App","M365 app"],["Grounding","Microsoft Graph"],["LLM","grounded prompt"],["Response","back to the app"]];
     body=steps.map((s,i)=>box(16+i*148,36,136,64,s[0],s[1])).join("")+steps.slice(0,-1).map((_,i)=>arrow(152+i*148,68,164+i*148)).join("");
     cap="Logical path from the architecture article. A write stays in the source system. Copilot is not the integration bus.";
+  } else if(kind==="walk"){
+    label="Four hops from the Copilot architecture article: prompt, grounding, the model, response";
+    const steps=[["Prompt","in the app"],["Grounding","Graph, in transit"],["LLM","grounded prompt"],["Response","back to the app"]];
+    body=steps.map((s,i)=>box(16+i*186,36,170,64,s[0],s[1])).join("")+steps.slice(0,-1).map((_,i)=>arrow(186+i*186,68,202+i*186)).join("");
+    cap="Architecture article order, read 15 Oct 2026. Post-processing and optional web search are on other pages.";
   } else if(kind==="identity"){
     label="Identity and access: the Microsoft 365 boundary, the user's permissions, and the controls around them";
     vb="0 0 760 210";
@@ -647,15 +652,24 @@ function renderCopilot(){
     const tail=b.id==="models"?paras.slice(1):[];
     h+=`<section class="card cop-block" id="cop-${esc(b.id)}"><h2>${esc(b.n)} · ${esc(b.title)}</h2>${head.map(t=>`<p>${ec(t)}</p>`).join("")}`;
     if(b.reveals) h+=b.reveals.map(r=>`<details class="why-matters"><summary>${esc(r.q)}</summary><p>${ec(r.a)}</p></details>`).join("");
-    if(b.id==="models"&&C.modelMap){
-      h+=`<div class="mc-grid">${C.modelMap.rows.map(r=>`<article class="mc"><div class="mc-k">${esc(r[0])}</div><p>${ec(r[1])}</p><div class="mc-s">${ec(r[2])}</div></article>`).join("")}</div>`;
-      if(C.processors) h+=`<div class="mc-grid">${C.processors.map(c=>`<article class="mc"><div class="mc-k">${esc(c.k)}</div><p>${ec(c.t)}</p></article>`).join("")}</div>`;
+    if(b.id==="models"&&C.modelBands){
+      C.modelBands.forEach(band=>{
+        h+=`<div class="band">${esc(band.k)}</div>`;
+        h+=`<div class="mc-grid">${band.cards.map(c=>`<article class="mc"><div class="mc-k">${esc(c.k)}</div><ul>${c.lines.map(line=>`<li>${ec(line)}</li>`).join("")}</ul><div class="mc-s">${ec(c.s)}</div></article>`).join("")}</div>`;
+      });
+      if(C.processors){
+        h+=`<div class="band">Processor type</div>`;
+        h+=`<div class="mc-grid">${C.processors.map(c=>`<article class="mc"><div class="mc-k">${esc(c.k)}</div><p>${ec(c.t)}</p></article>`).join("")}</div>`;
+      }
       h+=tail.map(t=>`<p>${ec(t)}</p>`).join("");
     }
-    if(b.lanes) h+=`<div class="mc-grid mc-2">${b.lanes.map(c=>`<article class="mc"><div class="mc-k">${esc(c.k)}</div><p>${ec(c.t)}</p></article>`).join("")}</div>`;
+    if(b.lanes) h+=`<div class="mc-grid mc-2">${b.lanes.map(c=>`<article class="mc"><div class="mc-k">${esc(c.k)}</div><ul>${(c.lines||[c.t]).map(line=>`<li>${ec(line)}</li>`).join("")}</ul></article>`).join("")}</div>`;
     if(b.cards) h+=`<div class="mc-grid">${b.cards.map(c=>`<article class="mc"><div class="mc-k">${esc(c.k)}</div><p>${ec(c.t)}</p></article>`).join("")}</div>`;
+    if(b.tables) h+=b.tables.map(tableHTML).join("");
     if(b.id==="stack"){
-      h+=`<ol class="path">${C.steps.map((s,i)=>`<li><span class="pn">${i+1}</span><div><b>${esc(s.t)}</b><p>${ec(s.d)}</p></div></li>`).join("")}</ol>`;
+      h+=archDiagram("walk");
+      h+=`<div class="mc-grid">${C.steps.map((s,i)=>`<article class="mc"><div class="mc-k">${i+1} · ${esc(s.t)}</div><ul>${s.lines.map(line=>`<li>${ec(line)}</li>`).join("")}</ul><div class="mc-s">${ec(s.s)}</div></article>`).join("")}</div>`;
+      if(C.stackAlso) h+=`<div class="mc-grid">${C.stackAlso.map(c=>`<article class="mc"><div class="mc-k">${esc(c.k)}</div><p>${ec(c.t)}</p></article>`).join("")}</div>`;
     }
     if(b.id==="family"){
       h+=`<table class="tbl"><thead><tr>${C.family.cols.map(c=>`<th>${esc(c)}</th>`).join("")}</tr></thead><tbody>${C.family.rows.map(r=>`<tr>${r.map(c=>`<td>${ec(c)}</td>`).join("")}</tr>`).join("")}</tbody></table>`;
@@ -672,7 +686,6 @@ function renderCopilot(){
       C.prompts.forEach(p=>{
         h+=`<details class="promptbox"><summary>${esc(p.title)}</summary><pre>${esc(p.text)}</pre><button type="button" class="copybtn" data-c="${encodeURIComponent(p.text)}">Copy</button></details>`;
       });
-      h+=`<p class="obj">Open questions live on the <a href="#/backlog">Backlog</a>.</p>`;
     }
     h+=`</section>`;
   });
