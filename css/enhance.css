@@ -344,3 +344,35 @@ a.nav-item:hover{text-decoration:none}
 #v-views .arch-svg .ahead{fill:none;stroke:#F3EE6E;stroke-width:1.6}
 #v-views figcaption{font-size:.8rem;color:#8A8A8A;margin-top:.35rem}
 #v-views .alt-k{display:inline-block;background:#F3EE6E;color:#000000;font-size:.68rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;border-radius:4px;padding:.08rem .4rem;margin-right:.35rem}
+
+/* Deep-dive cards, prompt library, backlog. House colors on the cards. */
+#v-copilot,#v-prompts,#v-backlog{font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+#v-copilot .mc-grid,#v-prompts .mc-grid,#v-backlog .mc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:.7rem;margin:.85rem 0 1rem}
+#v-copilot .mc,#v-prompts .mc,#v-backlog .mc{background:#000000;color:#FFFFFF;border:1px solid #8A8A8A;border-radius:12px;padding:.85rem 1rem;margin:0}
+#v-copilot .mc p,#v-prompts .mc p,#v-backlog .mc p{margin:.35rem 0 0;line-height:1.5;color:#FFFFFF}
+#v-copilot .mc-k,#v-prompts .mc-k,#v-backlog .mc-k{display:inline-block;background:#F3EE6E;color:#000000;font-size:.68rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;border-radius:4px;padding:.12rem .45rem}
+#v-copilot .mc-s,#v-prompts .mc-s,#v-backlog .mc-s{color:#8A8A8A;font-size:.8rem;margin-top:.45rem}
+#v-copilot .mc h3,#v-prompts .mc h3{margin:.45rem 0 0;font-size:1rem;color:#FFFFFF}
+#v-copilot .cite,#v-backlog .cite,#v-prompts .cite{color:#000000;background:#F3EE6E;border:1px solid #F3EE6E}
+#v-copilot .path{list-style:none;margin:.7rem 0 0;padding:0;display:grid;gap:.55rem}
+#v-copilot .path li{display:grid;grid-template-columns:2.2rem 1fr;gap:.75rem;align-items:start;background:#000000;color:#FFFFFF;border:1px solid #8A8A8A;border-radius:12px;padding:.75rem .9rem}
+#v-copilot .path b{display:block;margin-bottom:.2rem}
+#v-copilot .path p{margin:0;color:#FFFFFF;line-height:1.5}
+#v-copilot .pn{width:2rem;height:2rem;border-radius:999px;background:#F3EE6E;color:#000000;display:grid;place-items:center;font-weight:700}
+#v-prompts .prompt-card pre{white-space:pre-wrap;font-family:ui-monospace,Consolas,monospace;font-size:.78rem;line-height:1.45;color:#FFFFFF;background:transparent;border:0;padding:.55rem 0 0;margin:0}
+#v-prompts .copybtn{margin-top:.6rem}
+[data-theme$="-light"] #v-copilot .mc,
+[data-theme$="-light"] #v-prompts .mc,
+[data-theme$="-light"] #v-backlog .mc,
+[data-theme$="-light"] #v-copilot .path li{background:#FFFFFF;color:#000000;border-color:#000000}
+[data-theme$="-light"] #v-copilot .mc p,
+[data-theme$="-light"] #v-prompts .mc p,
+[data-theme$="-light"] #v-backlog .mc p,
+[data-theme$="-light"] #v-copilot .path p,
+[data-theme$="-light"] #v-copilot .mc h3,
+[data-theme$="-light"] #v-prompts .mc h3,
+[data-theme$="-light"] #v-prompts .prompt-card pre{color:#000000}
+[data-theme$="-light"] #v-copilot .mc-k,
+[data-theme$="-light"] #v-prompts .mc-k,
+[data-theme$="-light"] #v-backlog .mc-k,
+[data-theme$="-light"] #v-copilot .pn{background:#F3EE6E;color:#000000}

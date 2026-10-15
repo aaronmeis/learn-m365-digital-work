@@ -414,15 +414,13 @@ function renderPrompts(){
   const el=$("#v-prompts");
   const pl=(window.LIBRARY||[]).filter(p=>p.section==="Prompts");
   let h=`<h2 class="vh">Prompt library</h2>
-  <p class="lead">Study prompts that stay on public documentation. No tenant names, secrets, or customer data. The NotebookLM prompts that generated this pack's reports and media are below.</p>
-  <div class="note danger"><b>Data hygiene.</b> No tenant names, secrets, credentials, or customer data in any model. Use synthetic designs and public Microsoft documentation.</div>`;
-  DATA.prompts.forEach(p=>{
-    h+=`<div class="promptcat"><h3>${esc(p.cat)} <span class="pill">${esc(p.model)}</span></h3>
-      <div class="obj" style="margin:.15rem 0 .4rem">${esc(p.desc)}</div>
-      <div style="font-size:.8rem;color:var(--text-dim);margin-bottom:.4rem">Variants: ${p.items.map(esc).join(" · ")}</div>
-      <details class="promptbox"><summary>Flagship prompt</summary><pre>${esc(p.flagship)}</pre><button class="copybtn" data-c="${encodeURIComponent(p.flagship)}">Copy</button></details></div>`;
+  <p class="lead">Nine study prompts. Public documentation only. No tenant names, secrets, or customer data.</p>
+  <div class="note"><b>Data hygiene.</b> Paste a synthetic design. Cite Microsoft Learn or GitHub Docs. If the page does not say it, the answer is UNVERIFIED.</div>
+  <div class="mc-grid">`;
+  DATA.prompts.forEach((p,i)=>{
+    h+=`<article class="mc prompt-card"><div class="mc-k">${String(i+1).padStart(2,"0")} · ${esc(p.model)}</div><h3>${esc(p.cat)}</h3><p>${esc(p.desc)}</p><p class="mc-s">${p.items.map(esc).join(" · ")}</p><pre>${esc(p.flagship)}</pre><button type="button" class="copybtn" data-c="${encodeURIComponent(p.flagship)}">Copy</button></article>`;
   });
-  h+=`<h3 style="margin:1.8rem 0 .6rem;font-size:1rem">NotebookLM prompt notes</h3><div class="libgrid">${pl.map(p=>`<a class="libcard" href="library/${p.slug}.html"><b>${esc(p.title)}</b><span>${esc(p.desc)}</span></a>`).join("")}</div>`;
+  h+=`</div><h3 style="margin:1.8rem 0 .6rem;font-size:1rem">NotebookLM prompt notes</h3><div class="libgrid">${pl.map(p=>`<a class="libcard" href="library/${p.slug}.html"><b>${esc(p.title)}</b><span>${esc(p.desc)}</span></a>`).join("")}</div>`;
   el.innerHTML=h;
   $$(".copybtn",el).forEach(b=>b.onclick=()=>{try{navigator.clipboard.writeText(decodeURIComponent(b.dataset.c));b.textContent="Copied";b.classList.add("copied");setTimeout(()=>{b.textContent="Copy";b.classList.remove("copied");},1200);}catch(e){}});
 }
@@ -543,7 +541,6 @@ function defaultMode(){try{return window.matchMedia("(prefers-color-scheme: ligh
 function renderCopilot(){
   const el=$("#v-copilot"); if(!el||!DATA.copilot) return;
   const C=DATA.copilot;
-  const paras=arr=>(arr||[]).map(t=>`<p>${ec(t)}</p>`).join("");
   let h=`<span class="badge">COPILOT DEEP DIVE · ${esc(C.asOf)}</span>
   <h1 style="margin-top:.9rem">Microsoft Copilot deep dive</h1>
   <p class="lead">What it is, how a prompt walks the stack, which models Learn names as of October 2026, and where the trust boundary stops. Every claim has an S# chip. Government-cloud parity stays UNVERIFIED unless a government service description says otherwise. Learn pages were read ${esc(C.asOf)}.</p>
@@ -556,13 +553,20 @@ function renderCopilot(){
   </div>
   <nav class="cop-jump" aria-label="Deep dive blocks">${C.blocks.map(b=>`<a href="#/copilot/${esc(b.id)}">${esc(b.n)} ${esc(b.title)}</a>`).join("")}</nav>`;
   C.blocks.forEach(b=>{
-    h+=`<section class="card cop-block" id="cop-${esc(b.id)}"><h2>${esc(b.n)} · ${esc(b.title)}</h2>${paras(b.paras)}`;
+    const paras=b.paras||[];
+    const head=b.id==="models"?paras.slice(0,1):paras;
+    const tail=b.id==="models"?paras.slice(1):[];
+    h+=`<section class="card cop-block" id="cop-${esc(b.id)}"><h2>${esc(b.n)} · ${esc(b.title)}</h2>${head.map(t=>`<p>${ec(t)}</p>`).join("")}`;
     if(b.reveals) h+=b.reveals.map(r=>`<details class="why-matters"><summary>${esc(r.q)}</summary><p>${ec(r.a)}</p></details>`).join("");
     if(b.id==="models"&&C.modelMap){
-      h+=`<table class="tbl"><thead><tr>${C.modelMap.cols.map(c=>`<th>${esc(c)}</th>`).join("")}</tr></thead><tbody>${C.modelMap.rows.map(r=>`<tr>${r.map(c=>`<td>${ec(c)}</td>`).join("")}</tr>`).join("")}</tbody></table>`;
+      h+=`<div class="mc-grid">${C.modelMap.rows.map(r=>`<article class="mc"><div class="mc-k">${esc(r[0])}</div><p>${ec(r[1])}</p><div class="mc-s">${ec(r[2])}</div></article>`).join("")}</div>`;
+      if(C.processors) h+=`<div class="mc-grid">${C.processors.map(c=>`<article class="mc"><div class="mc-k">${esc(c.k)}</div><p>${ec(c.t)}</p></article>`).join("")}</div>`;
+      h+=tail.map(t=>`<p>${ec(t)}</p>`).join("");
     }
+    if(b.lanes) h+=`<div class="mc-grid mc-2">${b.lanes.map(c=>`<article class="mc"><div class="mc-k">${esc(c.k)}</div><p>${ec(c.t)}</p></article>`).join("")}</div>`;
+    if(b.cards) h+=`<div class="mc-grid">${b.cards.map(c=>`<article class="mc"><div class="mc-k">${esc(c.k)}</div><p>${ec(c.t)}</p></article>`).join("")}</div>`;
     if(b.id==="stack"){
-      h+=`<div class="stepper" id="copStepper"><div class="stepper-nav" role="tablist">${C.steps.map((s,i)=>`<button type="button" class="b ${i===0?"on":""}" role="tab" aria-selected="${i===0}" data-step="${i}">${i+1} ${esc(s.t)}</button>`).join("")}</div><div class="stepper-panel" id="copStepPanel">${ec(C.steps[0].d)}</div></div>`;
+      h+=`<ol class="path">${C.steps.map((s,i)=>`<li><span class="pn">${i+1}</span><div><b>${esc(s.t)}</b><p>${ec(s.d)}</p></div></li>`).join("")}</ol>`;
     }
     if(b.id==="family"){
       h+=`<table class="tbl"><thead><tr>${C.family.cols.map(c=>`<th>${esc(c)}</th>`).join("")}</tr></thead><tbody>${C.family.rows.map(r=>`<tr>${r.map(c=>`<td>${ec(c)}</td>`).join("")}</tr>`).join("")}</tbody></table>`;
@@ -579,16 +583,11 @@ function renderCopilot(){
       C.prompts.forEach(p=>{
         h+=`<details class="promptbox"><summary>${esc(p.title)}</summary><pre>${esc(p.text)}</pre><button type="button" class="copybtn" data-c="${encodeURIComponent(p.text)}">Copy</button></details>`;
       });
-      h+=`<h3>Still open</h3><ul class="openq">${C.open.map(t=>`<li><b>UNVERIFIED.</b> ${esc(t)}</li>`).join("")}</ul>`;
+      h+=`<p class="obj">Open questions live on the <a href="#/backlog">Backlog</a>.</p>`;
     }
     h+=`</section>`;
   });
   el.innerHTML=h;
-  $$("[data-step]",el).forEach(btn=>btn.onclick=()=>{
-    const i=+btn.dataset.step;
-    $$("[data-step]",el).forEach(x=>{const on=x===btn; x.classList.toggle("on",on); x.setAttribute("aria-selected",on?"true":"false");});
-    $("#copStepPanel").innerHTML=ec(C.steps[i].d);
-  });
   $$(".qcard",el).forEach(card=>{
     const q=DATA.quiz.filter(x=>x.week===6)[+card.dataset.cqi];
     $$(".qopts label",card).forEach(l=>l.onclick=()=>{
@@ -606,5 +605,14 @@ function focusCopilot(sub){
   if(id) id.scrollIntoView({block:"start"});
 }
 
+function renderBacklog(){
+  const el=$("#v-backlog"); if(!el||!DATA.backlog) return;
+  let h=`<span class="badge">BACKLOG · 15 Oct 2026</span>
+  <h1 style="margin-top:.9rem">Backlog</h1>
+  <p class="lead">Open questions to pick up next time. Each one is UNVERIFIED until a page says otherwise. Architecture views keep their own open rows on the page.</p>
+  <div class="mc-grid">${DATA.backlog.map(item=>`<article class="mc"><div class="mc-k">${esc(item.area)}</div><p>${ec(item.t)}</p><p class="mc-s"><a href="${esc(item.where)}">Open the section</a></p></article>`).join("")}</div>`;
+  el.innerHTML=h;
+}
+
 /* ---- Init ---- */
-initTheme();renderDashboard();renderCurriculum();renderViews();renderMap();renderFlash();renderDeck();renderQuiz();renderGlossary();renderPrompts();renderCounsel();renderCheat();renderEA();renderLibrary();renderReferences();renderCopilot();
+initTheme();renderDashboard();renderCurriculum();renderViews();renderMap();renderFlash();renderDeck();renderQuiz();renderGlossary();renderPrompts();renderCounsel();renderCheat();renderEA();renderLibrary();renderReferences();renderCopilot();renderBacklog();
