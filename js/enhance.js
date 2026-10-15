@@ -14,12 +14,12 @@ const APP_URL="https://aaronmeis.github.io/learn-m365-digital-work/";
 
 /* ---------- Views and groups ---------- */
 const VIEWS = {
-  today:"Today", curriculum:"Curriculum", views:"Architecture views", shorts:"Shorts", deck:"Deck and deep-dive cut", library:"Library",
+  today:"Today", copilot:"Microsoft Copilot deep dive", curriculum:"Curriculum", views:"Architecture views", shorts:"Shorts", deck:"Deck and deep-dive cut", library:"Library",
   flash:"Flashcards", quiz:"Quiz", failures:"Failure modes", prompts:"Prompts",
   cheat:"Decision rules", map:"Progress map", glossary:"Glossary", ea:"EA mapping", refs:"Source ledger", dashboard:"Overview"
 };
 const GROUPS = {
-  learn:["curriculum","views","shorts","deck","library"],
+  learn:["copilot","curriculum","views","shorts","deck","library"],
   practice:["flash","quiz","failures","prompts"],
   reference:["cheat","map","glossary","ea","refs","dashboard"]
 };
@@ -167,6 +167,7 @@ function show(v,sub){
     const main=$("#main"); if(main) main.scrollTop=0;
     window.scrollTo(0,0);
   }
+  if(v==="copilot" && typeof focusCopilot==="function") focusCopilot(sub);
 }
 window.go = function(v){
   const target="#/"+v;
@@ -526,6 +527,7 @@ function renderToday(){
       <p class="lead">${chDone(ch)?"Today's challenge is done. Anything more is a bonus.":"Three rounds, about three minutes. Keep the streak going."}</p></div>
     <div class="streak ${st?"on":""}" title="Days in a row with the daily challenge completed"><b>${st}</b><span>day streak</span></div>
   </div>
+  <div class="note whats-new"><b>What's new · 15 Oct 2026.</b> Microsoft Copilot deep dive: the rename (Microsoft 365 Copilot → Microsoft Copilot, Chat → Microsoft Copilot Chat), the prompt stack, who controls the model, and the federated write confirmation card. <a href="#/copilot">Open the deep dive</a> · <a href="#/copilot/start">Start at block 0</a></div>
   ${challengeHTML()}
   <div class="today-grid">
     ${cs?h`<a class="hero-card" href="#/shorts/${encodeURIComponent(cs.id)}">
@@ -623,7 +625,9 @@ function buildPaletteIndex(){
     .concat(DATA.glossary.map(g=>({kind:"Term",label:g.term,sub:g.category,go:()=>{LS.set(KEY+"gq",g.term);LS.set(KEY+"gcat","all");renderGlossary();go("glossary");}})))
     .concat(DATA.checklist.map((c,i)=>({kind:"Failure",label:c.title,sub:c.view,go:()=>{LS.set(KEY+"cl-open:"+i,true);LS.set(KEY+"fmView","all");renderCounsel();go("failures");}})))
     .concat((window.LIBRARY||[]).map(p=>({kind:"Note",label:p.title,sub:p.section,go:()=>{location.href="library/"+p.slug+".html";}})))
-    .concat(SOURCES.map(s=>({kind:"Source",label:"S"+s.n+" · "+s.t,sub:s.type,go:()=>{window.open(s.u,"_blank","noopener");}})));
+    .concat(SOURCES.map(s=>({kind:"Source",label:"S"+s.n+" · "+s.t,sub:s.type,go:()=>{window.open(s.u,"_blank","noopener");}})))
+    .concat((DATA.copilot&&DATA.copilot.blocks||[]).map(b=>({kind:"Copilot",label:b.n+" · "+b.title,sub:"Microsoft Copilot deep dive",go:()=>{location.hash="#/copilot/"+b.id;}})))
+    .concat((DATA.copilot&&DATA.copilot.prompts||[]).map(p=>({kind:"Prompt",label:p.title,sub:"Copilot deep dive",go:()=>{location.hash="#/copilot/checks";}})));
 }
 function openPalette(){
   closeSheet(); if(!palIndex.length) buildPaletteIndex();

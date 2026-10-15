@@ -11,10 +11,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Learn the digital-work platform</title>
-<meta name="description" content="Architect study console for Microsoft's digital-work platform: Microsoft 365 Copilot, GitHub Copilot, connectors, and MCP, with a daily architecture challenge.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<meta name="description" content="Architect study console for Microsoft's digital-work platform: Microsoft Copilot, GitHub Copilot, connectors, and MCP, with a daily architecture challenge.">
 <link rel="stylesheet" href="css/base.css">
 <link rel="stylesheet" href="css/enhance.css">
 </head>
@@ -47,6 +44,7 @@
     </div>
     <div class="nav-group" data-group="learn">
       <div class="nav-group-label">Learn</div>
+      <a class="nav-item" href="#/copilot" data-v="copilot"><span class="ni-ic" aria-hidden="true">▪</span>Microsoft Copilot deep dive</a>
       <a class="nav-item" href="#/curriculum" data-v="curriculum"><span class="ni-ic" aria-hidden="true">▪</span>Curriculum (8 blocks)</a>
       <a class="nav-item" href="#/views" data-v="views"><span class="ni-ic" aria-hidden="true">▪</span>Architecture views</a>
       <a class="nav-item" href="#/shorts" data-v="shorts"><span class="ni-ic" aria-hidden="true">▪</span>Shorts</a>
@@ -82,7 +80,7 @@
       </select>
     </div>
     <div class="data-row"><button type="button" class="linkbtn" data-action="export">Export progress</button><button type="button" class="linkbtn" data-action="import">Import</button></div>
-    Microsoft-grounded sources only. No tenant data or secrets in any model.<br><br>
+    Study material, not an official Microsoft course or a license quote. Claims need an S# chip. Government-cloud parity stays UNVERIFIED unless a government service description says so. No tenant data or secrets in any model.<br><br>
     Canonical path: Obsidian <code>Learning/tech-deep-dive/m365-digital-work-platform/</code>. Progress saved locally.
   </div>
 </nav>
@@ -118,6 +116,7 @@
 
 <main class="main-content" id="main" tabindex="-1">
   <section class="view active" id="v-today" aria-live="polite"></section>
+  <section class="view" id="v-copilot"></section>
   <section class="view" id="v-dashboard"></section>
   <section class="view" id="v-curriculum"></section>
   <section class="view" id="v-views"></section>
@@ -146,8 +145,8 @@
 
 <script src="library/manifest.js"></script>
 <script src="shorts-catalog.js"></script>
-<script src="js/data.js?v=20261002d"></script>
-<script src="js/app.js?v=20261002d"></script>
+<script src="js/data.js?v=20261015a"></script>
+<script src="js/app.js?v=20261015a"></script>
 <script src="js/enhance.js"></script>
 </body>
 </html>
