@@ -527,7 +527,7 @@ function renderToday(){
       <p class="lead">${chDone(ch)?"Today's challenge is done. Anything more is a bonus.":"Three rounds, about three minutes. Keep the streak going."}</p></div>
     <div class="streak ${st?"on":""}" title="Days in a row with the daily challenge completed"><b>${st}</b><span>day streak</span></div>
   </div>
-  <div class="note whats-new"><b>What's new · 15 Oct 2026.</b> Microsoft Copilot deep dive: the rename (Microsoft 365 Copilot → Microsoft Copilot, Chat → Microsoft Copilot Chat), the prompt stack, who controls the model, and the federated write confirmation card. <a href="#/copilot">Open the deep dive</a> · <a href="#/copilot/start">Start at block 0</a></div>
+  <div class="note whats-new"><b>What's new · 15 Oct 2026.</b> Microsoft Copilot deep dive, checked against Learn the same day: the rename, three processor types, Anthropic defaults and the apps setting, usage-based Cowork and Copilot Code, and the federated write confirmation card. <a href="#/copilot">Open the deep dive</a> · <a href="#/copilot/models">Models</a></div>
   ${challengeHTML()}
   <div class="today-grid">
     ${cs?h`<a class="hero-card" href="#/shorts/${encodeURIComponent(cs.id)}">

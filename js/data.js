@@ -317,7 +317,7 @@ const SOURCES = [
     "u": "https://learn.microsoft.com/en-us/microsoft-365/copilot/ai-models-overview",
     "type": "docs",
     "trust": "high",
-    "b": "model types, continuous updates",
+    "b": "rename, processor types, Message center",
     "ledger": "32"
   },
   {
@@ -519,6 +519,26 @@ const SOURCES = [
     "trust": "high",
     "b": "Copilot Code",
     "ledger": "52"
+  },
+  {
+    "n": 53,
+    "g": "Microsoft Learn",
+    "t": "Copilot in Microsoft 365 apps with Anthropic models",
+    "u": "https://learn.microsoft.com/en-us/microsoft-365/copilot/copilot-anthropic-apps",
+    "type": "docs",
+    "trust": "high",
+    "b": "Anthropic apps setting, IP decommission 1 May 2026",
+    "ledger": "53"
+  },
+  {
+    "n": 54,
+    "g": "Microsoft Learn",
+    "t": "Understanding the user subscription license (USL) and usage-based billing (UBB)",
+    "u": "https://learn.microsoft.com/en-us/microsoft-365/copilot/user-subscription-license-usage-based-billing",
+    "type": "docs",
+    "trust": "high",
+    "b": "USL vs Copilot Credits",
+    "ledger": "54"
   }
 ];
 
@@ -1663,7 +1683,7 @@ const DATA = {
         "So the response can skip post-processing checks"
       ],
       "answer": "So the request can include data the user is already allowed to open, without that data training the foundation model",
-      "explanation": "Grounding adds permitted input, such as Microsoft Graph data, before the LLM call [S11] [S36]. Prompts, responses, and Graph data are not used to train foundation LLMs [S33]."
+      "explanation": "Grounding adds permitted input, such as Microsoft Graph data, before the LLM call [S11] [S36]. The privacy page says prompts, responses, and data accessed through Microsoft Graph aren't used to train foundation LLMs, including those used by Microsoft Copilot [S33]."
     },
     {
       "week": 6,
@@ -1708,7 +1728,7 @@ const DATA = {
         "GCC High is the Department of Defense tenant"
       ],
       "answer": "Anthropic models are documented as unavailable for federal GCC, GCC High, and DoD. Other Copilot feature parity is UNVERIFIED unless a government service description says otherwise",
-      "explanation": "The Anthropic subprocessor page states that exclusion [S34]. GCC High is not the DoD tenant [S27]. A commercial page is not gov-cloud evidence."
+      "explanation": "The Anthropic page excludes federal GCC, GCC High, and DoD. Non-federal GCC has a separate opt-in as of 22 July 2026 [S34]. GCC High is not the DoD tenant [S27]. A commercial page is not gov-cloud evidence for every other feature."
     }
   ],
   "views": {
@@ -2708,27 +2728,27 @@ DATA.glossary = [
     "term": "Microsoft Copilot",
     "rung": 100,
     "essential": true,
-    "definition": "The current name of the product formerly called Microsoft 365 Copilot. Licenses and some screens can still say Microsoft 365 Copilot during the transition. Security, compliance, and privacy commitments are unchanged by the rename.",
+    "definition": "The current name. The models overview states that Microsoft 365 Copilot is now named Microsoft Copilot, and that there are no changes to security, compliance, and privacy for organizations. The privacy page adds that some experiences, licenses, and capabilities might still say Microsoft 365 Copilot during the transition.",
     "see_also": "Copilot Chat, Microsoft 365 Copilot",
     "where": "Copilot deep dive",
-    "source": "[S33] [S41]"
+    "source": "[S32] [S33]"
   },
   {
     "category": "Platform",
     "term": "Copilot Chat",
     "rung": 100,
     "essential": true,
-    "definition": "The chat experience now named Microsoft Copilot Chat. The previous product name is Microsoft 365 Copilot Chat. Purview compliance docs also record the older names Business Chat, Graph-grounded chat, and Microsoft 365 Chat.",
+    "definition": "The chat experience now named Microsoft Copilot Chat. The models overview states the previous name, Microsoft 365 Copilot Chat, and that the rename does not change security, compliance, or privacy. Purview docs also record older names: Business Chat, Graph-grounded chat, and Microsoft 365 Chat.",
     "see_also": "Microsoft Copilot, Enterprise Data Protection",
     "where": "Copilot deep dive",
-    "source": "[S33] [S51]"
+    "source": "[S32] [S33] [S51]"
   },
   {
     "category": "Platform",
     "term": "AI model hosted by Microsoft",
     "rung": 200,
     "essential": true,
-    "definition": "A model Microsoft hosts and operates, such as Azure OpenAI. On the models overview, data for these models does not leave Microsoft, and the Microsoft DPA and Product Terms apply.",
+    "definition": "A model Microsoft hosts and operates, such as Azure OpenAI or Black Forest Labs FLUX. Offered under the Microsoft DPA and Product Terms. The models overview says data does not leave Microsoft. Those names are examples on that page, not a menu to memorize.",
     "see_also": "AI subprocessor, AI independent processor",
     "where": "Copilot deep dive",
     "source": "[S32]"
@@ -2748,10 +2768,10 @@ DATA.glossary = [
     "term": "AI independent processor",
     "rung": 300,
     "essential": false,
-    "definition": "A third-party provider that processes data under its own terms, outside the Microsoft DPA. If an admin does not enable it, Microsoft Online Services do not use it. Mistral is turned on under AI providers for other large language models, and the admin accepts Mistral's terms. The Mistral page does not use the words AI independent processor; that label is the models-overview category this note maps it to.",
+    "definition": "A third-party provider that processes data under its own terms, outside the Microsoft DPA, Product Terms, and enterprise safeguards. Admins turn these models on or off in the Microsoft 365 admin center or the Power Platform admin center. If an admin does not enable one, Microsoft Online Services do not use that third-party AI. Anthropic models with Data Retention are an explicit case and stay off until an admin opts in. The older Anthropic independent-processor setting was decommissioned on 1 May 2026. Mistral is enabled under AI providers for other large language models; that page does not use the words AI independent processor.",
     "see_also": "AI subprocessor, AI model hosted by Microsoft",
     "where": "Copilot deep dive",
-    "source": "[S32] [S48]"
+    "source": "[S32] [S34] [S53] [S48]"
   },
   {
     "category": "Platform",
@@ -2818,17 +2838,17 @@ DATA.glossary = [
     "term": "Copilot Credits",
     "rung": 200,
     "essential": false,
-    "definition": "The usage-based meter in the Microsoft 365 admin center for services the credits article lists, including Cowork, advanced SharePoint and OneDrive work, the Work IQ API, Copilot Managed Runtime, Teams Phone Agent, and Code. Several of those rows also require a Copilot license. This is not the same thing as the Microsoft 365 Copilot (Premium) add-on.",
+    "definition": "The meter for usage-based billing. The credits article lists Cowork, advanced SharePoint and OneDrive work, the Work IQ API, Copilot Managed Runtime, Teams Phone Agent, and Code. Cowork and Code also require a Copilot license. The USL article says these experiences consume Copilot Credits and require a user subscription license. The overview says usage-based billing capabilities require Microsoft 365 Copilot (Premium). An admin must set a billing policy before a user can spend credits.",
     "see_also": "Work IQ API, Copilot Cowork",
     "where": "Copilot deep dive",
-    "source": "[S42]"
+    "source": "[S42] [S54] [S10]"
   },
   {
     "category": "Platform",
     "term": "Copilot Cowork",
     "rung": 200,
     "essential": false,
-    "definition": "A Copilot experience that uses Anthropic models to carry out tasks across Microsoft 365 apps. The credits article lists Cowork as usage-based and says a Copilot license is required. The Model menu defaults to Auto, which picks among models the organization has enabled. Named models on that page change, so this note does not freeze SKUs.",
+    "definition": "A Copilot experience that carries out tasks across the Microsoft 365 environment. The overview places it on usage-based billing, which requires Microsoft 365 Copilot (Premium). The credits article also requires a Copilot license. The Model menu defaults to Auto. Named models on the Cowork models page change, so this note does not freeze SKUs.",
     "see_also": "Copilot Credits, AI subprocessor",
     "where": "Copilot deep dive",
     "source": "[S37] [S42] [S47]"
@@ -2878,8 +2898,8 @@ DATA.glossary = [
 DATA.copilot = {
   "asOf": "2026-10-15",
   "aliases": [
-    {"now": "Microsoft Copilot", "was": "Microsoft 365 Copilot", "note": "Current product name. Some licenses and screens still say Microsoft 365 Copilot during the transition. Commitments do not change [S33] [S41]."},
-    {"now": "Microsoft Copilot Chat", "was": "Microsoft 365 Copilot Chat", "note": "Current chat name. Purview docs also record older names: Business Chat, Graph-grounded chat, and Microsoft 365 Chat [S33] [S51]."}
+    {"now": "Microsoft Copilot", "was": "Microsoft 365 Copilot", "note": "The models overview states the rename and that there are no changes to security, compliance, and privacy for organizations. Some licenses and screens can still show the old name during the transition [S32] [S33]."},
+    {"now": "Microsoft Copilot Chat", "was": "Microsoft 365 Copilot Chat", "note": "Same rename note. Purview docs also record older names: Business Chat, Graph-grounded chat, and Microsoft 365 Chat [S32] [S33] [S51]."}
   ],
   "blocks": [
     {
@@ -2889,12 +2909,12 @@ DATA.copilot = {
       "paras": [
         "Microsoft Copilot, for an organization, is the work assistant in Microsoft 365 apps and in chat. It coordinates a language model, content the signed-in user can already open in Microsoft Graph, and the app they are using [S10] [S33].",
         "It matters because the answer is only as good as the data the user can reach, and a write still lands in some other system of record. Copilot is a consumer of that integration layer. This pack's warning is: do not draw it as the bus that owns HR, ITSM, or GitHub [S11] [S4].",
-        "Read the alias card above before the rest. Old slide titles that say Microsoft 365 Copilot or Microsoft 365 Copilot Chat still mean these products [S33]."
+        "Read the alias card above before the rest. The models overview, read 15 Oct 2026, states both renames in one sentence and says there are no changes to security, compliance, and privacy for organizations [S32]. The privacy page repeats that and adds that some experiences, licenses, and capabilities might still use the old names during the transition [S33]."
       ],
       "reveals": [
         {"q": "Why ground on Microsoft Graph?", "a": "The model does not hold your tenant. Grounding adds permitted context, such as mail, files, and meetings the user can already open, at request time. That context is not used to train the foundation model [S11] [S36] [S33]."},
         {"q": "Why is Copilot not the integration bus?", "a": "The architecture sends a grounded prompt to a model and returns a response to the app [S11]. Live facts and writes stay in the source system through connectors or APIs [S3] [S4]. Calling Copilot the bus is how designs skip that layer. The phrase is this pack's rule; Microsoft's pages describe the orchestration, not a bus product."},
-        {"q": "Why is model choice Microsoft's, and the admin's?", "a": "Microsoft chooses and updates the models in the service. Many changes are not a customer announcement [S32]. Admins decide which subprocessors and other providers are on [S34] [S35] [S48]. A user or a Studio maker can pick only inside that boundary [S10] [S34]."}
+        {"q": "Why is model choice Microsoft's, and the admin's?", "a": "Microsoft continuously evaluates and updates the models. A Message center post is used when the change needs admin action, touches contractual, compliance, security, privacy, or data-processing commitments, or is a significant service change. Other changes may show up only on the Copilot blog or in release notes [S32]. Admins decide which subprocessors and independent processors are on [S34] [S35] [S32]. A user or a Studio maker can pick only inside that boundary [S10] [S34]."}
       ]
     },
     {
@@ -2911,12 +2931,14 @@ DATA.copilot = {
       "n": "2",
       "title": "Models behind Copilot",
       "paras": [
-        "Three kinds of model show up in Microsoft Online Services [S32]. Microsoft-hosted models, such as Azure OpenAI, stay inside Microsoft: the DPA and Product Terms apply, and the models page says data does not leave Microsoft. An AI subprocessor is a third party working for Microsoft under that same DPA. An AI independent processor works under its own terms, and only if an admin turns it on.",
-        "The organization application card, read 15 Oct 2026, gives examples rather than a frozen catalog: GPT models from Microsoft (Azure OpenAI), Claude Opus and Claude Sonnet from Anthropic, and GPT models from OpenAI [S36]. Do not memorize those names as the menu. The card says Microsoft may deploy other Microsoft-hosted models, and the models page says the set is updated continuously [S32].",
-        "Anthropic is a subprocessor. OpenAI, when OpenAI operates the model, is a different subprocessor from Azure OpenAI, which Microsoft operates [S34] [S35]. Admins set both under Copilot, Settings, AI providers operating as Microsoft subprocessors. Mistral is not that toggle. It is enabled under AI providers for other large language models, and the admin accepts Mistral's terms [S48].",
-        "Where a person can pick, as of the pages read 15 Oct 2026: the Copilot overview documents a Chat model menu of Auto, Quick response, and Think deeper, and says the options change [S10]. The same page notes that Anthropic is not on for every user. The Anthropic article says the Copilot UI indicates when a Claude model is in use, and that users can select Claude in Researcher and in Edit with Copilot in Microsoft 365 apps [S34]. Excel enterprise users can choose Claude models after Anthropic is enabled [S37]. In Copilot Studio the maker selects the model while creating the agent [S34]. Cowork's Model menu defaults to Auto, which picks among models the organization enabled [S47]. A Chat menu item literally named Claude, beyond the in-use indicator, is UNVERIFIED on those pages.",
-        "Anthropic models used in Copilot, Researcher, Copilot Studio, Power Platform, and Copilot in Microsoft 365 apps are excluded from the EU Data Boundary. EU, EFTA, and UK tenants have Anthropic off by default [S34]. The OpenAI subprocessor article says OpenAI-operated models are in the EU Data Boundary except where the EU Data Boundary docs say otherwise [S35]. Microsoft Copilot itself is documented as meeting the EU Data Boundary commitment [S33]. Do not collapse those three sentences into one.",
-        "Prompts, responses, and data accessed through Microsoft Graph are not used to train foundation LLMs, including the ones Copilot uses [S33]. That sentence is about training. It is not a promise that a prompt never leaves the tenant when a subprocessor or optional web search is in the path [S34] [S41]."
+        "Three kinds of model show up in Microsoft Online Services, on the page read 15 Oct 2026 [S32]. Models hosted and operated by Microsoft, such as Azure OpenAI or Black Forest Labs FLUX, stay under the Microsoft DPA and Product Terms, and that page says data does not leave Microsoft. An AI subprocessor is a third party that handles data on Microsoft's behalf under that same DPA; Microsoft publishes the disclosures. An AI independent processor works under its own terms, outside the DPA. An admin turns those models on or off in the Microsoft 365 admin center or the Power Platform admin center. If an independent processor is not enabled, Microsoft Online Services do not use that third-party AI.",
+        "Do not memorize model names. The organization application card, read 15 Oct 2026, gives examples: GPT models from Microsoft (Azure OpenAI), Claude Opus and Claude Sonnet from Anthropic, and GPT models from OpenAI [S36]. The USL article, same date, gives different examples for everyday licensing: fair use such as GPT 5.6 and Sonnet, and limits such as Opus. It names Astra and Fable as examples of newer frontier models on usage-based billing [S54]. The models page says the set is updated continuously [S32].",
+        "Microsoft tells customers in the Microsoft 365 Message center when a model change needs administrator action, affects contractual, compliance, security, privacy, or data-processing commitments, or is a significant service change. Other model changes may appear only on the Copilot blog or in the Copilot release notes [S32]. The privacy page adds that model updates do not change the customer's security, privacy, or compliance settings [S33].",
+        "Anthropic is a subprocessor. OpenAI, when OpenAI operates the model, is a different subprocessor from Azure OpenAI, which Microsoft operates [S34] [S35]. Admins set both under Copilot, Settings, AI providers operating as Microsoft subprocessors. Mistral is not that toggle. It is enabled under AI providers for other large language models, and the admin accepts Mistral's terms. The Mistral page does not call Mistral an AI independent processor [S48]. Anthropic models with Data Retention are the explicit independent-processor case on the Anthropic page: off by default, under Anthropic's own terms [S34].",
+        "Where a person can pick, as of the pages read 15 Oct 2026: the Copilot overview documents a Chat model menu of Auto, Quick response, and Think deeper, and says the options change [S10]. Auto is also the default the USL article describes: it routes the request without the user choosing a model [S54]. The Anthropic article says the Copilot UI indicates when a Claude model is in use, and that users can select Claude in Researcher and in Edit with Copilot in Microsoft 365 apps [S34]. Excel enterprise users can choose Claude models after Anthropic is enabled [S37]. In Copilot Studio the maker selects the model while creating the agent [S34]. Cowork's Model menu defaults to Auto [S47]. A Chat menu item literally named Claude, beyond the in-use indicator, is UNVERIFIED on those pages.",
+        "Anthropic defaults, read 15 Oct 2026: Microsoft enables Anthropic models on by default for most commercial-cloud customers, excluding EU, EFTA, and UK. Customers in the EU Data Boundary and in the UK have Anthropic disabled by default; the admin setting is present and set to No users [S34]. A separate setting, Copilot in Microsoft 365 apps with Anthropic models, covers Word, Excel, and PowerPoint for EU, EFTA, and UK tenants. It is on by default for tenants created after 25 March 2026. Tenants that existed before that date check Message center for their default. That apps setting does not change the global subprocessor setting, and it is unavailable when the global setting is already All users or Specific users and groups. When those app experiences use Anthropic, processing is outside the EU Data Boundary [S53]. The Anthropic independent-processor setting was decommissioned on 1 May 2026. If Anthropic is not enabled as a Microsoft subprocessor, access to Anthropic models is no longer available [S53].",
+        "The privacy page says models provided by Anthropic as a subprocessor are currently excluded from the EU Data Boundary [S33]. The Anthropic page says the same exclusion for Anthropic models in Copilot, Researcher, Copilot Studio, Power Platform, and Copilot in Microsoft 365 apps, and adds in-country processing commitments where those apply [S34]. The OpenAI subprocessor article says OpenAI-operated models are in the EU Data Boundary except where the EU Data Boundary docs say otherwise [S35]. Microsoft Copilot itself is documented as meeting the EU Data Boundary commitment [S33]. Do not collapse those sentences into one.",
+        "Exact training line from the privacy page, read 15 Oct 2026: prompts, responses, and data accessed through Microsoft Graph aren't used to train foundation LLMs, including those used by Microsoft Copilot [S33]. That sentence is about training. It is not a promise that a prompt never leaves the tenant when a subprocessor or optional web search is in the path [S34] [S41]."
       ]
     },
     {
@@ -2928,7 +2950,7 @@ DATA.copilot = {
         "A grounded sentence can still be unsupported. The application card calls the model's step inferencing: it predicts a response. Post-processing then runs more Graph checks plus responsible AI, security, compliance, and privacy checks [S36]. UNVERIFIED: any claim that grounding removes hallucination. Treat an unsourced sentence as a draft until a citation or the system of record agrees.",
         "Synced connectors copy external content into a Graph external item, with an ACL mapped from the source, so search and Copilot can retrieve it later [S3] [S15]. Federated connectors use MCP, run as the user, and do not index that content into Microsoft 365 [S4]. Use sync for durable knowledge people will search again. Use federated for live, sensitive, or fast-changing facts.",
         "Sensitivity labels and the ACL are different controls. Copilot honors the usage rights on Purview-labeled or IRM-protected content [S33] [S29]. SharePoint Advanced Management is the cleanup layer the Copilot overview points at so overshared sites are not in the grounding set [S10] [S46].",
-        "Write, update, and delete through a federated connector began rolling out in early October 2026 [S4]. The action runs in the third-party system as the user, only if that user could do it there, and nothing is sent until they answer a confirmation card. The card offers Allow once, Allow for conversation, Always allow, or Cancel. Read tools do not ask. Researcher does not support these writes. The product card is the native gate.",
+        "Write, update, and delete through a federated connector begin rolling out in early October 2026 [S4]. The same page still heads that section Coming soon and says to check availability by Copilot experience. The action runs in the third-party system as the user, only if that user could do it there, and nothing is sent until they answer a confirmation card. The card offers Allow once, Allow for conversation, Always allow, or Cancel. Read tools do not ask. Researcher does not support these writes. The product card is the native gate.",
         "This pack adds a second gate for consequential actions: a workflow approval bound to a verified identity, outside the wording of the prompt. Always allow on the card is a user convenience. It is not a change-management approval. Teach both, and do not pretend the workflow gate is a Microsoft default."
       ]
     },
@@ -2937,7 +2959,7 @@ DATA.copilot = {
       "n": "4",
       "title": "Family map",
       "paras": [
-        "These are related products, not one license. The overview still describes Microsoft 365 Copilot (Basic) and Microsoft 365 Copilot (Premium) experiences on the page read 15 Oct 2026, while privacy pages use the new Microsoft Copilot name [S10] [S33]. Premium is the add-on that grounds in organizational data through Graph, Work IQ, Copilot Search, and the semantic index. Work IQ can be turned off. The Work IQ API is a separate Copilot Credits meter [S10] [S43] [S42]."
+        "These are related products, not one license. The overview, read 15 Oct 2026, still describes Copilot Chat (Basic), Microsoft 365 Copilot (Basic), and Microsoft 365 Copilot (Premium), then a fourth column for usage-based billing [S10] [S33]. Premium is the add-on that grounds in work data through Graph and Work IQ. Work IQ can be turned off. Cowork and Copilot Code sit on usage-based billing, which the overview says requires Microsoft 365 Copilot (Premium), and which consumes Copilot Credits [S10] [S42] [S54]. The USL article splits the same idea as everyday AI on a user subscription license, with Auto as the default router, versus advanced AI such as Cowork and Code on usage-based billing [S54]."
       ]
     },
     {
@@ -2957,7 +2979,7 @@ DATA.copilot = {
       "paras": [
         "Organizational grounding stays inside the user's existing permissions. Semantic index retrieval does not widen that boundary [S33] [S11]. Enterprise Data Protection is the name for the DPA and Product Terms commitments on Copilot and Copilot Chat prompts and responses [S41].",
         "Purview DSPM for AI is the admin's window onto AI activity, oversharing assessments, and starter policies [S44]. The article read 15 Oct 2026 is the classic experience and points readers at a newer DSPM. Confirm which one the tenant has. The Interaction Export API is the Graph pull of prompts and responses that were written to the interaction history service [S45]. Its national-cloud table lists global service, US Government L4, and US Government L5 (DoD) as available, and China operated by 21Vianet as not. That row is this API only.",
-        "UNVERIFIED: Microsoft Copilot, Copilot Chat, connectors, Cowork, and Copilot Studio feature parity in GCC, GCC High, and DoD, except where a government service description or a specific API table says otherwise. Anthropic models are documented as unavailable for federal customers in GCC and for any customers in GCC High and DoD [S34]. A commercial architecture page is not that evidence [S27]."
+        "Anthropic, as of the page read 15 Oct 2026: unavailable for federal customers in GCC and for any customers in GCC High and DoD. A setting dated 22 July 2026 lets non-federal GCC customers opt in. Other sovereign clouds are excluded [S34]. UNVERIFIED: Microsoft Copilot, Copilot Chat, connectors, Cowork, and Copilot Studio feature parity in GCC, GCC High, and DoD beyond that Anthropic statement and the Interaction Export API's own national-cloud table. A commercial architecture page is not that evidence [S27]."
       ]
     },
     {
@@ -2981,13 +3003,13 @@ DATA.copilot = {
   "family": {
     "cols": ["Product", "What it is", "How you pay or control it", "Source"],
     "rows": [
-      ["Microsoft Copilot", "Work assistant in Microsoft 365 apps. Formerly Microsoft 365 Copilot.", "Overview still describes Basic and Premium experiences. Premium adds organizational grounding, Work IQ, and SharePoint Advanced Management.", "[S10] [S33]"],
-      ["Microsoft Copilot Chat", "Chat surface. Formerly Microsoft 365 Copilot Chat.", "Enterprise Data Protection for Copilot Chat is documented at no extra cost. Organizational grounding is the Premium experience.", "[S41] [S49] [S10]"],
+      ["Microsoft Copilot", "Work assistant in Microsoft 365 apps. Formerly Microsoft 365 Copilot.", "Overview still names Chat (Basic), Microsoft 365 Copilot (Basic), and Microsoft 365 Copilot (Premium). Premium adds work-data grounding through Graph and Work IQ.", "[S10] [S32] [S33]"],
+      ["Microsoft Copilot Chat", "Chat surface. Formerly Microsoft 365 Copilot Chat.", "Enterprise Data Protection for Copilot Chat is documented at no extra cost. Work-data grounding is the Premium experience. Chat (Basic) on the overview is web data only.", "[S41] [S49] [S10]"],
       ["Copilot Studio", "Low-code and pro-code place to build agents.", "Makers select a model at creation time. Separate from GitHub Copilot.", "[S22] [S34]"],
       ["GitHub Copilot", "Coding assistant in the GitHub and IDE surfaces.", "Separate license and product from Microsoft Copilot.", "[S12]"],
       ["Security Copilot", "Security product for investigating threats in natural language.", "Its own Learn set. License and gov-cloud parity against Microsoft Copilot are UNVERIFIED here.", "[S50]"],
-      ["Copilot Cowork", "Task help across Microsoft 365 apps, using Anthropic models.", "Credits article: Copilot license required, and Cowork is on the usage-based list. Model menu defaults to Auto.", "[S37] [S42] [S47]"],
-      ["Copilot Code", "Frontier coding experience on an application card. Users can pick Anthropic Claude variants or Microsoft-hosted GPT models, or let it choose.", "Credits article lists a service named Code that requires a Copilot license. Whether this is the same product as GitHub Copilot is UNVERIFIED.", "[S52] [S42]"],
+      ["Copilot Cowork", "Carries out tasks across the Microsoft 365 environment.", "Usage-based billing. Overview: requires Microsoft 365 Copilot (Premium). Credits article: Copilot license required. Model menu defaults to Auto.", "[S10] [S42] [S47] [S54]"],
+      ["Copilot Code", "Frontier coding experience. Helps enterprise users build, understand, and automate code with natural language and organizational context. The application card describes a model choice; do not treat that card as a frozen SKU list.", "Usage-based billing, same Premium and Copilot-license pattern as Cowork. Whether this is the same product as GitHub Copilot is UNVERIFIED.", "[S10] [S52] [S42] [S54]"],
       ["Researcher", "Agent in Copilot that can use Claude. Federated write, update, and delete are not supported here.", "Available inside Copilot experiences. Not a separate integration bus.", "[S37] [S4]"]
     ]
   },
@@ -2998,7 +3020,7 @@ DATA.copilot = {
     },
     {
       "title": "Model and subprocessor review",
-      "text": "Date your answer. Do not invent model names.\nFrom Microsoft Learn only, explain for a commercial tenant:\n1. Microsoft-hosted models vs AI subprocessors vs AI independent processors.\n2. The admin settings AI providers operating as Microsoft subprocessors and AI providers for other large language models.\n3. Where a user or maker can pick (Chat menu, Researcher, Excel, Copilot Studio, Cowork Auto).\n4. EU Data Boundary treatment of Anthropic vs the Copilot service commitment.\n5. The no-training statement for Graph prompts.\nCite ai-models-overview and the Anthropic and OpenAI subprocessor pages. Mark anything those pages do not say as UNVERIFIED."
+      "text": "Date your answer. Do not invent model names. If a page gives an example, quote it as an example and date the page.\nFrom Microsoft Learn only, explain for a commercial tenant:\n1. Models hosted by Microsoft vs AI subprocessors vs AI independent processors. Name the admin centers that turn an independent processor on.\n2. How Microsoft communicates a model change: Message center versus blog or release notes.\n3. Anthropic defaults for commercial cloud versus EU, EFTA, and UK. Include the Copilot in Microsoft 365 apps with Anthropic models setting, and the 1 May 2026 decommission of the Anthropic independent-processor setting.\n4. The exact no-training sentence for prompts, responses, and Microsoft Graph data.\n5. User subscription license versus usage-based billing for Cowork and Copilot Code.\nCite ai-models-overview, the privacy page, connect-to-ai-subprocessor, copilot-anthropic-apps, and the USL article. Mark anything those pages do not say as UNVERIFIED."
     },
     {
       "title": "Write-back design",
@@ -3006,11 +3028,11 @@ DATA.copilot = {
     },
     {
       "title": "Trust boundary",
-      "text": "List the trust boundary for Microsoft Copilot in a commercial tenant:\ntenant Graph permissions, sensitivity labels, SharePoint Advanced Management, Enterprise Data Protection, Purview DSPM for AI, and the Interaction Export API.\nSay what the Interaction Export national-cloud table covers and what it does not.\nFor GCC, GCC High, and DoD feature parity, write UNVERIFIED except for the Anthropic exclusion and any government service description you actually cite.\nNo tenant data."
+      "text": "List the trust boundary for Microsoft Copilot in a commercial tenant:\ntenant Graph permissions, sensitivity labels, SharePoint Advanced Management, Enterprise Data Protection, Purview DSPM for AI, and the Interaction Export API.\nSay what the Interaction Export national-cloud table covers and what it does not.\nFor Anthropic, separate federal GCC, non-federal GCC, GCC High, and DoD using the Anthropic subprocessor page.\nFor every other GCC, GCC High, and DoD feature, write UNVERIFIED unless you cite a government service description.\nNo tenant data."
     }
   ],
   "open": [
-    "Feature parity for Microsoft Copilot, connectors, Cowork, and Copilot Studio in GCC, GCC High, and DoD, beyond the Anthropic exclusion and the Interaction Export API's own national-cloud table.",
+    "Feature parity for Microsoft Copilot, connectors, Cowork, and Copilot Studio in GCC, GCC High, and DoD, beyond the Anthropic page (federal GCC, GCC High, and DoD excluded; non-federal GCC opt-in as of 22 July 2026) and the Interaction Export API's own national-cloud table.",
     "Whether the Copilot Chat model menu includes a control named Claude, beyond the documented indicator that a Claude model is in use.",
     "Whether Copilot Code (Frontier) is the same product as GitHub Copilot. The credits article lists Code separately from any GitHub SKU.",
     "The current Cowork model names. The Cowork models page changes; this note records Auto and the fact of named models, not a SKU list.",
